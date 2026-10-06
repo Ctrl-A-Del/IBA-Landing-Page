@@ -152,16 +152,19 @@ export const Contact = (props) => {
           </div> */}
         </div>
       </div>
-      {/* <div id="footer">
+      <div id="footer">
         <div className="container text-center">
-          <p>
-            &copy; 2023 Issaaf Kattan React Land Page Template. Design by{" "}
-            <a href="http://www.templatewire.com" rel="nofollow">
-              TemplateWire
-            </a>
-          </p>
+          <ul>
+            {/* <li><a href="/agb">AGB</a></li> */}
+            <li>
+              <a href="/datenschutz.html">Datenschutzerklärung</a>
+            </li>
+            <li>
+              <a href="/impressum.html">Impressum</a>
+            </li>
+          </ul>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

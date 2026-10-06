@@ -8,7 +8,7 @@ export const Header = (props) => {
           <img src="img/logo.jpg" alt="Company logo" />
         </div>
         <div class="hero__claim">
-          <h1>Wir graben nicht - wir fräsen!</h1>
+          <h1>Wir schaufeln nicht - wir fräsen!</h1>
         </div>
       </section>
       {/* <div className="intro">
