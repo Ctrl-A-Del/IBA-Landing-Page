@@ -2,17 +2,19 @@ name: Deploy landing page
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
+
+permissions:
+  contents: write # needed to push to gh-pages
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v2
 
-    - name: Deploy react app to github pages
-      uses: tanwanimohit/deploy-react-to-ghpages@v1.0.1
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploy react app to github pages
+        uses: tanwanimohit/deploy-react-to-ghpages@v1.0.1

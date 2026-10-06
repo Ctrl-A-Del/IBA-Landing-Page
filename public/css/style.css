@@ -25,6 +25,8 @@
   /* prevents grid blowout */
   min-height: 0;
   color: white;
+  font-family: "Raleway", sans-serif;
+  text-transform: uppercase;
 }
 
 .hero__logo {
