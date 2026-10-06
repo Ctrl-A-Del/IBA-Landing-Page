@@ -1,12 +1,12 @@
-import { useState } from "react";
-import emailjs from "emailjs-com";
+// import { useState } from "react";
+// import emailjs from "emailjs-com";
 import React from "react";
 
-const initialState = {
-  name: "",
-  email: "",
-  message: "",
-};
+// const initialState = {
+//   name: "",
+//   email: "",
+//   message: "",
+// };
 export const Contact = (props) => {
   // const [{ name, email, message }, setState] = useState(initialState);
 
@@ -99,21 +99,21 @@ export const Contact = (props) => {
                   Send Message
                 </button>
               </form> */}
-            <div className="contact-item">
-              {/* <h3>Contact Info</h3> */}
-              {/* <p>
+            {/* <div className="contact-item"> */}
+            {/* <h3>Contact Info</h3> */}
+            {/* <p>
                 <span>
                   <i className="fa fa-map-marker"></i> Address
                 </span>
                 {props.data ? props.data.address : "loading"}
               </p> */}
-            </div>
+            {/* </div> */}
             <div className="contact-item">
               <p>
                 <span>
                   <i className="fa fa-phone"></i> Phone
                 </span>{" "}
-                <a href={`tel:${props.data.phone}`}>{props.data.phone}</a>
+                <a href={`tel:+49 176 618 77 599`}>+49 176 618 77 599</a>
               </p>
             </div>
             <div className="contact-item">
@@ -121,7 +121,9 @@ export const Contact = (props) => {
                 <span>
                   <i className="fa fa-envelope-o"></i> Email
                 </span>{" "}
-                <a href={`mailto:${props.data.email}`}>{props.data.email}</a>
+                <a href={`mailto:info@ingenieurbuero-auner.com`}>
+                  info@ingenieurbuero-auner.com
+                </a>
               </p>
             </div>
           </div>
