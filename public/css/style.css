@@ -448,6 +448,7 @@ header .intro-text {
 
 /* Features Section */
 #features {
+  padding-top: 50px;
   background: #0a1f2e;
 }
 
