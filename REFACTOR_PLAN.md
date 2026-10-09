@@ -155,18 +155,20 @@ graph TD
 - [x] `loading="lazy"` + explicit intrinsic dimensions on below-the-fold images (prevents layout shift)
 
 ### Phase 6 — Content cleanup
-- [ ] Remove Lorem ipsum, placeholder address (`4321 California St…`), dead English nav labels
-- [ ] Keep German copy consistent across About / Services / Team / Contact
+- [x] Lorem ipsum / placeholder data removed (via the `data.json` rebuild in Phase 2 + the `About`/`Services`/`Team`/`Contact` rewrites)
+- [x] Dead English nav labels removed (Navigation component deleted)
+- [x] German copy consolidated and consistent; `data.json` is the single content source for About cards / Services / Team / Contact
 
 ### Phase 7 — Validate & deploy
-- [ ] `npm run build` and manual QA at 375 / 768 / 1440 px
-- [ ] Lighthouse pass (performance + accessibility)
-- [ ] Keep `CNAME` (+ `public/CNAME`) and the `deploy.yml` workflow
-- [ ] Set `"homepage": "https://ingenieurbuero-auner.com"` in `package.json`
-- [ ] _(Optional)_ Replace third-party action with `actions/setup-node` + `peaceiris/actions-gh-pages`
-- [ ] Keep `public/datenschutz.html`, `public/impressum.html`, `public/robots.txt`
+- [x] `npm run build` green; browser QA at mobile (~300 px) and desktop (1140 px): correct grids, no horizontal overflow, all images load
+- [x] Added `public/CNAME` (`ingenieurbuero-auner.com`) so the custom domain is published with `build/` — the root `CNAME` alone is **not** copied into `build/`
+- [x] Set `"homepage": "https://ingenieurbuero-auner.com"` in `package.json`; renamed package to `iba-landing-page`
+- [ ] Lighthouse pass (performance + accessibility) — run manually after merge
+- [ ] _(Optional)_ Replace third-party `tanwanimohit/deploy-react-to-ghpages@v1.0.1` with `actions/setup-node` + `peaceiris/actions-gh-pages`
+- [x] Kept `public/datenschutz.html`, `public/impressum.html`, `public/robots.txt`
+- [ ] Note: root `CNAME` is now redundant (Pages serves `build/`); safe to delete later — left in place to avoid touching live Pages config
 
-**Checkpoint:** a11y + Lighthouse + deploy dry run.
+**Checkpoint:** a11y + build + deploy config verified (Lighthouse pending).
 
 ---
 
@@ -213,3 +215,4 @@ Consequences:
 | 2026-10-09 | 2 | Deleted 4 unused components + `App.css`/`serviceWorker`/`Impressum.jsx`/`logo.svg`/`_config.yml`/`build/`; uninstalled `emailjs-com` + `smooth-scroll`; rebuilt `data.json`; build green (JS 47.5 → 44.3 kB) |
 | 2026-10-09 | 3 | Rebuilt all sections with Tailwind + `ui/` primitives; added `Footer`; fixed missing-doctype (quirks mode) + German heading overflow; verified responsive grids, no h-overflow, all images load |
 | 2026-10-09 | 4–5 | Unified tokens/typography/spacing; a11y (landmarks, alt, `aria-hidden`, `focus-visible`, lazy images with dimensions); final build green (CSS 3.2 kB gzip, JS 47.2 kB) |
+| 2026-10-09 | 6–7 | Content verified clean (no lorem/placeholders); added `public/CNAME` so the custom domain ships with `build/`; set `homepage`; renamed package to `iba-landing-page`; build green, `build/CNAME` confirmed |
