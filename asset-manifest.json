@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.1a5bde68.css",
+    "main.js": "/static/js/main.153eadc0.js",
+    "static/media/open-sans-latin.woff2": "/static/media/open-sans-latin.70c0e311f2a1c0efb988.woff2",
+    "static/media/raleway-latin.woff2": "/static/media/raleway-latin.8a0fedcbef2d73112703.woff2",
+    "index.html": "/index.html",
+    "main.1a5bde68.css.map": "/static/css/main.1a5bde68.css.map",
+    "main.153eadc0.js.map": "/static/js/main.153eadc0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1a5bde68.css",
+    "static/js/main.153eadc0.js"
+  ]
+}
