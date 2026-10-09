@@ -102,7 +102,7 @@ graph TD
 - [x] Clean `public/index.html`: remove Bootstrap/Font Awesome/style.css/nivo-lightbox `<link>`s and jQuery/bootstrap `<script>`s (kept favicon, apple-touch; added font `preconnect`)
 - [x] Delete `public/css/`, `public/js/`, `public/fonts/` (Font Awesome + glyphicons)
 - [x] Remove duplicate `yarn.lock` (deploy action runs `npm ci`, so npm is the single package manager)
-- [ ] Map `fa fa-*` icon strings in `data.json` → `lucide-react` components → *moved to Phase 3*
+- [x] Map `fa fa-*` icon strings → semantic icon keys consumed by a `lucide-react` map in `services.jsx` (done in Phase 3)
 
 **Checkpoint:** app renders (roughly unstyled) and builds with Tailwind active; legacy CSS gone.
 → ✅ Verified: build compiled, processed CSS grew `305 B → 1.72 kB` (Tailwind preflight now active).
