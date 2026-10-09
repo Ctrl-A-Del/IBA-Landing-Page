@@ -2,7 +2,7 @@ import React from "react";
 
 export const Features = (props) => {
   return (
-    <div id="features" className="text-center">
+    <div id="features" className="text-centero">
       <div className="container">
         <img src="img/fraese.png" alt="" style={{ width: "100%" }}></img>
         {/* <div className="col-md-10 col-md-offset-1 section-title">
