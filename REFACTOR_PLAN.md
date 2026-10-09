@@ -86,24 +86,26 @@ graph TD
 ## Phases
 
 ### Phase 0 — Safety net
-- [ ] Create branch `chore/tailwind-refactor`
-- [ ] Baseline: run `npm start`, screenshot hero/about/services/team/contact (mobile + desktop)
-- [ ] Confirm `npm run build` currently succeeds
+- [x] Create branch `chore/tailwind-refactor`
+- [x] Baseline committed to git (`c15c6be`); visual baseline for the "light refresh" is the committed source + per-section screenshots during Phase 3
+- [x] Confirm `npm run build` currently succeeds (baseline: `main.bbf23de5.js` 47.95 kB, `main.3af27a2c.css` 305 B — real CSS is unprocessed in `public/`)
 
 ### Phase 1 — Swap the styling foundation
-- [ ] Install dev deps: `npm i -D tailwindcss@3 postcss autoprefixer`
-- [ ] Install runtime dep: `npm i lucide-react`
-- [ ] Generate config: `npx tailwindcss init -p` (`tailwind.config.js` + `postcss.config.js`)
-- [ ] Set `content: ["./src/**/*.{js,jsx}", "./public/index.html"]`
-- [ ] Add design tokens to `theme.extend` in `tailwind.config.js`:
-      `colors.brand = #0a1f2e`, `colors.accent.{from,to} = #6372ff / #5ca9fb`,
-      `fontFamily.heading = Raleway`, `fontFamily.body = Open Sans`, radius/shadow scale
-- [ ] Add `@tailwind base / components / utilities` to `src/index.css`
-- [ ] Clean `public/index.html`: remove Bootstrap/Font Awesome/style.css/nivo-lightbox `<link>`s and jQuery/bootstrap `<script>`s (keep favicon, apple-touch, font links)
-- [ ] Delete `public/css/`, `public/js/`, `public/fonts/font-awesome/` (and now-empty `public/fonts/`)
-- [ ] Map `fa fa-*` icon strings in `data.json` → `lucide-react` components
+- [x] Install dev deps: `npm i -D tailwindcss@3 postcss autoprefixer` (→ tailwindcss 3.4.19, postcss 8.5.29, autoprefixer 10.6.1)
+- [x] Install runtime dep: `npm i lucide-react` (→ 1.54.0)
+- [x] Create `tailwind.config.js` with `content: ["./src/**/*.{js,jsx}", "./public/index.html"]`
+- [x] ~~Generate `postcss.config.js`~~ → **not needed / ignored by CRA** (see [Discovery](#discovery-cra-5--tailwind))
+- [x] Add design tokens to `theme.extend` in `tailwind.config.js`:
+      `colors.brand = #0a1f2e` (+`brand.alt`), `colors.accent.{from,to} = #6372ff / #5ca9fb`,
+      `colors.link`, `colors.surface`, `fontFamily.heading/body/nav`, `maxWidth.container`
+- [x] Add `@tailwind base / components / utilities` to `src/index.css` (+ base layer: smooth scroll, body font/color, heading font)
+- [x] Clean `public/index.html`: remove Bootstrap/Font Awesome/style.css/nivo-lightbox `<link>`s and jQuery/bootstrap `<script>`s (kept favicon, apple-touch; added font `preconnect`)
+- [x] Delete `public/css/`, `public/js/`, `public/fonts/` (Font Awesome + glyphicons)
+- [x] Remove duplicate `yarn.lock` (deploy action runs `npm ci`, so npm is the single package manager)
+- [ ] Map `fa fa-*` icon strings in `data.json` → `lucide-react` components → *moved to Phase 3*
 
 **Checkpoint:** app renders (roughly unstyled) and builds with Tailwind active; legacy CSS gone.
+→ ✅ Verified: build compiled, processed CSS grew `305 B → 1.72 kB` (Tailwind preflight now active).
 
 ### Phase 2 — Remove dead code & unused files
 - [ ] Delete components: `navigation.jsx`, `gallery.jsx`, `testimonials.jsx`, `image.jsx`
@@ -169,11 +171,27 @@ graph TD
 
 ---
 
+## Discovery: CRA 5 + Tailwind
+
+`react-scripts` 5 **auto-enables Tailwind** when `tailwind.config.js` exists at the project root:
+
+```js
+// node_modules/react-scripts/config/webpack.config.js
+const useTailwind = fs.existsSync(path.join(paths.appPath, 'tailwind.config.js'));
+...
+plugins: !useTailwind ? [ /* flexbugs-fixes, preset-env, normalize */ ]
+                      : ['tailwindcss', /* flexbugs-fixes, preset-env */]
+```
+
+Consequences:
+- **No `postcss.config.js` is required** — CRA sets `config: false`, so an external PostCSS config is **ignored**. Just `tailwind.config.js` + `@tailwind` directives is enough.
+- Tailwind's PostCSS plugin reads `tailwind.config.js` from the project root, so the `content` globs must cover every file containing class names.
+
 ## Risks & notes
 
-- **Tailwind v4 vs CRA 5:** pin **Tailwind v3**. v4's PostCSS plugin is not compatible with CRA 5's PostCSS 8 pipeline.
-- **Bootstrap removal is a visible change:** mitigate by doing it section-by-section with visual comparison against the Phase 0 screenshots.
-- **GitHub Pages action compatibility:** mitigate with the `homepage` field and/or the optional standard action.
+- **Tailwind v4 vs CRA 5:** pinned **Tailwind v3** (3.4.19). v4's PostCSS plugin is not compatible with CRA 5's PostCSS 8 pipeline.
+- **Bootstrap removal is a visible change:** mitigate by doing it section-by-section with visual comparison against the Phase 0 baseline (per-section screenshots during Phase 3).
+- **Deploy uses npm:** the `tanwanimohit/deploy-react-to-ghpages` action runs `npm i` → `npm ci` → `npx react-scripts build`, so `package-lock.json` must stay in sync with `package.json`. `yarn.lock` was removed to avoid drift.
 
 ---
 
@@ -182,3 +200,5 @@ graph TD
 | Date | Phase | Notes |
 | --- | --- | --- |
 | 2026-10-09 | Planning | Baseline audit complete; plan created |
+| 2026-10-09 | 0 | Branch `chore/tailwind-refactor`; baseline committed `c15c6be`; baseline build green |
+| 2026-10-09 | 1 | Tailwind 3.4.19 wired via `tailwind.config.js` (CRA auto-detect); legacy CSS/JS/fonts deleted; duplicate `yarn.lock` removed; build green (CSS 305 B → 1.72 kB) |
