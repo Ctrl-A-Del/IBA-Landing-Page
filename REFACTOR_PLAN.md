@@ -10,12 +10,12 @@ and rebuilding the layout on a modern foundation.
 
 ## Decisions
 
-| Topic | Decision |
-| --- | --- |
-| **Styling** | Adopt **Tailwind CSS** (remove Bootstrap 3, jQuery, Font Awesome, nivo-lightbox) |
-| **Scope** | **Cleanup + light visual refresh** — preserve current look/sections, fix layout & code |
-| **Dormant sections** | **Delete** Navigation, Gallery, Testimonials, Image |
-| **Deployment** | **Keep GitHub Pages + custom domain** (`ingenieurbuero-auner.com`); remove stray `_config.yml` |
+| Topic                | Decision                                                                                       |
+| -------------------- | ---------------------------------------------------------------------------------------------- |
+| **Styling**          | Adopt **Tailwind CSS** (remove Bootstrap 3, jQuery, Font Awesome, nivo-lightbox)               |
+| **Scope**            | **Cleanup + light visual refresh** — preserve current look/sections, fix layout & code         |
+| **Dormant sections** | **Delete** Navigation, Gallery, Testimonials, Image                                            |
+| **Deployment**       | **Keep GitHub Pages + custom domain** (`ingenieurbuero-auner.com`); remove stray `_config.yml` |
 
 ### Target stack
 
@@ -56,12 +56,14 @@ graph TD
 ## Baseline audit (current state)
 
 **Stack**
+
 - CRA 5 / React 17. Styling is global CSS loaded via `<link>` in `public/index.html`:
   `bootstrap.css` (Bootstrap **3**, ~6,750 lines), `font-awesome.css` (v4), `style.css` (754 lines),
   plus nivo-lightbox. **jQuery 1.11 + bootstrap.js** loaded via `<script>` (BS3 JS depends on jQuery).
 - Deployment: GitHub Actions (`tanwanimohit/deploy-react-to-ghpages`) → `gh-pages`, `CNAME` = custom domain.
 
 **Code mess**
+
 - Commented-out dead code in every component (`header`, `features`, `about`, `contact`, `gallery`, `testimonials`, `navigation`).
 - `navigation.jsx` exists but is commented out of `App.jsx` → page has no nav.
 - `features.jsx` is gutted — only a stray `<img src="img/fraese.png">` remains.
@@ -70,6 +72,7 @@ graph TD
 - `App.css` dead; `index.css` default CRA boilerplate; `serviceWorker` unused.
 
 **CSS problems**
+
 - Mixed `class=` vs `className=` (`header.jsx`, `about.jsx`); typo class `text-centero` in `features.jsx`.
 - Conflicting card breakpoints: `max-width:768px` (flex-column) vs `1024px` (grid 2-col) vs `600px` (grid 1-col).
 - Duplicate `.hero__claim`; `#about h2::after` color equals its own background (invisible).
@@ -78,6 +81,7 @@ graph TD
 - `!important` hacks (e.g. `flex: 0 0 50px !important`).
 
 **Assets / structure**
+
 - `build/` present locally (correctly gitignored). Images in `public/img/`, referenced as relative `img/...`.
 - `src/pages/Impressum.jsx` unused (footer links to static `/impressum.html` + `/datenschutz.html`).
 
@@ -86,11 +90,13 @@ graph TD
 ## Phases
 
 ### Phase 0 — Safety net
+
 - [x] Create branch `chore/tailwind-refactor`
 - [x] Baseline committed to git (`c15c6be`); visual baseline for the "light refresh" is the committed source + per-section screenshots during Phase 3
 - [x] Confirm `npm run build` currently succeeds (baseline: `main.bbf23de5.js` 47.95 kB, `main.3af27a2c.css` 305 B — real CSS is unprocessed in `public/`)
 
 ### Phase 1 — Swap the styling foundation
+
 - [x] Install dev deps: `npm i -D tailwindcss@3 postcss autoprefixer` (→ tailwindcss 3.4.19, postcss 8.5.29, autoprefixer 10.6.1)
 - [x] Install runtime dep: `npm i lucide-react` (→ 1.54.0)
 - [x] Create `tailwind.config.js` with `content: ["./src/**/*.{js,jsx}", "./public/index.html"]`
@@ -108,6 +114,7 @@ graph TD
 → ✅ Verified: build compiled, processed CSS grew `305 B → 1.72 kB` (Tailwind preflight now active).
 
 ### Phase 2 — Remove dead code & unused files
+
 - [x] Delete components: `navigation.jsx`, `gallery.jsx`, `testimonials.jsx`, `image.jsx`
 - [x] Delete dead files: `src/App.css`, `src/serviceWorker.js` (+ its import in `index.js`), `src/pages/Impressum.jsx`, `src/logo.svg`, root `_config.yml`, local `build/`
 - [x] Remove deps: `emailjs-com`, `smooth-scroll` (uninstalled)
@@ -119,23 +126,25 @@ graph TD
 → ✅ Verified: build compiled, JS bundle `47.54 kB → 44.25 kB`.
 
 ### Phase 3 — Rebuild layout with Tailwind + shared primitives
+
 - [x] Create `src/components/ui/Container.jsx` (max-width + responsive padding)
 - [x] Create `src/components/ui/Section.jsx` (vertical rhythm `py-20 md:py-28`, `light`/`muted`/`dark`/`darkAlt` variants, `id` + `scroll-mt-24`)
 - [x] Create `src/components/ui/SectionTitle.jsx` (heading + gradient underline + optional subtitle)
 
-| Component | Change | Done |
-| --- | --- | --- |
-| `header.jsx` | Tailwind hero; grid `2fr/1fr` mobile → `1fr/2fr` desktop; `100dvh` where supported; uses `data.title` | ✅ |
-| `features.jsx` | Clean full-width banner (`fraese.png`) with alt + intrinsic dimensions | ✅ |
-| `about.jsx` | 4 cards → `grid sm:grid-cols-2 lg:grid-cols-4`; conflicting breakpoints gone; data-driven from `data.cards` | ✅ |
-| `services.jsx` | BS `col-md-4` + `fa` icons → `grid md:grid-cols-3` + `lucide-react` via icon map | ✅ |
-| `Team.jsx` | BS grid/`thumbnail` → Tailwind cards; images `h-60 w-60 rounded-[20px]` | ✅ |
-| `contact.jsx` | Centered contact links (phone/email) with lucide icons; commented form + social removed | ✅ |
-| `Footer.jsx` | New component: Datenschutz / Impressum links (extracted from `contact.jsx`) | ✅ |
+| Component      | Change                                                                                                      | Done |
+| -------------- | ----------------------------------------------------------------------------------------------------------- | ---- |
+| `header.jsx`   | Tailwind hero; grid `2fr/1fr` mobile → `1fr/2fr` desktop; `100dvh` where supported; uses `data.title`       | ✅   |
+| `features.jsx` | Clean full-width banner (`fraese.png`) with alt + intrinsic dimensions                                      | ✅   |
+| `about.jsx`    | 4 cards → `grid sm:grid-cols-2 lg:grid-cols-4`; conflicting breakpoints gone; data-driven from `data.cards` | ✅   |
+| `services.jsx` | BS `col-md-4` + `fa` icons → `grid md:grid-cols-3` + `lucide-react` via icon map                            | ✅   |
+| `Team.jsx`     | BS grid/`thumbnail` → Tailwind cards; images `h-60 w-60 rounded-[20px]`                                     | ✅   |
+| `contact.jsx`  | Centered contact links (phone/email) with lucide icons; commented form + social removed                     | ✅   |
+| `Footer.jsx`   | New component: Datenschutz / Impressum links (extracted from `contact.jsx`)                                 | ✅   |
 
 - [x] Apply rules throughout: `class=`→`className=`, dropped `text-centero`, no `id`-based CSS, no inline `style={{}}`, consistent `sm/md/lg` breakpoints
 
 **Defects found & fixed during this phase:**
+
 - `public/index.html` had **no `<!DOCTYPE html>` / `<html>` element** → page rendered in **quirks mode**. Added doctype + `<html lang="de">` (now `document.compatMode === "CSS1Compat"`); fixed title umlaut; added `theme-color`.
 - Long German compounds overflowed headings (regression from dropping `.heading { overflow-wrap: break-word }`). Fixed with base-layer `break-words`.
 - Verified: responsive grids (about 1/2/4, team 1/2/3, services 1/3), **no horizontal overflow** at 300/818/1140 px, all images load (lazy-loaded team photos verified after scroll).
@@ -143,11 +152,13 @@ graph TD
 **Checkpoint:** visual QA per section → ✅ done via browser (desktop + mobile screenshots).
 
 ### Phase 4 — Tokens, typography, consistency
+
 - [x] All colors/fonts sourced from `tailwind.config.js` (no repeated hex literals in components)
 - [x] Uniform heading scale via `SectionTitle`; body via `font-body`
 - [x] Consistent section spacing via `Section` (`py-20 md:py-28`) — backgrounds intentionally stay uniformly dark (`brand`/`darkAlt`) to match the original design; `Section` supports `light`/`muted` variants if needed later
 
 ### Phase 5 — Accessibility & polish
+
 - [x] `alt` on all images; decorative lucide icons marked `aria-hidden="true"` (no icon-only links exist)
 - [x] Semantic landmarks (`<header>`, `<main>`, `<section>`, `<footer>`); exactly one `<h1>` (hero); `lang="de"`
 - [x] Smooth anchor scroll via CSS (`scroll-behavior: smooth`) + `scroll-mt-24` on sections (removed `smooth-scroll` dep)
@@ -155,11 +166,13 @@ graph TD
 - [x] `loading="lazy"` + explicit intrinsic dimensions on below-the-fold images (prevents layout shift)
 
 ### Phase 6 — Content cleanup
+
 - [x] Lorem ipsum / placeholder data removed (via the `data.json` rebuild in Phase 2 + the `About`/`Services`/`Team`/`Contact` rewrites)
 - [x] Dead English nav labels removed (Navigation component deleted)
 - [x] German copy consolidated and consistent; `data.json` is the single content source for About cards / Services / Team / Contact
 
 ### Phase 7 — Validate & deploy
+
 - [x] `npm run build` green; browser QA at mobile (~300 px) and desktop (1140 px): correct grids, no horizontal overflow, all images load
 - [x] Added `public/CNAME` (`ingenieurbuero-auner.com`) so the custom domain is published with `build/` — the root `CNAME` alone is **not** copied into `build/`
 - [x] Set `"homepage": "https://ingenieurbuero-auner.com"` in `package.json`; renamed package to `iba-landing-page`
@@ -169,6 +182,17 @@ graph TD
 - [ ] Note: root `CNAME` is now redundant (Pages serves `build/`); safe to delete later — left in place to avoid touching live Pages config
 
 **Checkpoint:** a11y + build + deploy config verified (Lighthouse pending).
+
+---
+
+### Follow-up — Self-hosted fonts
+- [x] Replace the Google Fonts CDN with self-hosted variable fonts in `src/assets/fonts/`
+  - `raleway-latin.woff2` (weight range **100–900**), `open-sans-latin.woff2` (weight range **300–800**), `latin` subset only
+  - `@font-face` rules in `src/index.css` using relative `url("./assets/fonts/...")` → CRA emits hashed files under `static/media/`
+  - Removed the Google Fonts `<link>`s + `preconnect`s from `public/index.html`
+  - Dropped the unused `font-nav` (Lato) token from `tailwind.config.js`
+- [x] Finding: Google Fonts' css2 API serves a **single variable font per family** regardless of the weights requested, so only one file per family is needed (requesting `wght@400;500;600;700;800` returns the same file 5×).
+- [x] Verified: `document.fonts` reports `Raleway 100 900 loaded` and `Open Sans 300 800 loaded`; only local `/static/media/*.woff2` requested; **zero `googleapis`/`gstatic` references** in the build.
 
 ---
 
@@ -194,6 +218,7 @@ plugins: !useTailwind ? [ /* flexbugs-fixes, preset-env, normalize */ ]
 ```
 
 Consequences:
+
 - **No `postcss.config.js` is required** — CRA sets `config: false`, so an external PostCSS config is **ignored**. Just `tailwind.config.js` + `@tailwind` directives is enough.
 - Tailwind's PostCSS plugin reads `tailwind.config.js` from the project root, so the `content` globs must cover every file containing class names.
 
@@ -207,12 +232,12 @@ Consequences:
 
 ## Progress log
 
-| Date | Phase | Notes |
-| --- | --- | --- |
-| 2026-10-09 | Planning | Baseline audit complete; plan created |
-| 2026-10-09 | 0 | Branch `chore/tailwind-refactor`; baseline committed `c15c6be`; baseline build green |
-| 2026-10-09 | 1 | Tailwind 3.4.19 wired via `tailwind.config.js` (CRA auto-detect); legacy CSS/JS/fonts deleted; duplicate `yarn.lock` removed; build green (CSS 305 B → 1.72 kB) |
-| 2026-10-09 | 2 | Deleted 4 unused components + `App.css`/`serviceWorker`/`Impressum.jsx`/`logo.svg`/`_config.yml`/`build/`; uninstalled `emailjs-com` + `smooth-scroll`; rebuilt `data.json`; build green (JS 47.5 → 44.3 kB) |
-| 2026-10-09 | 3 | Rebuilt all sections with Tailwind + `ui/` primitives; added `Footer`; fixed missing-doctype (quirks mode) + German heading overflow; verified responsive grids, no h-overflow, all images load |
-| 2026-10-09 | 4–5 | Unified tokens/typography/spacing; a11y (landmarks, alt, `aria-hidden`, `focus-visible`, lazy images with dimensions); final build green (CSS 3.2 kB gzip, JS 47.2 kB) |
-| 2026-10-09 | 6–7 | Content verified clean (no lorem/placeholders); added `public/CNAME` so the custom domain ships with `build/`; set `homepage`; renamed package to `iba-landing-page`; build green, `build/CNAME` confirmed |
+| Date       | Phase    | Notes                                                                                                                                                                                                        |
+| ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-10-09 | Planning | Baseline audit complete; plan created                                                                                                                                                                        |
+| 2026-10-09 | 0        | Branch `chore/tailwind-refactor`; baseline committed `c15c6be`; baseline build green                                                                                                                         |
+| 2026-10-09 | 1        | Tailwind 3.4.19 wired via `tailwind.config.js` (CRA auto-detect); legacy CSS/JS/fonts deleted; duplicate `yarn.lock` removed; build green (CSS 305 B → 1.72 kB)                                              |
+| 2026-10-09 | 2        | Deleted 4 unused components + `App.css`/`serviceWorker`/`Impressum.jsx`/`logo.svg`/`_config.yml`/`build/`; uninstalled `emailjs-com` + `smooth-scroll`; rebuilt `data.json`; build green (JS 47.5 → 44.3 kB) |
+| 2026-10-09 | 3        | Rebuilt all sections with Tailwind + `ui/` primitives; added `Footer`; fixed missing-doctype (quirks mode) + German heading overflow; verified responsive grids, no h-overflow, all images load              |
+| 2026-10-09 | 4–5      | Unified tokens/typography/spacing; a11y (landmarks, alt, `aria-hidden`, `focus-visible`, lazy images with dimensions); final build green (CSS 3.2 kB gzip, JS 47.2 kB)                                       |
+| 2026-10-09 | 6–7      | Content verified clean (no lorem/placeholders); added `public/CNAME` so the custom domain ships with `build/`; set `homepage`; renamed package to `iba-landing-page`; build green, `build/CNAME` confirmed   || 2026-10-09 | Follow-up | Self-hosted Raleway + Open Sans as latin-subset variable fonts in `src/assets/fonts/`; removed Google Fonts CDN; verified fonts load locally and build has no external font refs |

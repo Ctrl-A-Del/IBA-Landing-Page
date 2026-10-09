@@ -22,7 +22,6 @@ module.exports = {
       fontFamily: {
         heading: ["Raleway", "sans-serif"],
         body: ['"Open Sans"', "sans-serif"],
-        nav: ["Lato", "sans-serif"],
       },
       maxWidth: {
         container: "1170px",
