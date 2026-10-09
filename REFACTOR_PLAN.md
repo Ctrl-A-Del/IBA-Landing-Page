@@ -119,33 +119,40 @@ graph TD
 → ✅ Verified: build compiled, JS bundle `47.54 kB → 44.25 kB`.
 
 ### Phase 3 — Rebuild layout with Tailwind + shared primitives
-- [ ] Create `src/components/ui/Section.jsx` (vertical rhythm `py-20 md:py-28`, dark/light variant, `id` + `scroll-mt-24`)
-- [ ] Create `src/components/ui/Container.jsx` (max-width + padding)
-- [ ] Create `src/components/ui/SectionTitle.jsx` (eyebrow/heading/underline pattern)
+- [x] Create `src/components/ui/Container.jsx` (max-width + responsive padding)
+- [x] Create `src/components/ui/Section.jsx` (vertical rhythm `py-20 md:py-28`, `light`/`muted`/`dark`/`darkAlt` variants, `id` + `scroll-mt-24`)
+- [x] Create `src/components/ui/SectionTitle.jsx` (heading + gradient underline + optional subtitle)
 
-| Component | Change |
-| --- | --- |
-| `header.jsx` | Convert hero to Tailwind; `class=`→`className=`; keep logo + claim; remove invalid nested CSS |
-| `features.jsx` | Turn gutted component into a clean full-width **banner** (`fraese.png`) with alt + responsive image |
-| `about.jsx` | 4 `.card`s → `grid sm:grid-cols-2 lg:grid-cols-4`; kill conflicting breakpoints; `class=`→`className=` |
-| `services.jsx` | Replace BS `col-md-4` + `fa` icons → `grid md:grid-cols-3` + lucide icons |
-| `Team.jsx` | Replace BS grid + `thumbnail` → Tailwind cards; responsive images |
-| `contact.jsx` | Two-column layout; keep tel/mailto; delete commented form + social |
-| `Footer.jsx` | Datenschutz / Impressum links + copyright |
+| Component | Change | Done |
+| --- | --- | --- |
+| `header.jsx` | Tailwind hero; grid `2fr/1fr` mobile → `1fr/2fr` desktop; `100dvh` where supported; uses `data.title` | ✅ |
+| `features.jsx` | Clean full-width banner (`fraese.png`) with alt + intrinsic dimensions | ✅ |
+| `about.jsx` | 4 cards → `grid sm:grid-cols-2 lg:grid-cols-4`; conflicting breakpoints gone; data-driven from `data.cards` | ✅ |
+| `services.jsx` | BS `col-md-4` + `fa` icons → `grid md:grid-cols-3` + `lucide-react` via icon map | ✅ |
+| `Team.jsx` | BS grid/`thumbnail` → Tailwind cards; images `h-60 w-60 rounded-[20px]` | ✅ |
+| `contact.jsx` | Centered contact links (phone/email) with lucide icons; commented form + social removed | ✅ |
+| `Footer.jsx` | New component: Datenschutz / Impressum links (extracted from `contact.jsx`) | ✅ |
 
-- [ ] Apply rules throughout: `class=`→`className=`, drop `text-centero`, no `id`-based CSS, no inline `style={{}}`, consistent `sm/md/lg` breakpoints
+- [x] Apply rules throughout: `class=`→`className=`, dropped `text-centero`, no `id`-based CSS, no inline `style={{}}`, consistent `sm/md/lg` breakpoints
+
+**Defects found & fixed during this phase:**
+- `public/index.html` had **no `<!DOCTYPE html>` / `<html>` element** → page rendered in **quirks mode**. Added doctype + `<html lang="de">` (now `document.compatMode === "CSS1Compat"`); fixed title umlaut; added `theme-color`.
+- Long German compounds overflowed headings (regression from dropping `.heading { overflow-wrap: break-word }`). Fixed with base-layer `break-words`.
+- Verified: responsive grids (about 1/2/4, team 1/2/3, services 1/3), **no horizontal overflow** at 300/818/1140 px, all images load (lazy-loaded team photos verified after scroll).
+
+**Checkpoint:** visual QA per section → ✅ done via browser (desktop + mobile screenshots).
 
 ### Phase 4 — Tokens, typography, consistency
-- [ ] All colors/fonts sourced from `tailwind.config.js` (no repeated hex literals)
-- [ ] Uniform heading scale; body via `font-body`
-- [ ] Consistent section spacing + alternating dark/light backgrounds (currently `#0a1f2e` everywhere)
+- [x] All colors/fonts sourced from `tailwind.config.js` (no repeated hex literals in components)
+- [x] Uniform heading scale via `SectionTitle`; body via `font-body`
+- [x] Consistent section spacing via `Section` (`py-20 md:py-28`) — backgrounds intentionally stay uniformly dark (`brand`/`darkAlt`) to match the original design; `Section` supports `light`/`muted` variants if needed later
 
 ### Phase 5 — Accessibility & polish
-- [ ] `alt` on all images; `aria-label` on icon-only links
-- [ ] Semantic landmarks (`<header>`, `<main>`, `<section>`, `<footer>`); exactly one `<h1>` (hero)
-- [ ] Smooth anchor scroll via `scroll-smooth` + `scroll-mt-24` (remove `smooth-scroll` lib)
-- [ ] Visible focus states
-- [ ] `loading="lazy"` + explicit dimensions on below-the-fold images
+- [x] `alt` on all images; decorative lucide icons marked `aria-hidden="true"` (no icon-only links exist)
+- [x] Semantic landmarks (`<header>`, `<main>`, `<section>`, `<footer>`); exactly one `<h1>` (hero); `lang="de"`
+- [x] Smooth anchor scroll via CSS (`scroll-behavior: smooth`) + `scroll-mt-24` on sections (removed `smooth-scroll` dep)
+- [x] Visible `focus-visible` ring styles on footer/contact links
+- [x] `loading="lazy"` + explicit intrinsic dimensions on below-the-fold images (prevents layout shift)
 
 ### Phase 6 — Content cleanup
 - [ ] Remove Lorem ipsum, placeholder address (`4321 California St…`), dead English nav labels
@@ -204,3 +211,5 @@ Consequences:
 | 2026-10-09 | 0 | Branch `chore/tailwind-refactor`; baseline committed `c15c6be`; baseline build green |
 | 2026-10-09 | 1 | Tailwind 3.4.19 wired via `tailwind.config.js` (CRA auto-detect); legacy CSS/JS/fonts deleted; duplicate `yarn.lock` removed; build green (CSS 305 B → 1.72 kB) |
 | 2026-10-09 | 2 | Deleted 4 unused components + `App.css`/`serviceWorker`/`Impressum.jsx`/`logo.svg`/`_config.yml`/`build/`; uninstalled `emailjs-com` + `smooth-scroll`; rebuilt `data.json`; build green (JS 47.5 → 44.3 kB) |
+| 2026-10-09 | 3 | Rebuilt all sections with Tailwind + `ui/` primitives; added `Footer`; fixed missing-doctype (quirks mode) + German heading overflow; verified responsive grids, no h-overflow, all images load |
+| 2026-10-09 | 4–5 | Unified tokens/typography/spacing; a11y (landmarks, alt, `aria-hidden`, `focus-visible`, lazy images with dimensions); final build green (CSS 3.2 kB gzip, JS 47.2 kB) |

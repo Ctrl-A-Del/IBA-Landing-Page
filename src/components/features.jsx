@@ -1,26 +1,17 @@
 import React from "react";
+import { Container } from "./ui/Container";
 
-export const Features = (props) => {
-  return (
-    <div id="features" className="text-centero">
-      <div className="container">
-        <img src="img/fraese.png" alt="" style={{ width: "100%" }}></img>
-        {/* <div className="col-md-10 col-md-offset-1 section-title">
-          <h2>Features</h2>
-        </div>
-        <div className="row">
-          {props.data
-            ? props.data.map((d, i) => (
-                <div key={`${d.title}-${i}`} className="col-xs-6 col-md-3">
-                  {" "}
-                  <i className={d.icon}></i>
-                  <h3>{d.title}</h3>
-                  <p>{d.text}</p>
-                </div>
-              ))
-            : "Loading..."}
-        </div> */}
-      </div>
-    </div>
-  );
-};
+export const Features = () => (
+  <section id="features" className="scroll-mt-24 bg-brand py-16 md:py-20">
+    <Container>
+      <img
+        src="img/fraese.png"
+        alt="Fräsmaschine für den Grabenaushub"
+        width="1342"
+        height="738"
+        className="mx-auto h-auto w-full rounded-xl"
+        loading="lazy"
+      />
+    </Container>
+  </section>
+);
