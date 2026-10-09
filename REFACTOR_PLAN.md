@@ -108,14 +108,15 @@ graph TD
 → ✅ Verified: build compiled, processed CSS grew `305 B → 1.72 kB` (Tailwind preflight now active).
 
 ### Phase 2 — Remove dead code & unused files
-- [ ] Delete components: `navigation.jsx`, `gallery.jsx`, `testimonials.jsx`, `image.jsx`
-- [ ] Strip commented-out blocks from `header.jsx`, `features.jsx`, `about.jsx`, `contact.jsx`, `services.jsx`, `Team.jsx`
-- [ ] Delete dead files: `src/App.css`, `src/serviceWorker.js` (+ its import in `index.js`), `src/pages/Impressum.jsx`, root `_config.yml`, local `build/`
-- [ ] Remove deps: `emailjs-com`, `smooth-scroll`
-- [ ] `data.json`: remove `Gallery`, `Testimonials`, `Features`, `About.Why`/`Why2`, unused `Contact` social fields
-- [ ] Extract footer from `contact.jsx` into `src/components/Footer.jsx`
+- [x] Delete components: `navigation.jsx`, `gallery.jsx`, `testimonials.jsx`, `image.jsx`
+- [x] Delete dead files: `src/App.css`, `src/serviceWorker.js` (+ its import in `index.js`), `src/pages/Impressum.jsx`, `src/logo.svg`, root `_config.yml`, local `build/`
+- [x] Remove deps: `emailjs-com`, `smooth-scroll` (uninstalled)
+- [x] `App.jsx`: drop `smooth-scroll` + `App.css` imports and the commented `Navigation`/`Gallery`/`Testimonials`
+- [x] `data.json`: rebuilt — trimmed to `Header`, `About` (heading + `cards`), `Services`, `Team`, `Contact` (`phone`/`email`); icon keys set to semantic names
+- [~] Strip commented-out blocks + extract `Footer.jsx` → **folded into the Phase 3 rewrites** (rewriting each component removes the dead comments)
 
 **Checkpoint:** no dead files remain; `npm run build` still green.
+→ ✅ Verified: build compiled, JS bundle `47.54 kB → 44.25 kB`.
 
 ### Phase 3 — Rebuild layout with Tailwind + shared primitives
 - [ ] Create `src/components/ui/Section.jsx` (vertical rhythm `py-20 md:py-28`, dark/light variant, `id` + `scroll-mt-24`)
@@ -202,3 +203,4 @@ Consequences:
 | 2026-10-09 | Planning | Baseline audit complete; plan created |
 | 2026-10-09 | 0 | Branch `chore/tailwind-refactor`; baseline committed `c15c6be`; baseline build green |
 | 2026-10-09 | 1 | Tailwind 3.4.19 wired via `tailwind.config.js` (CRA auto-detect); legacy CSS/JS/fonts deleted; duplicate `yarn.lock` removed; build green (CSS 305 B → 1.72 kB) |
+| 2026-10-09 | 2 | Deleted 4 unused components + `App.css`/`serviceWorker`/`Impressum.jsx`/`logo.svg`/`_config.yml`/`build/`; uninstalled `emailjs-com` + `smooth-scroll`; rebuilt `data.json`; build green (JS 47.5 → 44.3 kB) |
