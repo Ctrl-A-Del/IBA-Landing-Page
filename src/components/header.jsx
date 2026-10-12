@@ -1,42 +1,24 @@
 import React from "react";
 
-export const Header = (props) => {
+export const Header = ({ data }) => {
+  const title = data?.title ?? "Wir schaufeln nicht – wir fräsen";
+
   return (
     <header id="header">
-      <section class="hero">
-        <div class="hero__logo">
-          <img src="img/logo.jpg" alt="Company logo" />
+      <div className="grid h-screen min-h-[600px] w-full grid-rows-[2fr_1fr] bg-brand supports-[height:100dvh]:h-[100dvh] md:grid-cols-[1fr_2fr] md:grid-rows-1">
+        <div className="relative overflow-hidden">
+          <img
+            src="img/logo.jpg"
+            alt="Ingenieurbüro Auner"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
         </div>
-        <div class="hero__claim">
-          <h1>Wir schaufeln nicht - wir fräsen!</h1>
+        <div className="flex items-center justify-center p-6 md:justify-start md:p-12">
+          <h1 className="text-center font-heading text-3xl font-bold uppercase leading-tight text-white sm:text-4xl md:text-left md:text-5xl lg:text-6xl">
+            {title}
+          </h1>
         </div>
-      </section>
-      {/* <div className="intro">
-        <div className="overlay">
-          <div className="container" style={{ width: "100%", height: "100%" }}>
-            <div className="row">
-              <div className="col-sm-4 col-xs-12" style={{ padding: "0" }}>
-                <img
-                  src="img/logo.jpg"
-                  style={{
-                    height: "70vh",
-                    width: "100vw",
-                    objectFit: "cover",
-                    objectPosition: "center",
-                  }}
-                ></img>
-              </div>
-              <div className="col-sm-8 col-xs-12">
-                <h1>
-                  {props.data ? props.data.title : "Loading"}
-                  <span></span>
-                </h1>
-                <p>{props.data ? props.data.paragraph : "Loading"}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
+      </div>
     </header>
   );
 };

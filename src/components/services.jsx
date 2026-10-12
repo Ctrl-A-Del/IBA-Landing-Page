@@ -1,31 +1,38 @@
 import React from "react";
+import { FastForward, Recycle, User } from "lucide-react";
+import { Section } from "./ui/Section";
+import { SectionTitle } from "./ui/SectionTitle";
 
-export const Services = (props) => {
+const ICONS = {
+  "fast-forward": FastForward,
+  recycle: Recycle,
+  user: User,
+};
+
+export const Services = ({ data }) => {
+  const services = data ?? [];
+
   return (
-    <div id="services" className="text-center">
-      <div className="container">
-        <div className="section-title">
-          <h2>Neue Netze brauchen leistungsfähigere Bauprozesse.</h2>
-          {/* <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit duis sed
-            dapibus leonec.
-          </p> */}
-        </div>
-        <div className="row">
-          {props.data
-            ? props.data.map((d, i) => (
-                <div key={`${d.name}-${i}`} className="col-md-4">
-                  {" "}
-                  <i className={d.icon}></i>
-                  <div className="service-desc">
-                    <h3>{d.name}</h3>
-                    <p>{d.text}</p>
-                  </div>
-                </div>
-              ))
-            : "loading"}
-        </div>
+    <Section id="services" variant="darkAlt">
+      <SectionTitle dark>
+        Neue Netze brauchen leistungsfähigere Bauprozesse.
+      </SectionTitle>
+      <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
+        {services.map((service) => {
+          const Icon = ICONS[service.icon] ?? FastForward;
+          return (
+            <div key={service.name} className="text-center">
+              <span className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-r from-accent-from to-accent-to shadow-lg">
+                <Icon className="h-10 w-10 text-white" aria-hidden="true" />
+              </span>
+              <h3 className="mb-3 text-xl font-medium text-white">
+                {service.name}
+              </h3>
+              <p className="text-white/75">{service.text}</p>
+            </div>
+          );
+        })}
       </div>
-    </div>
+    </Section>
   );
 };
