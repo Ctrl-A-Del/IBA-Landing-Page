@@ -18,7 +18,7 @@ export const Team = ({ data }) => {
               alt={member.name}
               width="240"
               height="320"
-              className="mx-auto h-60 w-60 rounded-[20px] object-cover"
+              className="mx-auto aspect-[3/4] w-full max-w-[240px] rounded-[20px] object-cover object-top"
               loading="lazy"
             />
             <h3 className="mt-5 text-lg font-semibold text-white">

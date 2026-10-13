@@ -6,11 +6,13 @@ export const Header = ({ data }) => {
   return (
     <header id="header">
       <div className="grid h-screen min-h-[600px] w-full grid-rows-[2fr_1fr] bg-brand supports-[height:100dvh]:h-[100dvh] md:grid-cols-[1fr_2fr] md:grid-rows-1">
-        <div className="relative overflow-hidden">
+        {/* Logo panel: the image keeps its own aspect ratio and is scaled to fit
+            the panel, so the whole logo is visible at every breakpoint. */}
+        <div className="flex items-center justify-center overflow-hidden p-4 sm:p-6 md:p-8">
           <img
             src="img/logo.jpg"
             alt="Ingenieurbüro Auner"
-            className="absolute inset-0 h-full w-full object-cover object-center"
+            className="max-h-full w-auto max-w-full rounded-[20px] object-cover ring-1 ring-white/10"
           />
         </div>
         <div className="flex items-center justify-center p-6 md:justify-start md:p-12">
