@@ -4,11 +4,16 @@ Decision log, verified facts and task tracker for the redesign of `ingenieurbuer
 
 **Purpose:** this file is the single handoff artefact so that a fresh AI agent — or a human — can resume this work in a new context window without re-discovering the codebase or re-litigating decisions.
 
-**Status:** **design agreed and frozen — ready for implementation in a fresh context window.** No design code has been written yet (deliberately: the user wants implementation to start in a new session).
+**Status:** **design agreed and frozen; implementation under way.** Tickets `01`–`02` have landed on
+`design/v2`. Tickets `03`–`10` are the section wave, `11` is the integration QA pass, and `12`–`13`
+are human-gated (`13` **publishes the live site**).
 
-**Last updated:** 2026-10-15 · branch `design/v2` not yet created (still on `master` @ `e5ffdd6`)
+**Last updated:** 2026-10-15 · branch `design/v2` with ticket `02` landed; nothing pushed, `master`
+untouched at `e5ffdd6`.
 
-**Progress:** all five interview rounds are closed; there are **no open questions** (§5). Everything decided is in §3.
+**Progress:** all five interview rounds are closed; there are **no open questions** (§5). Everything
+decided is in §3. Ticket `01` is complete and reviewed; ticket `02` is complete and verified, with
+five items raised for a human at the bottom of its ticket file.
 
 ---
 
@@ -301,16 +306,16 @@ If implementation turns up a genuine conflict with a decision in §3, raise it w
 ## 6. Task list
 
 ### Setup
-- [ ] Create branch `design/v2` off `master` (`e5ffdd6`)
-- [ ] `npm ci`
-- [ ] Prototype scaffold: `src/prototype/` + the temporary `App.jsx` pointer (D5)
+- [x] Create branch `design/v2` off `master` (`e5ffdd6`)
+- [x] `npm ci`
+- [x] Prototype scaffold: `src/prototype/` + the temporary `App.jsx` pointer (D5)
 - [ ] **Do not re-open settled decisions** — §3 is frozen. If something genuinely conflicts during implementation, raise it with the user instead of silently changing it
 
 ### Theme
-- [ ] Extend `tailwind.config.js`: orange signal colour `#f08a24` (+ a hover/active shade), a custom neutral ramp, retire the `accent` gradient from CTAs, add a shadow/ring token set for the framed cards (B7)
-- [ ] Rework the type scale: display sizes for Raleway at 700–900, tighter tracking, body sizes for Open Sans
-- [ ] Add `prefers-reduced-motion` handling and the `IntersectionObserver` reveal hook (B5)
-- [ ] Add an AA-contrast CTA button component (orange fill, navy text)
+- [x] Extend `tailwind.config.js`: orange signal colour `#f08a24` (+ a hover/active shade), a custom neutral ramp, retire the `accent` gradient from CTAs, add a shadow/ring token set for the framed cards (B7)
+- [x] Rework the type scale: display sizes for Raleway at 700–900, tighter tracking, body sizes for Open Sans
+- [x] Add `prefers-reduced-motion` handling and the `IntersectionObserver` reveal hook (B5)
+- [x] Add an AA-contrast CTA button component (orange fill, navy text)
 
 ### Sections (per §4)
 - [ ] Nav + CSS-cropped logo mark (B6), transparent-over-hero behaviour (B9), with the mobile call bar (C6)
@@ -324,9 +329,9 @@ If implementation turns up a genuine conflict with a decision in §3, raise it w
 - [ ] Footer with the logo plate
 
 ### Housekeeping (D4)
-- [ ] Fix the four broken favicon references in `public/index.html`
-- [ ] Fill the meta description
-- [ ] Add Open Graph + Twitter card tags
+- [x] Fix the four broken favicon references in `public/index.html`
+- [x] Fill the meta description
+- [x] Add Open Graph + Twitter card tags
 - [ ] Prune dead images **only after** the design lands
 
 ### Review & ship
