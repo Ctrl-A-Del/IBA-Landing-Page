@@ -138,20 +138,51 @@ test("Escape closes the dialog and returns focus to the trigger", () => {
   expect(document.activeElement).toBe(trigger);
 });
 
-test("a click on the backdrop closes the dialog and returns focus; a click on the render does not", () => {
+// What the browser dispatches for one press-and-release of the primary button: `mousedown` on the
+// element under the pointer at press, `mouseup` on the one under it at release, then `click` on
+// their nearest common ancestor. Pointer events on `::backdrop` are reported with the <dialog> as
+// the target.
+const commonAncestor = (a, b) => {
+  let node = a;
+  while (!node.contains(b)) node = node.parentNode;
+  return node;
+};
+const pointerPress = (downOn, upOn = downOn) => {
+  fireEvent.mouseDown(downOn);
+  fireEvent.mouseUp(upOn);
+  fireEvent.click(commonAncestor(downOn, upOn));
+};
+
+test("a click on the backdrop closes the dialog and returns focus; a click on the render or caption does not", () => {
   const { trigger, dialog } = openWithButton();
   within(dialog).getByRole("button", { name: "Schließen" }).focus();
 
-  fireEvent.click(within(dialog).getByRole("img"));
+  pointerPress(within(dialog).getByRole("img"));
   expect(dialog.open).toBe(true);
 
-  fireEvent.click(within(dialog).getByText(CAPTION));
+  pointerPress(within(dialog).getByText(CAPTION));
   expect(dialog.open).toBe(true);
 
-  // A click on `::backdrop` is reported by the browser with the <dialog> itself as the target.
-  fireEvent.click(dialog);
+  pointerPress(dialog);
   expect(dialog.open).toBe(false);
   expect(document.activeElement).toBe(trigger);
+});
+
+test("dragging from the render or its caption out to the backdrop does not close the dialog", () => {
+  const { dialog } = openWithButton();
+
+  pointerPress(within(dialog).getByRole("img"), dialog);
+  expect(dialog.open).toBe(true);
+
+  pointerPress(within(dialog).getByText(CAPTION), dialog);
+  expect(dialog.open).toBe(true);
+});
+
+test("dragging from the backdrop onto the render does not close the dialog", () => {
+  const { dialog } = openWithButton();
+
+  pointerPress(dialog, within(dialog).getByRole("img"));
+  expect(dialog.open).toBe(true);
 });
 
 test("pointer users can click the render itself; focus returns to it, and it adds no tab stop", () => {
