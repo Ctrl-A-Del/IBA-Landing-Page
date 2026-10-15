@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 (Theme foundation and shared primitives)
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] The section is anchored at `#team` on the navy background, not on a light surface
 - [ ] All three people appear: Marcus Auner — Geschäftsführung · Klaus Auner — Einkauf · Jan Hönninger — Technischer Leiter
