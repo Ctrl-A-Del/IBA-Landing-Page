@@ -1,10 +1,176 @@
+import { useRef } from "react";
+import { Maximize2, X } from "lucide-react";
+import Section from "../ui/Section";
+import Reveal from "../ui/Reveal";
+
 /**
- * Ticket 05 — Verfahren / Die Maschine, incl. the lightbox (DESIGN_PLAN.md §4 row 3,
- * decisions C4, C9, C10, C13, C14).
+ * Ticket 05 — Verfahren / Die Maschine (DESIGN_PLAN.md §4 row 3, decisions C4, C9, C10, C13, C14).
  *
- * PLACEHOLDER. A section ticket replaces this whole file and does not edit `../Prototype.jsx`.
- * Shell contract: this slot renders the `verfahren` anchor on the light background.
+ * THE RENDER (C9). `fraese.png` is shown at the full container width at every breakpoint, scaled
+ * as a whole (`w-full h-auto`): never hidden, cropped or CSS-zoomed. At ~375 px its baked-in
+ * annotations shrink to ~4 px, so the meaning is carried by the module list below it (C4).
+ *
+ * THE MODULES (C4). The four annotation boxes baked into the raster, reproduced verbatim as an
+ * ordered list of real text, so screen readers and search engines get them too.
+ *
+ * THE LIGHTBOX (C10, C13, C14). A native <dialog> opened with `showModal()`. The browser supplies
+ * the focus trap, Esc-to-close, inertness of the page behind it and `::backdrop`; nothing here
+ * re-implements those. This file adds only what the platform does not:
+ *   - a backdrop click closes it (the dialog fills the viewport, so a click anywhere except the
+ *     render, its caption or the close button counts as "outside");
+ *   - focus goes back to whichever element opened it — the labelled button, or the render for a
+ *     pointer user — on every exit path. All exits (Esc, close button, backdrop) end in the dialog's
+ *     `close` event, so that is the one place focus is restored.
+ * No pan/zoom UI: the source is a finite 1342×738 raster. The enlarged image is capped at its
+ * natural size (`w-auto h-auto max-w-full max-h-full`), so it fills the viewport on phones and
+ * laptops and stops at 1:1 on larger screens instead of showing interpolation.
+ *
+ * COPY (C8): the eyebrow, H2 and intro are new prototype copy, flagged `C8-NEW` for the diff
+ * against `data.json`. The intro is derived from the hedged Services text (C2: "soll", no claims).
  */
-const Verfahren = () => <section id="verfahren" />;
+
+// C4: the four annotation boxes baked into `public/img/fraese.png`, reproduced verbatim as text.
+const MODULES = [
+  { numeral: "01", name: "Fräsmodul", line: "Zwei Arme, gegenläufige Fräsköpfe" },
+  { numeral: "02", name: "Aufnahmemodul", line: "Nimmt das gelöste Material auf" },
+  { numeral: "03", name: "Fördermodul", line: "Kontinuierlicher Austrag, beidseitig" },
+  { numeral: "04", name: "Antriebsmodul", line: "Energie, Hydraulik, Steuerung" },
+];
+
+const RENDER_SRC = "img/fraese.png";
+const RENDER_ALT = "3D-Darstellung der Fräsmaschine mit ihren vier Modulen";
+// C14: the only text a screen-reader user gets when the render opens full-screen.
+const CAPTION = "Fräsmodul, Aufnahme-, Förder- und Antriebsmodul";
+
+const HEADING_ID = "verfahren-heading";
+const CAPTION_ID = "verfahren-lightbox-caption";
+
+// Hairline-ruled, hard-edged secondary button (§4.1). Orange is reserved for primary CTAs (B3).
+const BUTTON_BASE =
+  "inline-flex items-center gap-2 rounded-edge border px-4 py-2 text-body-sm font-semibold transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+
+const Verfahren = () => {
+  const dialogRef = useRef(null);
+  const openerRef = useRef(null);
+
+  const open = (event) => {
+    openerRef.current = event.currentTarget;
+    dialogRef.current.showModal();
+  };
+
+  const close = () => dialogRef.current.close();
+
+  // Only the render, its caption and the close button are "inside"; everything else in the
+  // full-viewport dialog, including `::backdrop` (reported with the <dialog> as target), closes it.
+  const closeOnOutsideClick = (event) => {
+    if (!event.target.closest("img, figcaption, button")) close();
+  };
+
+  const restoreFocus = () => {
+    if (openerRef.current) openerRef.current.focus();
+    openerRef.current = null;
+  };
+
+  return (
+    <Section id="verfahren" tone="light" aria-labelledby={HEADING_ID}>
+      <Reveal className="max-w-2xl">
+        {/* C8-NEW */}
+        <p className="text-eyebrow text-ink-500">Verfahren</p>
+        {/* C8-NEW */}
+        <h2 id={HEADING_ID} className="mt-3 text-display-lg text-ink-900">
+          Die Maschine
+        </h2>
+        {/* C8-NEW */}
+        <p className="mt-5 text-body-lg">
+          Die Maschine ist in Entwicklung. Vier Module sollen Bodenabtrag und Materialtransport in
+          einem kontinuierlichen Arbeitsgang bündeln.
+        </p>
+      </Reveal>
+
+      <div className="mt-12 sm:mt-16">
+        {/*
+          Pointer-only shortcut (C14). `tabIndex={-1}` keeps it out of the tab order — the labelled
+          button below is the accessible affordance — but makes it focusable, so focus can return
+          here when a pointer user closes the lightbox.
+        */}
+        <img
+          src={RENDER_SRC}
+          alt={RENDER_ALT}
+          width="1342"
+          height="738"
+          loading="lazy"
+          decoding="async"
+          tabIndex={-1}
+          onClick={open}
+          className="block h-auto w-full cursor-zoom-in focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+        />
+        <div className="mt-4 flex justify-end">
+          <button
+            type="button"
+            onClick={open}
+            className={`${BUTTON_BASE} border-brand text-brand hover:bg-brand hover:text-mist-100 focus-visible:outline-brand`}
+          >
+            <Maximize2 aria-hidden="true" size={16} strokeWidth={2.25} />
+            Größer ansehen
+          </button>
+        </div>
+      </div>
+
+      <Reveal
+        as="ol"
+        aria-label="Die vier Module der Maschine"
+        className="mt-12 grid gap-x-8 gap-y-8 sm:mt-16 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        {MODULES.map(({ numeral, name, line }) => (
+          <li key={numeral} className="border-t border-ink-900/15 pt-5">
+            <span className="block font-heading text-display-md text-brand">{numeral}</span>
+            <h3 className="mt-2 text-body-lg font-bold text-ink-900">{name}</h3>
+            <p className="mt-1 text-body">{line}</p>
+          </li>
+        ))}
+      </Reveal>
+
+      {/*
+        No `display` utility on the <dialog> itself: that would override the UA `display: none` of a
+        closed dialog. Layout lives on the inner wrapper.
+      */}
+      <dialog
+        ref={dialogRef}
+        aria-labelledby={CAPTION_ID}
+        onClose={restoreFocus}
+        onClick={closeOnOutsideClick}
+        className="m-0 h-full max-h-none w-full max-w-none border-0 bg-transparent p-0 text-mist-300 backdrop:bg-brand"
+      >
+        <div className="flex h-full w-full flex-col p-4 sm:p-8">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={close}
+              className={`${BUTTON_BASE} border-mist-500 text-mist-100 hover:bg-mist-100 hover:text-brand focus-visible:outline-white`}
+            >
+              <X aria-hidden="true" size={16} strokeWidth={2.25} />
+              Schließen
+            </button>
+          </div>
+          <figure className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center gap-3">
+            <div className="flex min-h-0 w-full flex-1 items-center justify-center">
+              <img
+                src={RENDER_SRC}
+                alt={RENDER_ALT}
+                width="1342"
+                height="738"
+                decoding="async"
+                className="block h-auto max-h-full w-auto max-w-full"
+              />
+            </div>
+            <figcaption id={CAPTION_ID} className="text-center text-body-sm text-mist-300">
+              {CAPTION}
+            </figcaption>
+          </figure>
+        </div>
+      </dialog>
+    </Section>
+  );
+};
 
 export default Verfahren;
