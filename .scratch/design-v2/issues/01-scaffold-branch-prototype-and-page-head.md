@@ -4,7 +4,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** claimed
+**Status:** ready-for-human
 
 - [x] Branch `design/v2` exists, created off `master` at `e5ffdd6`
 - [x] `npm ci` completes, and `npm start` serves the app — npm only, with `package-lock.json` left in sync
@@ -71,17 +71,21 @@ are facts, not guesses. `<html lang="de">` and `<title>Ingenieurbüro Auner</tit
 - `npm ci` → exit 0, 1664 packages, `package-lock.json` unmodified. (The first attempt was
   interrupted by a tool-session boundary and left a partial `node_modules/`; re-run cleanly.)
 - `npm run build` → **Compiled successfully**, exit 0. `main.js` gzip **−4.45 kB** vs. the previous
-  build, which is the old component tree no longer being bundled — direct evidence the entry now
-  points at the prototype.
+  build, which shows the old component tree is no longer bundled. The direct evidence that the entry
+  points at the prototype is the live DOM below, not the size delta.
 - Built `build/index.html` contains the new description/OG/Twitter tags, and
   `Select-String 'favicon|apple-touch-icon'` over `build/index.html` + `build/static/js/*.js`
-  returns **0** matches (the note comment is stripped by the production HTML minifier).
+  returns **0** matches (the note comment is stripped by the production HTML minifier, so the
+  reference that remains in the source comment is not in the shipped artefact).
 - `npm start` → compiled successfully, HTTP 200 on `http://localhost:3000/`.
 - Live DOM at that URL (Playwright): landmarks `nav → main → footer`;
   `main` anchors in order `start, verfahren, einsatzbereiche, warum, team, kontakt` — i.e. exactly
   `DESIGN_PLAN.md` §4's order; `document.documentElement.lang === "de"`.
-- All resource timings at that URL: **200 only, no 404** — and `head link` count is `0`, so no icon
-  request is made at all.
+- In that page load, `performance.getEntriesByType('resource')` held only three entries, all
+  `200`: the bundle and two HMR updates. No icon request appeared, and the document has **0**
+  `<link>` elements. That is an observation about one page load, not a guarantee: deleting the
+  `<link>`s cannot suppress a browser's own implicit `/favicon.ico` probe, so a future console 404
+  for an unlinked default icon is possible and is exactly what raised question 1 below is about.
 - `npm test` → `No tests found, exiting with code 1`. Pre-existing: the repo has zero test files
   (`setupTests.js` is not one) and CRA's `test` script has always behaved this way here. Not a
   regression.
@@ -105,8 +109,54 @@ are facts, not guesses. `<html lang="de">` and `<title>Ingenieurbüro Auner</tit
    image was re-encoded or invented. If a smaller preview asset is wanted later, that is a `12`
    (asset pruning) decision.
 
-**Status.** Left as `claimed` deliberately, per `parallelisation.md` §4.2: the work is complete and
-verified, and verification of the assembled page belongs to ticket `11`. The three items above are
-the only parts of this ticket that are waiting on a human. No PR was opened and nothing was pushed —
-`design/v2` is a local branch, so the live site is untouched.
+**Status.** `ready-for-human`, per `parallelisation.md` §4.2: the implementation is complete and
+verified, and the three items above are decisions only a human can make. Verification of the
+assembled page still belongs to ticket `11`. No PR was opened and nothing was pushed — `design/v2`
+is a local branch with no upstream, so the live site is untouched.
+
+### Post-implementation review (two-axis, fixed point `da12675`)
+
+Both axes ran independently. What they found, and what was done about it:
+
+**Fixed after the review:**
+
+- **The tagline was misquoted in the share titles.** `og:title` / `twitter:title` read
+  `"Ingenieurbüro Auner – Wir schaufeln nicht, wir fräsen"` — a **comma** where the company's own
+  tagline has a **U+2013 en dash** (§1.5 `Header.title`, §1.8). Both axes flagged it. The titles now
+  carry the tagline **verbatim** (`"Wir schaufeln nicht – wir fräsen"`) and the brand is carried by
+  `og:site_name`, so the tagline cannot be re-punctuated in future. Verified by code point
+  (`U+2013`, no `U+002C` in the tagline).
+
+**Corrected above (claims in this ticket that the diff could not support):**
+
+- The build-size delta was described as "direct evidence" for the entry switch; it only shows the
+  old tree left the bundle. The live DOM is the evidence, and the bullet now says so.
+- "no icon request is made at all" was an overclaim from a single page load. Deleting the `<link>`s
+  cannot suppress a browser's implicit `/favicon.ico` probe.
+
+**Accepted, with reasons — deliberately not changed:**
+
+- *Duplicated description string across `description` / `og:description` / `twitter:description`
+  (Duplicated Code smell).* Inherent to OG/Twitter: the two protocols do not read each other's
+  tags. Collapsing them would break previews on one platform.
+- *`const App` inside `src/AppLegacy.jsx` still called `App` (Mysterious Name).* The file is
+  byte-identical to `e5ffdd6:src/App.jsx` on purpose — that equality is the audit trail that proves
+  nothing under the old tree was edited. Renaming one symbol would destroy it.
+- *The six anchors exist as strings in three places: the §4 contract table in `Prototype.jsx`, the
+  stub `id`s, and this ticket (Primitive Obsession / Duplicated Code).* The stubs are throwaway and
+  each wave-3 ticket owns its own file, so a shared constants module would be speculative
+  generality — and it would put a shared file back in the path of eight parallel agents, which is
+  the exact collision `parallelisation.md` §3 exists to prevent. `11` reconciles by hand.
+- *`og:image` is a grey `#d8d8d8` render, so "consistent with the theme colour `#0a1f2e`" is not
+  something an OG tag can demonstrate.* The theme colour is declared in exactly one place —
+  `<meta name="theme-color" content="#0a1f2e" />` — and it was already correct before this ticket.
+  No OG/Twitter tag expresses a colour, so this part of the checkbox is satisfied as far as it can
+  be. Raising rather than inventing a navy-tinted preview image.
+- *No `Type:` line on this ticket.* `docs/agents/triage-labels.md` asks for a category role, but
+  none of the 13 tickets in this queue carries one, so adding it to `01` alone would be
+  inconsistent. Category is clear from the wording (enhancement). Flagging the queue-wide gap
+  instead of changing one file.
+- *No `.scratch/design-v2/spec.md`.* `issue-tracker.md` names `spec.md` as the feature spec;
+  `DESIGN_PLAN.md` is standing in for it, as the ticket instructions given to the implementer
+  confirmed. Pre-existing shape of the queue, not something ticket 01 introduced.
 
