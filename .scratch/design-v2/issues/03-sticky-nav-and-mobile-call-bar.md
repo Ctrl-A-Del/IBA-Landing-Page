@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 (Theme foundation and shared primitives)
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] A sticky nav renders the emblem disc as a tight CSS crop of the existing logo plate; the full framed plate is not used in the nav — it is a JPEG, so transparency is impossible
 - [ ] The nav links to Verfahren · Einsatzbereiche · Team · Kontakt, and each anchor lands on its section with the heading clear of the sticky bar
