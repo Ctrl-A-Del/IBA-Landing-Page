@@ -1,7 +1,7 @@
 import { useLayoutEffect } from "react";
 import { Phone } from "lucide-react";
 import CTA from "../ui/CTA";
-import { PHONE_DISPLAY, PHONE_HREF } from "./phone";
+import { CALL_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
 import useScrolled from "./useScrolled";
 
 /**
@@ -34,8 +34,6 @@ const LINKS = [
   { href: "#team", label: "Team" },
   { href: "#kontakt", label: "Kontakt" },
 ];
-
-const CALL_LABEL = `Anrufen: ${PHONE_DISPLAY}`;
 
 // The bar's height and the space `<body>` reserves for it are the same literal, written twice in
 // this one file because Tailwind only compiles class names that appear verbatim (DESIGN_PLAN §2.5).
