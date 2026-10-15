@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 (Theme foundation and shared primitives)
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] The hero is anchored at `#start` on the navy background
 - [ ] The H1 reads `Wir schaufeln nicht – wir fräsen`, with the en dash (U+2013) preserved exactly rather than typed as a hyphen
