@@ -25,9 +25,9 @@ afterAll(() => {
 });
 
 const renderSection = () => {
-  const utils = render(<WarumWir />);
-  const section = utils.container.querySelector("section#warum");
-  return { ...utils, section };
+  const { container } = render(<WarumWir />);
+  const section = container.querySelector("section#warum");
+  return { section };
 };
 
 test("renders the #warum section, labelled by its heading", () => {
@@ -83,7 +83,22 @@ const CLAIM = new RegExp(
   "i"
 );
 // Hedging resolved, not deleted: each point states openly that it is a goal of a machine being built.
-const INTENT = /\b(ziel|ausgelegt|entwickeln|entwickelt|geplant|planen)\b/i;
+// Checked per clause, not per body: a body that opens with "Wir entwickeln …:" and then describes
+// the working machine in plain present tense would otherwise pass on its first verb alone.
+const INTENT = /\b(ziel|ausgelegt|entwickeln|entwickelt|geplant|planen|konzept)\b/i;
+// Clauses end at a full stop, colon or semicolon. Commas stay inside a clause, so "Ziel ist, dass …"
+// keeps its goal marker.
+const clausesOf = (text) =>
+  text
+    .split(/[.:;]/)
+    .map((clause) => clause.trim())
+    .filter(Boolean);
+// Each body names its goal in the same words: "Ziel ist …".
+const GOAL = /\bZiel ist\b/;
+// An implied "better than" comparison is a performance claim the page cannot back up. Applied to
+// the point bodies only: the point name "Schneller vorankommen" is verbatim data, and the H2 is
+// kept under C2 (see the ticket).
+const COMPARATIVE = /\b(statt|anstatt|als|gegenüber|vergleich\w*|schneller|besser|effizienter)\b/i;
 
 test("the copy is plain German without 'sollen' hedging, and says the machine is in development", () => {
   const { section } = renderSection();
@@ -91,7 +106,19 @@ test("the copy is plain German without 'sollen' hedging, and says the machine is
   expect(section.textContent).not.toMatch(HEDGE);
   expect(section.textContent).toMatch(/\bEntwicklung\b/);
   getPoints(section).forEach((item) => {
-    expect(item.querySelector("p").textContent).toMatch(INTENT);
+    const body = item.querySelector("p").textContent;
+    expect(body).toMatch(GOAL);
+    clausesOf(body).forEach((clause) => {
+      expect(clause).toMatch(INTENT);
+    });
+  });
+});
+
+test("no point body compares the machine with another way of working", () => {
+  const { section } = renderSection();
+
+  getPoints(section).forEach((item) => {
+    expect(item.querySelector("p").textContent).not.toMatch(COMPARATIVE);
   });
 });
 
