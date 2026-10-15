@@ -146,3 +146,60 @@ the UA behaviour the spec defines (`open` set or cleared, `close` fired, Escape 
 5. **Page scroll behind the open dialog is not locked**, per C13 ("no manual scroll lock"). The
    page is inert but can still scroll under the opaque backdrop on some platforms. Nothing visible
    changes, because the backdrop is solid.
+
+### Review follow-up (agent, 2026-10-15)
+
+Branch `design-v2/05-review-fixes`. Only `Verfahren.jsx`, `Verfahren.test.jsx` and this file were
+edited.
+
+**Fixed:**
+
+- **Backdrop click.** The `closest("img, figcaption, button")` tag allowlist is gone. The dialog
+  records the `mousedown` and `mouseup` targets, and its `click` handler closes only when both lie
+  outside the figure content: `figureRef.current.contains(node)`, excluding the `<figure>` box
+  itself. The release target is needed too, because `click` fires on the common ancestor of press
+  and release, so a drag from the backdrop onto the render looks like a backdrop click. Clicks with
+  no recorded press (keyboard Enter on "Schließen") are ignored by this handler, and the button
+  closes the dialog itself. The `<figure>` became a two-row grid (`minmax(0,1fr)` / `auto`) with no
+  wrapper `<div>`, so the render and caption are its only descendants and its empty area still
+  counts as backdrop.
+  - Tests: the backdrop test now dispatches real press/release/click sequences. Two new tests cover
+    a drag from the render or the caption out to the backdrop, and a drag from the backdrop onto the
+    render. Both were red before the change.
+  - Browser check (scratch build on port 3005, headless Edge over CDP) at 375×740, 1280×800,
+    1920×1080 and 800×375:
+    - Click on the render: stays open. Drag render→corner: stays open. Drag corner→render: stays
+      open.
+    - Click in the figure's empty area beside the render: closes, and focus returns to
+      "Größer ansehen".
+    - Enlarged render sizes: 1173×645 at 1280×800, 1342×738 at 1920×1080, 400×220 at 800×375. The
+      ratio is 1.818 everywhere, and the caption is in view.
+- **Data clump.** A single `RENDER = { src, alt, width, height }` is spread into both `<img>`s.
+- **Duplicate class.** The `<figcaption>` no longer repeats `text-mist-300`; it inherits it from the
+  `<dialog>`.
+- **Reveal.** A comment marks the render as deliberately outside `Reveal` (C9: never hidden).
+- **Focus outline.** The section render has `outline-none` in place of its `focus-visible` ring.
+  Focus still returns to it (the test is unchanged and green). In the browser, after a pointer open
+  and Esc, it matches `:focus-visible` but its outline is transparent (`2px solid #0000`). Tab never
+  reaches it, so the ring could only ever appear as a stray. In forced-colours mode the transparent
+  outline shows, which is intended.
+
+**Raised for a human (not changed):**
+
+1. **Local `BUTTON_BASE` vs the red-list "never fork a local variant" rule.** The two outline
+   buttons ("Größer ansehen", "Schließen") share a local class string, because ticket 02 ships only
+   the orange primary CTA, and orange is reserved for primary CTAs (B3). This is arguably a local
+   fork of a shared primitive. Should it become a shared secondary/outline button in ticket 02's
+   domain (`src/prototype/ui/`), which other sections could then consume?
+2. **Enlarged render capped at its natural 1342×738 vs C14 "as large as the viewport allows".** On
+   viewports larger than about 1406×870 the render stops at 1:1 with navy around it. That follows
+   C14's own "no pan/zoom, magnifying past 1:1 only shows interpolation", but the literal wording
+   says "as large as the viewport allows". Confirm the cap, or remove it and let the render upscale.
+3. **`getComputedStyle` test shim, kept.** jsdom 16 logs "Not implemented: window.computedStyle(elt,
+   pseudoElt)" each time `getByRole(..., { name })` computes an accessible name. The shim drops
+   the pseudo-element argument and returns the element's own style. That is honest here, because no
+   pseudo-element on this page carries text. It is scoped to this file (`beforeAll`/`afterAll`)
+   and only keeps the output readable; it changes no assertion. Remove it if jsdom is upgraded.
+
+**Tests.** Full suite 24/24 green before and after `git merge design/v2`, run with the `.claude/`
+worktree `--testMatch` workaround from ticket 03.

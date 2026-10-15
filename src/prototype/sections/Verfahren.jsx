@@ -16,8 +16,9 @@ import Reveal from "../ui/Reveal";
  * THE LIGHTBOX (C10, C13, C14). A native <dialog> opened with `showModal()`. The browser supplies
  * the focus trap, Esc-to-close, inertness of the page behind it and `::backdrop`; nothing here
  * re-implements those. This file adds only what the platform does not:
- *   - a backdrop click closes it (the dialog fills the viewport, so a click anywhere except the
- *     render, its caption or the close button counts as "outside");
+ *   - a backdrop click closes it. The dialog fills the viewport, so "outside" means outside the
+ *     <figure>'s content (render and caption). Press and release must both land outside it, so
+ *     dragging from the render or caption onto the backdrop (or back) never closes it;
  *   - focus goes back to whichever element opened it — the labelled button, or the render for a
  *     pointer user — on every exit path. All exits (Esc, close button, backdrop) end in the dialog's
  *     `close` event, so that is the one place focus is restored.
@@ -37,8 +38,13 @@ const MODULES = [
   { numeral: "04", name: "Antriebsmodul", line: "Energie, Hydraulik, Steuerung" },
 ];
 
-const RENDER_SRC = "img/fraese.png";
-const RENDER_ALT = "3D-Darstellung der Fräsmaschine mit ihren vier Modulen";
+// The one raster, shown inline and enlarged. Natural size, so the browser reserves the box.
+const RENDER = {
+  src: "img/fraese.png",
+  alt: "3D-Darstellung der Fräsmaschine mit ihren vier Modulen",
+  width: 1342,
+  height: 738,
+};
 // C14: the only text a screen-reader user gets when the render opens full-screen.
 const CAPTION = "Fräsmodul, Aufnahme-, Förder- und Antriebsmodul";
 
@@ -52,6 +58,8 @@ const BUTTON_BASE =
 const Verfahren = () => {
   const dialogRef = useRef(null);
   const openerRef = useRef(null);
+  const figureRef = useRef(null);
+  const pressRef = useRef({ down: null, up: null });
 
   const open = (event) => {
     openerRef.current = event.currentTarget;
@@ -60,10 +68,23 @@ const Verfahren = () => {
 
   const close = () => dialogRef.current.close();
 
-  // Only the render, its caption and the close button are "inside"; everything else in the
-  // full-viewport dialog, including `::backdrop` (reported with the <dialog> as target), closes it.
-  const closeOnOutsideClick = (event) => {
-    if (!event.target.closest("img, figcaption, button")) close();
+  // Content = anything inside the <figure> except the figure box itself, whose empty grid area
+  // looks like backdrop. `::backdrop` hits are reported with the <dialog> as their target.
+  const isContent = (node) => node !== figureRef.current && figureRef.current.contains(node);
+
+  // `click` lands on the common ancestor of press and release, so it cannot tell a drag from the
+  // render onto the backdrop from a real backdrop click. The press and release targets can.
+  const recordPress = (event) => {
+    pressRef.current = { down: event.target, up: null };
+  };
+  const recordRelease = (event) => {
+    pressRef.current.up = event.target;
+  };
+  const closeOnBackdropClick = () => {
+    const { down, up } = pressRef.current;
+    pressRef.current = { down: null, up: null };
+    // No press recorded = a keyboard-generated click (Enter on "Schließen"), not a backdrop click.
+    if (down && up && !isContent(down) && !isContent(up)) close();
   };
 
   const restoreFocus = () => {
@@ -87,22 +108,21 @@ const Verfahren = () => {
         </p>
       </Reveal>
 
+      {/* Deliberately outside <Reveal>: the render is never hidden, not even before it scrolls in (C9). */}
       <div className="mt-12 sm:mt-16">
         {/*
           Pointer-only shortcut (C14). `tabIndex={-1}` keeps it out of the tab order — the labelled
           button below is the accessible affordance — but makes it focusable, so focus can return
-          here when a pointer user closes the lightbox.
+          here when a pointer user closes the lightbox. No focus outline: Tab never reaches it, so a
+          ring would only ever appear as a stray one after the lightbox closes.
         */}
         <img
-          src={RENDER_SRC}
-          alt={RENDER_ALT}
-          width="1342"
-          height="738"
+          {...RENDER}
           loading="lazy"
           decoding="async"
           tabIndex={-1}
           onClick={open}
-          className="block h-auto w-full cursor-zoom-in focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+          className="block h-auto w-full cursor-zoom-in outline-none"
         />
         <div className="mt-4 flex justify-end">
           <button
@@ -138,7 +158,9 @@ const Verfahren = () => {
         ref={dialogRef}
         aria-labelledby={CAPTION_ID}
         onClose={restoreFocus}
-        onClick={closeOnOutsideClick}
+        onMouseDown={recordPress}
+        onMouseUp={recordRelease}
+        onClick={closeOnBackdropClick}
         className="m-0 h-full max-h-none w-full max-w-none border-0 bg-transparent p-0 text-mist-300 backdrop:bg-brand"
       >
         <div className="flex h-full w-full flex-col p-4 sm:p-8">
@@ -152,18 +174,22 @@ const Verfahren = () => {
               Schließen
             </button>
           </div>
-          <figure className="mt-4 flex min-h-0 flex-1 flex-col items-center justify-center gap-3">
-            <div className="flex min-h-0 w-full flex-1 items-center justify-center">
-              <img
-                src={RENDER_SRC}
-                alt={RENDER_ALT}
-                width="1342"
-                height="738"
-                decoding="async"
-                className="block h-auto max-h-full w-auto max-w-full"
-              />
-            </div>
-            <figcaption id={CAPTION_ID} className="text-center text-body-sm text-mist-300">
+          {/*
+            Grid, not a wrapper <div>: the render and caption are the figure's only descendants, so
+            every other point in it is the figure box itself and counts as backdrop. The image row
+            takes the leftover height (`minmax(0,1fr)`), and `max-h-full`/`max-w-full` scale the
+            render down into it proportionally.
+          */}
+          <figure
+            ref={figureRef}
+            className="mt-4 grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)] grid-rows-[minmax(0,1fr)_auto] place-items-center gap-3"
+          >
+            <img
+              {...RENDER}
+              decoding="async"
+              className="block h-auto max-h-full w-auto max-w-full"
+            />
+            <figcaption id={CAPTION_ID} className="text-center text-body-sm">
               {CAPTION}
             </figcaption>
           </figure>
