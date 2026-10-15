@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 (Theme foundation and shared primitives)
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] The section is anchored at `#verfahren` on the light background
 - [ ] The render is full width at every breakpoint, including mobile, and is never hidden, cropped or CSS-zoomed
