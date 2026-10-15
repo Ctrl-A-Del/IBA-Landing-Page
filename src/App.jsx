@@ -1,25 +1,7 @@
-import React from "react";
-import { Header } from "./components/header";
-import { Features } from "./components/features";
-import { About } from "./components/about";
-import { Services } from "./components/services";
-import { Team } from "./components/Team";
-import { Contact } from "./components/contact";
-import { Footer } from "./components/Footer";
-import JsonData from "./data/data.json";
-
-const App = () => (
-  <>
-    <Header data={JsonData.Header} />
-    <main>
-      <Features />
-      <About data={JsonData.About} />
-      <Services data={JsonData.Services} />
-      <Team data={JsonData.Team} />
-      <Contact data={JsonData.Contact} />
-    </main>
-    <Footer />
-  </>
-);
-
-export default App;
+// Design v2 prototype switch (DESIGN_PLAN.md §3, D5).
+//
+// The redesign lives entirely under ./prototype/ and the whole app is reached through the single
+// line below. To go back to the previous design, change the specifier to "./AppLegacy" — nothing
+// else has to change. src/AppLegacy.jsx and everything under src/components/ are untouched by the
+// prototype and stay recoverable until ticket 12 (post-approval migration) removes them.
+export { default } from "./prototype/Prototype";
