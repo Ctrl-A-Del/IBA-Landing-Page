@@ -20,12 +20,36 @@
 }
 
 @layer base {
+  /*
+   * Sticky-nav / anchor contract (ticket 02 -> ticket 03).
+   *
+   * `--iba-anchor-offset` must equal the height of the sticky nav that ticket 03 adds. The nav is
+   * expected to render at `h-nav`, which is the same `spacing.nav` value in `tailwind.config.js`
+   * (5rem). The utility `scroll-mt-nav` is what the `Section` primitive applies; this rule is the
+   * safety net for any `section[id]` that is not built from that primitive.
+   *
+   * If the nav height changes, BOTH `spacing.nav` in `tailwind.config.js` and this value change
+   * together — they are owned by ticket 02, so a wave-3 agent escalates rather than edits.
+   *
+   * (In the compiled CSS this rule appears twice — `scroll-margin-top: 5rem` followed by the
+   * `var()` form. That is postcss-preset-env emitting a fallback; the `var()` declaration is the
+   * live one, so the custom property really is the single override point.)
+   */
+  :root {
+    --iba-anchor-offset: 5rem;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
+  section[id] {
+    scroll-margin-top: var(--iba-anchor-offset);
+  }
+
   body {
-    @apply font-body text-neutral-600 antialiased;
+    /* `text-ink-600` is a token from the neutral ramp, not an ad-hoc opacity (see ticket 02). */
+    @apply font-body text-ink-600 antialiased;
   }
 
   h1,
@@ -34,6 +58,28 @@
   h4,
   h5,
   h6 {
-    @apply font-heading break-words;
+    /* `normal-case` encodes DESIGN_PLAN.md decision B8: sentence case, never uppercased. */
+    @apply font-heading normal-case break-words;
+  }
+
+  /*
+   * Motion (B5): everything animates through CSS only, and all of it stops here. This is the
+   * stylesheet half of the guarantee — the JS half is the `useReveal` hook, which never starts an
+   * IntersectionObserver when this media query matches.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
+

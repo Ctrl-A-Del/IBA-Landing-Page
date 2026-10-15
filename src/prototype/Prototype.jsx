@@ -6,6 +6,9 @@ import WarumWir from "./sections/WarumWir";
 import Team from "./sections/Team";
 import Kontakt from "./sections/Kontakt";
 import Footer from "./sections/Footer";
+// TEMPORARY (ticket 02): the token showcase is a dev artefact, not a page section. Delete this
+// import and the `<Showcase />` line below before the page ships.
+import Showcase from "./Showcase";
 
 /**
  * Design v2 prototype shell — the composition and order fixed by DESIGN_PLAN.md §4.
@@ -40,6 +43,8 @@ import Footer from "./sections/Footer";
  */
 const Prototype = () => (
   <>
+    {/* TEMPORARY — ticket 02's token showcase. Remove with its import above. */}
+    <Showcase />
     <Nav />
     <main>
       <Hero />
