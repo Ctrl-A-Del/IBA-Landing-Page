@@ -82,6 +82,9 @@ test("renders a call bar beside the nav that dials the same number on first rend
   expect(bar.getAttribute("href")).toBe("tel:+4917661877599");
   expect(bar).toHaveTextContent("Anrufen");
   expect(bar).toHaveTextContent("0176 618 77 599");
+  // The two visible spans sit side by side with no text node between them, so screen readers get
+  // the verb and the number from the label, not from the run-together text.
+  expect(bar.getAttribute("aria-label")).toBe("Anrufen: 0176 618 77 599");
 });
 
 test("offers no WhatsApp or other unpublished contact channel", () => {

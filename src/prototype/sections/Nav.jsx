@@ -40,12 +40,18 @@ const CALL_LABEL = `Anrufen: ${PHONE_DISPLAY}`;
 // The bar's height and the space `<body>` reserves for it are the same literal, written twice in
 // this one file because Tailwind only compiles class names that appear verbatim (DESIGN_PLAN §2.5).
 // If one changes, change the other.
-const CALL_BAR_HEIGHT = "h-[4.5rem]";
-const CALL_BAR_RESERVE = "max-md:pb-[4.5rem]";
+//
+// iOS safe area: the bar grows by the home-indicator inset and pads its content clear of it, so the
+// 4.5rem tap row is never squashed, and `<body>` reserves the same sum. Defensive for now:
+// `env(safe-area-inset-bottom)` is 0 unless the viewport meta sets `viewport-fit=cover`
+// (public/index.html, owned by ticket 01).
+const CALL_BAR_HEIGHT =
+  "h-[calc(4.5rem+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)]";
+const CALL_BAR_RESERVE = "max-md:pb-[calc(4.5rem+env(safe-area-inset-bottom))]";
 
 // Visible keyboard focus for the text links and the emblem on navy: a white outline (16.8:1
 // against #0a1f2e). Outline, not ring, so it survives forced-colours mode — same choice as the CTA.
-const FOCUS =
+const FOCUS_ON_NAVY =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
 
 /**
@@ -95,14 +101,16 @@ const Nav = () => {
           <a
             href="#start"
             aria-label="Ingenieurbüro Auner – zum Seitenanfang"
-            className={`shrink-0 rounded-full ${FOCUS}`}
+            className={`shrink-0 rounded-full ${FOCUS_ON_NAVY}`}
           >
             <Emblem />
           </a>
 
           {/*
             Phones: the four links sit in one row at a compact 13px/medium so they fit beside the
-            emblem at 375 px. `overflow-x-auto` is the safety net for narrower screens, and it is
+            emblem at 375 px. 13px is an arbitrary value because no type token fits: `body-sm`
+            (14px) overflows the row at 375 and 360 px, and `eyebrow` (13px) carries letter-spacing.
+            `overflow-x-auto` is the safety net for narrower screens, and it is
             why the row is `justify-start` below `sm`: with `justify-end`, overflowing content spills
             off the LEFT edge, where a scroll box cannot reach it. The `p-1` keeps the focus outline
             inside the scroll box, which would otherwise clip it.
@@ -112,7 +120,7 @@ const Nav = () => {
               <li key={href} className="shrink-0">
                 <a
                   href={href}
-                  className={`block whitespace-nowrap rounded-edge py-2 font-body text-[0.8125rem] font-medium text-mist-200 no-underline transition-colors duration-150 hover:text-white sm:text-body sm:font-semibold ${FOCUS}`}
+                  className={`block whitespace-nowrap rounded-edge py-2 font-body text-[0.8125rem] font-medium text-mist-200 no-underline transition-colors duration-150 hover:text-white sm:text-body sm:font-semibold ${FOCUS_ON_NAVY}`}
                 >
                   {label}
                 </a>
@@ -135,7 +143,7 @@ const Nav = () => {
       >
         <CTA href={PHONE_HREF} aria-label={CALL_LABEL} className="w-full">
           <Phone aria-hidden="true" className="h-5 w-5" strokeWidth={2.25} />
-          <span>Anrufen</span>{" "}
+          <span>Anrufen</span>
           <span className="font-normal">{PHONE_DISPLAY}</span>
         </CTA>
       </div>

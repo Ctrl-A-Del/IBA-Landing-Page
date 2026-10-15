@@ -135,3 +135,51 @@ so it is verified in the browser pass below.
    explained in the component, done because the footer and shell are off-limits to this ticket. If
    ticket 10 or the coordinator would rather own that spacing (for example a spacer after the footer
    in the shell), it can be removed from `Nav.jsx` in one place.
+
+### Review outcome (2026-10-15)
+
+Review findings on 9d169b7 and what happened to them (branch `ticket/03-review-fixes`). Tests 9/9
+green, `npm run build` clean, re-measured in headless Edge at 360 / 375 / 768 / 1280 px on port 3104.
+
+**Fixed:**
+
+- **`useScrolled.js` was more general than it needed to be.** The unused `threshold` parameter is gone; the
+  8 px is now the named constant `SOLID_AFTER_PX`. The `typeof window` SSR guard is gone too (CRA has
+  no SSR). So is the eager `update()` in the effect, because the lazy `useState(readScrolled)` already
+  reads the restored scroll position on the first render. The "already solid when restored
+  mid-scroll" test still passes, and in the browser it was transparent at the top and solid after
+  scrolling.
+- **`FOCUS` → `FOCUS_ON_NAVY`**, so the name says it is the white-on-navy outline.
+- **The `{" "}` between the call-bar spans is removed.** `CTA`'s `gap-2` already gives the visible
+  8 px space (measured). The accessible name comes from `aria-label="Anrufen: 0176 618 77 599"`, so it
+  doesn't depend on the text node. The raw `textContent` now reads "Anrufen0176 618 77 599", but
+  `aria-label` replaces it as the link's name. The call-bar test now also pins its `aria-label` as the guard.
+- **iOS safe area on the mobile bar.** The bar is now
+  `h-[calc(4.5rem+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)]`, and `<body>`
+  reserves `max-md:pb-[calc(4.5rem+env(safe-area-inset-bottom))]`. All of these are literal classes,
+  and the compiled CSS shows `calc(4.5rem + env(safe-area-inset-bottom))`. In the browser the bar is
+  still 72 px with a 72 px body reserve, and the last content ends at y = 739.75 against a bar top of
+  740 (375 px). **This is defensive only:** `env(safe-area-inset-bottom)` is 0 unless the viewport
+  meta in `public/index.html` sets `viewport-fit=cover`, and that file belongs to ticket 01, so it
+  was not edited.
+
+**Left for a human:**
+
+- **`text-[0.8125rem]` stays.** No type-scale token fits. With `text-body-sm` (14px) swapped in, the
+  link row overflows by 5 px at 375 and 20 px at 360. With today's 13px it fits at 375 and overflows
+  by 2 px at 360 (the row's own padding). `eyebrow` is 13px but brings 0.14em tracking and weight 600,
+  so it would be wider still. Either accept the arbitrary value, or add a `nav` / `body-xs` token in
+  `tailwind.config.js` (ticket 02's file).
+- **No nav CTA below `md`** (C16 reading): raised item 1 above, still open.
+- **The `<body>` padding side effect, and who owns it** (ticket 10 / shell): raised item 4 above,
+  still open. The reserve now includes the safe-area inset, so whoever takes it over should keep the
+  `calc()`.
+- **The 8 px solid threshold vs "over the hero"** (B9 reading). The nav turns solid after 8 px, not
+  when it leaves the hero. Confirm this reading of B9, or say if it should switch at the hero's
+  bottom edge.
+- **The phone number is hardcoded** in `phone.js`, the ticket-02 `Showcase.jsx` and the tests. It
+  should be consolidated with `data.json` in ticket 12.
+- **The ticket files have no `Type:` line.** This one is unchanged; it is a template question for the
+  tracker, not for this ticket.
+- **Anchor landing** is still unverified, since the sections are placeholders. It is verified in
+  ticket 11.
