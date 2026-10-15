@@ -1,7 +1,7 @@
 import { Phone } from "lucide-react";
 import CTA from "../ui/CTA";
 import Section from "../ui/Section";
-import { PHONE_DISPLAY, PHONE_HREF } from "./phone";
+import { CALL_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
 
 /**
  * Ticket 04 — Hero (DESIGN_PLAN.md §4 row 2, decisions B8, C2, C8).
@@ -28,8 +28,6 @@ import { PHONE_DISPLAY, PHONE_HREF } from "./phone";
  *   trust line = moved from the hardcoded Team heading in the legacy `Team.jsx`.
  *   CTA        = the C16 number formats from `./phone`.
  */
-const CALL_LABEL = `Anrufen: ${PHONE_DISPLAY}`;
-
 const Hero = () => (
   <Section
     id="start"

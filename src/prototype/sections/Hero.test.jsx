@@ -20,7 +20,7 @@ test("is the #start anchor and carries the tagline as the page's H1, en dash int
   const h1 = getByRole("heading", { level: 1 });
   expect(section).toContainElement(h1);
   // U+2013 EN DASH, written as an escape so an editor can't silently turn it into a hyphen.
-  expect(h1.textContent).toBe("Wir schaufeln nicht – wir fräsen");
+  expect(h1.textContent).toBe("Wir schaufeln nicht \u2013 wir fräsen");
 });
 
 test("offers the call: one phone CTA dialling the international number, showing the local one", () => {
