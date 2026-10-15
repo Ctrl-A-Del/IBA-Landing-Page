@@ -111,3 +111,47 @@ here, scoped to the file.
 3. **Eyebrow "Warum wir" next to a goals-framed body.** The section title promises reasons to choose
    the company, while the body honestly lists development goals. Say if the eyebrow should change
    (for example to "Ziele").
+
+### Review findings (agent, 2026-10-15)
+
+Branch `design-v2/07-review-fixes`. Only `WarumWir.jsx`, `WarumWir.test.jsx` and this file were
+edited.
+
+**Fixed:**
+
+- **Point 1 copy ("Schneller vorankommen").** The old body opened with "Wir entwickeln …", but the
+  clause after the colon ("Sie fräst den Boden und fördert das Material … ab") described a working
+  machine in plain present tense, and "statt zwischen Graben, Schwenken und Abladen zu wechseln"
+  was an implied comparative performance claim. New body, same "Ziel ist …" framing as points 2
+  and 3, no comparison (still flagged `C8-NEW`):
+  "Ziel ist ein durchgehender Arbeitsgang, in dem die Maschine den Boden fräst und das Material im
+  selben Zug abfördert."
+- **Intent test tightened.** The old `INTENT` regex passed if "entwickeln" appeared anywhere in a
+  body, which let point 1 through. Now every body must contain "Ziel ist", and every clause (split
+  at `.`, `:` and `;`; commas stay inside) must carry an intent marker ("Ziel", "ausgelegt",
+  "entwickeln", "Konzept", …). A new test forbids comparatives in the point bodies ("statt",
+  "anstatt", "als", "gegenüber", "Vergleich…", "schneller", "besser", "effizienter"). It is scoped to
+  the bodies, so the verbatim point name "Schneller vorankommen" and the H2 are not hit. Both
+  checks were red against the old point-1 copy and are green now.
+- **Test helper.** `const utils = render(...)` became `const { container } = render(...)`, and the
+  helper returns only `{ section }`.
+
+**Deferred (for ticket 11 or a human):**
+
+1. **`getComputedStyle` shim duplicated** across the Verfahren, Team and WarumWir tests. A candidate
+   for `src/setupTests.js` (red-list / ticket-11 territory, so not moved here).
+2. **The rule + icon + h3 + p list item is duplicated** across Einsatzbereiche, Verfahren and
+   WarumWir. Extracting it would need a ticket-02-owned primitive in `src/prototype/ui/`.
+3. **Stroke widths differ:** 1.75 (WarumWir, Einsatzbereiche) vs 2.25 (Hero, Nav, Verfahren). The
+   rendered weights are close because the icon sizes differ, but §4.1 "consistent stroke width"
+   needs an interpretation: the same prop value, or the same rendered weight?
+4. **`ready-for-human` status semantics vs `docs/agents/triage-labels.md`.** This is repo-wide, not
+   specific to this ticket.
+5. **Human copy calls:** the eyebrow "Warum wir" sits above a goal-list body (alternative: "Unsere
+   Ziele"), and the H2 "Neue Netze brauchen leistungsfähigere Bauprozesse." was kept under C2.
+   Both need a human decision.
+
+**Tests / build.** Full suite 39/39 green, run with the `.claude/` worktree `--testMatch`
+workaround from ticket 03. `npm run build` (with `BUILD_PATH` in a scratch directory) reports
+"Compiled with warnings". Both warnings are the known `jsx-a11y/alt-text` ones in `Verfahren.jsx`
+(Raised item 1 above); WarumWir adds none.

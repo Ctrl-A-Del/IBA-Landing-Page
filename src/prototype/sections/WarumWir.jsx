@@ -10,11 +10,13 @@ import Reveal from "../ui/Reveal";
  *
  * HOW THE HEDGE IS RESOLVED (C2). Each old sentence used "soll(en)" because it states something the
  * machine is being built to do, not something it has done. Deleting "sollen" would make that a
- * promise. Instead each body says what the design is ("Wir entwickeln … für", "Das Konzept bündelt",
- * "wird … ausgelegt"), and what it is aimed at is labelled openly as a goal ("Ziel ist …"). The intro
- * says the machine is in development, so the three points read as goals, not results. Deliberately
- * dropped from the old copy: "höhere Tagesleistungen … als klassische Einzelzyklen", which is a
- * performance ratio nothing on this page can back up. No numerals, no counts, no references.
+ * promise. Instead every body labels its aim openly as a goal ("Ziel ist …"), and any sentence about
+ * the design says it is a design ("Das Konzept bündelt", "wird … ausgelegt"). No clause describes the
+ * machine working in plain present tense. The intro says the machine is in development, so the three
+ * points read as goals, not results. Deliberately dropped from the old copy: "höhere
+ * Tagesleistungen … als klassische Einzelzyklen", and any "statt …" comparison with other ways of
+ * working: both are performance claims nothing on this page can back up. No numerals, no counts,
+ * no references.
  *
  * ICONS (§4.1). The same three lucide glyphs the old Services section mapped (`fast-forward`,
  * `recycle`, `user`), in navy, with no gradient circle behind them. They render at 28 px and lucide
@@ -35,7 +37,7 @@ const POINTS = [
     Icon: FastForward,
     name: "Schneller vorankommen",
     // C8-NEW
-    text: "Wir entwickeln die Maschine für einen durchgehenden Arbeitsgang: Sie fräst den Boden und fördert das Material im selben Zug ab, statt zwischen Graben, Schwenken und Abladen zu wechseln.",
+    text: "Ziel ist ein durchgehender Arbeitsgang, in dem die Maschine den Boden fräst und das Material im selben Zug abfördert.",
   },
   {
     Icon: Recycle,
