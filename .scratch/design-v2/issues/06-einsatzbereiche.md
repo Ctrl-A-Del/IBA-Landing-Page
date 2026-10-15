@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 (Theme foundation and shared primitives)
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] The section is anchored at `#einsatzbereiche` on the navy background
 - [ ] All four areas appear with their existing headings and descriptions:
