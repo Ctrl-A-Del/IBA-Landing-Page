@@ -43,7 +43,7 @@ const SURFACES = [
     name: "link",
     value: "#608dfd",
     swatch: "bg-link",
-    note: "Legacy link colour. Not used by v2 sections — use the neutral ramp or `signal`.",
+    note: "Legacy link colour. Not used by v2 sections — use the neutral ramp (`signal` is CTA-only).",
   },
 ];
 
@@ -58,13 +58,13 @@ const SIGNALS = [
     name: "signal-hover",
     value: "#d4730f",
     swatch: "bg-signal-hover",
-    note: "Derived shade, H 30 S 87% L 46%. Navy on it: 5.01:1, so hover stays AA.",
+    note: "Derived shade, same hue: L 54.1% -> 44.5%. Navy on it: 5.01:1, so hover stays AA.",
   },
   {
     name: "signal-active",
     value: "#cd6e0e",
     swatch: "bg-signal-active",
-    note: "Derived shade, L 43%. Navy on it: 4.67:1. White on ANY of these is 2.5:1 — never.",
+    note: "Derived shade, L 42.9%. Navy on it: 4.67:1. White on ANY of these is 2.5:1 — never.",
   },
 ];
 
@@ -132,7 +132,7 @@ const Showcase = () => {
   return (
     <>
       <Section id="showcase-about" tone="alt">
-        <p className="font-heading text-eyebrow text-signal">Temporäres Dev-Artefakt · Ticket 02</p>
+        <p className="font-heading text-eyebrow text-mist-400">Temporäres Dev-Artefakt · Ticket 02</p>
         <h2 className="mt-3 max-w-3xl font-heading text-display-lg text-mist-100">
           Token- und Primitiv-Showcase — nicht Teil der Seite
         </h2>
@@ -151,13 +151,14 @@ const Showcase = () => {
             <span className="font-heading text-eyebrow text-mist-400">h-nav</span>
           </div>
           <p className="max-w-xl text-body-sm text-mist-300">
-            5rem — the height ticket 03 must build the sticky nav at, and the value of
-            <code className="mx-1 text-mist-200">scroll-mt-nav</code>
-            that every section anchor carries. One token, so the two cannot drift apart. A taller nav
-            needs <code className="text-mist-200">spacing.nav</code> in
-            <code className="mx-1 text-mist-200">tailwind.config.js</code>
-            and <code className="text-mist-200">--iba-anchor-offset</code> in
-            <code className="mx-1 text-mist-200">src/index.css</code> changed together.
+            5rem — the height ticket 03 must build the sticky nav at. Every{" "}
+            <code className="text-mist-200">section[id]</code> derives its anchor scroll-margin from
+            the same <code className="text-mist-200">spacing.nav</code> value in{" "}
+            <code className="text-mist-200">src/index.css</code> via{" "}
+            <code className="text-mist-200">theme()</code>, so there is one number rather than two
+            that have to be kept in step. A taller nav means changing{" "}
+            <code className="text-mist-200">spacing.nav</code> — which lives in a file ticket 02
+            owns, so escalate rather than edit it.
           </p>
         </div>
       </Section>
@@ -332,15 +333,41 @@ const Showcase = () => {
         <p className="mt-6">
           <a
             href="#showcase-tone-navy"
-            className="font-heading text-body font-semibold text-ink-900 underline decoration-signal decoration-2 underline-offset-4 transition-colors duration-150 hover:text-signal-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            className="font-heading text-body font-semibold text-ink-900 underline decoration-ink-500 decoration-2 underline-offset-4 transition-colors duration-150 hover:text-ink-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
             Sprungmarke zu tone="navy"
           </a>
         </p>
+
+        <div className="mt-12 border-t border-ink-400 pt-8">
+          <h3 className="font-heading text-display-md text-ink-900">Structural tokens</h3>
+          <ul className="mt-6 space-y-4 text-body text-ink-600">
+            <li>
+              <code className="text-ink-900">rounded-edge</code> · 3px. The page's only corner
+              radius — the CTA and the framed card share it, so nothing can drift to a pill.
+            </li>
+            <li>
+              <code className="text-ink-900">shadow-frame</code> +{" "}
+              <code className="text-ink-900">ring-frame</code> · the lift and the hairline on the
+              framed light card in the portrait section above. §4.1 keeps shadows to that one
+              exception, so nothing else may use them.
+            </li>
+            <li>
+              <code className="text-ink-900">max-w-container</code> · 1170px, the single page
+              gutter, applied by <code className="text-ink-900">Section</code>.
+            </li>
+            <li>
+              <code className="text-ink-900">h-nav</code> · 5rem, the height the ticket-03 sticky
+              nav must be built to. The anchor scroll-margin is derived from the same{" "}
+              <code className="text-ink-900">spacing.nav</code> value in{" "}
+              <code className="text-ink-900">src/index.css</code>, so there is one number, not two.
+            </li>
+          </ul>
+        </div>
       </Section>
 
       <Section id="showcase-tone-navy" tone="navy">
-        <p className="font-heading text-eyebrow text-signal">tone="navy"</p>
+        <p className="font-heading text-eyebrow text-mist-400">tone="navy"</p>
         <h3 className="mt-3 font-heading text-display-md text-mist-100">
           Hero, Einsatzbereiche, Team, Kontakt
         </h3>
@@ -362,7 +389,7 @@ const Showcase = () => {
       </Section>
 
       <Section id="showcase-tone-alt" tone="alt">
-        <p className="font-heading text-eyebrow text-signal">tone="alt"</p>
+        <p className="font-heading text-eyebrow text-mist-400">tone="alt"</p>
         <h3 className="mt-3 font-heading text-display-md text-mist-100">Footer</h3>
         <p className="mt-4 max-w-2xl text-body text-mist-300">
           brand-alt (#14171a) is the footer surface only (C12).

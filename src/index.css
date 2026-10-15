@@ -23,33 +23,33 @@
   /*
    * Sticky-nav / anchor contract (ticket 02 -> ticket 03).
    *
-   * `--iba-anchor-offset` must equal the height of the sticky nav that ticket 03 adds. The nav is
-   * expected to render at `h-nav`, which is the same `spacing.nav` value in `tailwind.config.js`
-   * (5rem). The utility `scroll-mt-nav` is what the `Section` primitive applies; this rule is the
-   * safety net for any `section[id]` that is not built from that primitive.
+   * Ticket 03's sticky nav must render exactly `h-nav` tall, i.e. `spacing.nav` in
+   * `tailwind.config.js` (5rem). Every `<section id>` carries a matching scroll-margin so a jump to
+   * `#verfahren` lands with the heading clear of the nav.
    *
-   * If the nav height changes, BOTH `spacing.nav` in `tailwind.config.js` and this value change
-   * together — they are owned by ticket 02, so a wave-3 agent escalates rather than edits.
+   * There is deliberately NO second copy of that number: this rule derives it from the config with
+   * `theme()`, so `spacing.nav` is the single source of truth. The `Section` primitive used to also
+   * apply a `scroll-mt-nav` utility — that was removed, because this rule (unlayered, specificity
+   * 0,1,1) outranks a utility class (0,1,0) and the duplicated literal made both wrong.
    *
-   * (In the compiled CSS this rule appears twice — `scroll-margin-top: 5rem` followed by the
-   * `var()` form. That is postcss-preset-env emitting a fallback; the `var()` declaration is the
-   * live one, so the custom property really is the single override point.)
+   * If the nav height changes, `spacing.nav` changes, and that file is owned by ticket 02, so a
+   * wave-3 agent escalates rather than edits it (parallelisation.md §3). Ticket 03 must build the
+   * nav at exactly `h-nav`; a taller nav is a change to this contract, not a local tweak.
    */
-  :root {
-    --iba-anchor-offset: 5rem;
-  }
-
   html {
     scroll-behavior: smooth;
   }
 
   section[id] {
-    scroll-margin-top: var(--iba-anchor-offset);
+    scroll-margin-top: theme("spacing.nav");
   }
 
   body {
     /* `text-ink-600` is a token from the neutral ramp, not an ad-hoc opacity (see ticket 02). */
-    @apply font-body text-ink-600 antialiased;
+    /* `break-words` mirrors what headings already have: a long unbreakable token (a file path, a
+       URL, a phone number typed without spaces) must never force a horizontal scrollbar on a phone,
+       which is the device the whole page is optimised for. */
+    @apply font-body text-ink-600 break-words antialiased;
   }
 
   h1,

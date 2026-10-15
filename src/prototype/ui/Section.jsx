@@ -15,19 +15,19 @@
  * drifts section by section.
  *
  * ANCHOR OFFSET — the contract ticket 03 and every section ticket must honour:
- *   The sticky nav is expected to be exactly `h-nav` tall (5rem, `spacing.nav` in
- *   `tailwind.config.js`). This primitive applies `scroll-mt-nav` (the SAME token) so a jump to
- *   `#verfahren` etc. lands with the heading clear of the nav. `src/index.css` also sets
- *   `scroll-margin-top: var(--iba-anchor-offset)` on every `section[id]` as a safety net.
- *   If ticket 03 needs a different nav height, `spacing.nav` and `--iba-anchor-offset` must change
- *   TOGETHER — both live in files owned by ticket 02, so escalate instead of editing (see
- *   `.scratch/design-v2/parallelisation.md` §3). There is deliberately no per-call override for
- *   this: two sections with different offsets would mean the page's nav is not one height.
+ *   The sticky nav is expected to be exactly `h-nav` tall (`spacing.nav` in `tailwind.config.js`).
+ *   The scroll-margin is NOT set here: `src/index.css` gives every `section[id]` a `scroll-margin-top`
+ *   derived from that same config value with `theme()`, so the number exists once. Do not add a
+ *   `scroll-mt-*` utility here — a local literal would outrank the derived rule (unlayered
+ *   specificity 0,1,1 beats a utility class) and silently reintroduce the drift this contract
+ *   exists to prevent. If ticket 03 needs a different nav height, escalate: `spacing.nav` lives in
+ *   a file ticket 02 owns (`.scratch/design-v2/parallelisation.md` §3).
  *
  * INTERFACE
  *   <Section id="team" tone="navy">...</Section>
- * `className` is for LAYOUT ONLY — it is appended last, so a tone/bg class passed there wins the
- * cascade. Don't.
+ * `className` is for LAYOUT ONLY. It is appended last so it reads last, but Tailwind's cascade is
+ * decided by the order of the generated utilities, not by the class attribute: a conflicting
+ * background utility passed here is NOT guaranteed to win. Pass layout, not colour.
  */
 const TONES = {
   navy: "bg-brand text-mist-300",
@@ -38,7 +38,7 @@ const TONES = {
 const Section = ({ id, tone = "light", className = "", containerClassName = "", children, ...rest }) => (
   <section
     id={id}
-    className={`scroll-mt-nav ${TONES[tone]} py-20 sm:py-28 lg:py-36 ${className}`}
+    className={`${TONES[tone]} py-20 sm:py-28 lg:py-36 ${className}`}
     {...rest}
   >
     {/* The page gutter. One container width for the whole page (1170px) — do not invent another. */}

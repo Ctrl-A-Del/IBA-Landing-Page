@@ -10,10 +10,17 @@
  *   navy on signal-active #0a1f2e on #cd6e0e -> 4.67:1  AA, so the pressed state stays legible
  *   WHITE on signal       #ffffff on #f08a24 ->  2.5:1  FAILS AA. Never allowed (DESIGN_PLAN §1.9).
  *
- * The text colour is NOT a prop and is locked with Tailwind's important modifier (`!text-brand`).
- * A caller cannot pass a colour prop because there is none, and cannot override the class with
- * `className="text-white"` either, because `!important` wins in the cascade. Making it literally
- * impossible is the point of the checklist item — "don't do that" comments get ignored.
+ * The FILL and the text colour are both locked with Tailwind's important modifier (`!bg-signal`,
+ * `!text-brand`), so the CTA has exactly one appearance. A caller cannot pass a colour prop because
+ * there is none, and cannot override it with `className="bg-accent-from text-white"` either —
+ * `!important` wins in the cascade. The hover/active variants are important too, otherwise the
+ * locked base colour would outrank them and hovering would do nothing. Making it literally
+ * impossible is the point of the checklist item ("the blue gradient is no longer reachable as a CTA
+ * fill"); "don't do that" comments get ignored.
+ *
+ * Consequence worth knowing before you fight it: a second CTA *appearance* (an outline CTA on navy,
+ * say) cannot be expressed by passing classes. That is a design decision, not a local tweak — raise
+ * it, do not fork this component.
  *
  * FOCUS INDICATOR — visible on BOTH navy and light backgrounds:
  * A single orange ring cannot do this job: orange against white is only ~2.5:1, below the 3:1 that
@@ -33,7 +40,7 @@
  * design; see above.
  */
 const CTA_CLASSES =
-  "inline-flex items-center justify-center gap-2 rounded-edge bg-signal px-6 py-3 font-body text-body font-semibold !text-brand no-underline transition-colors duration-150 hover:bg-signal-hover active:bg-signal-active focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white focus-visible:ring-2 focus-visible:ring-brand";
+  "inline-flex items-center justify-center gap-2 rounded-edge !bg-signal px-6 py-3 font-body text-body font-semibold !text-brand no-underline transition-colors duration-150 hover:!bg-signal-hover active:!bg-signal-active focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white focus-visible:ring-2 focus-visible:ring-brand";
 
 const CTA = ({ href, className = "", children, ...rest }) => {
   const classes = `${CTA_CLASSES} ${className}`;

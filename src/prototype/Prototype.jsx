@@ -7,7 +7,7 @@ import Team from "./sections/Team";
 import Kontakt from "./sections/Kontakt";
 import Footer from "./sections/Footer";
 // TEMPORARY (ticket 02): the token showcase is a dev artefact, not a page section. Delete this
-// import and the `<Showcase />` line below before the page ships.
+// import and the `<Showcase />` line at the bottom (after `<Footer />`) before the page ships.
 import Showcase from "./Showcase";
 
 /**
@@ -43,8 +43,6 @@ import Showcase from "./Showcase";
  */
 const Prototype = () => (
   <>
-    {/* TEMPORARY — ticket 02's token showcase. Remove with its import above. */}
-    <Showcase />
     <Nav />
     <main>
       <Hero />
@@ -55,6 +53,13 @@ const Prototype = () => (
       <Kontakt />
     </main>
     <Footer />
+    {/*
+      TEMPORARY — ticket 02's token showcase. It sits AFTER <Footer /> on purpose: it is a dev
+      artefact, not a section, so it belongs neither between the landmarks (`nav -> main -> footer`)
+      nor inside <main>, where it would perturb the §4 anchor order. Remove this line and the import
+      at the top of this file when the page ships.
+    */}
+    <Showcase />
   </>
 );
 

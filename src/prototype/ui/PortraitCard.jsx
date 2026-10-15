@@ -25,11 +25,14 @@ const PortraitCard = ({ src, alt, name, role, className = "" }) => (
   <figure
     className={`w-full bg-white p-3 text-ink-600 shadow-frame ring-1 ring-frame rounded-edge ${className}`}
   >
+    {/*
+      No `width`/`height` attributes on purpose: the three sources are 339x453, 385x513 and 481x642
+      px, so a single hardcoded pair would be wrong for two of them. The reserved box is the CSS
+      aspect ratio below (`aspect-[3/4]` + `w-full`), which already prevents layout shift.
+    */}
     <img
       src={src}
       alt={alt}
-      width="240"
-      height="320"
       loading="lazy"
       decoding="async"
       className="aspect-[3/4] w-full rounded-edge object-cover object-top"
