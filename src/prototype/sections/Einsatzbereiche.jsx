@@ -26,11 +26,11 @@ import Reveal from "../ui/Reveal";
 
 // data.json `About` — verbatim.
 const AREAS = [
-  { icon: Zap, title: "Stromtrassen", text: "Erdkabel und Energieübertragung" },
-  { icon: Flame, title: "Wasserstoff & Fernwärme", text: "Neue Leitungsnetze der Energiewende" },
-  { icon: Droplets, title: "Wasser & Abwasser", text: "Großformatige Versorgungsgräben" },
+  { Icon: Zap, title: "Stromtrassen", text: "Erdkabel und Energieübertragung" },
+  { Icon: Flame, title: "Wasserstoff & Fernwärme", text: "Neue Leitungsnetze der Energiewende" },
+  { Icon: Droplets, title: "Wasser & Abwasser", text: "Großformatige Versorgungsgräben" },
   {
-    icon: Waypoints,
+    Icon: Waypoints,
     title: "Weitere Infrastruktur",
     text: "Gas-, Drainage- und industrielle Leitungstrassen",
   },
@@ -59,7 +59,7 @@ const Einsatzbereiche = () => (
       aria-label="Die vier Einsatzbereiche"
       className="mt-12 grid gap-4 sm:mt-16 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5"
     >
-      {AREAS.map(({ icon: Icon, title, text }) => (
+      {AREAS.map(({ Icon, title, text }) => (
         <li key={title} className="flex flex-col border border-mist-500 p-6 sm:p-7">
           <Icon aria-hidden="true" size={28} strokeWidth={1.75} className="text-mist-200" />
           <h3 className="mt-8 text-body-lg font-bold text-mist-100 sm:mt-10">{title}</h3>

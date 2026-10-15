@@ -18,7 +18,7 @@ const headingsAt = (root, level) =>
     .filter((heading) => heading.tagName === `H${level}`);
 
 // DESIGN_PLAN.md §1.5 / data.json `About` — written out here as the independent source of truth.
-const AREAS = [
+const EXPECTED_AREAS = [
   ["Stromtrassen", "Erdkabel und Energieübertragung"],
   ["Wasserstoff & Fernwärme", "Neue Leitungsnetze der Energiewende"],
   ["Wasser & Abwasser", "Großformatige Versorgungsgräben"],
@@ -46,10 +46,10 @@ test("lists the four areas in order, each an H3 heading with its description, ve
 
   const list = getByRole("list", { name: "Die vier Einsatzbereiche" });
   const items = within(list).getAllByRole("listitem");
-  expect(items).toHaveLength(AREAS.length);
+  expect(items).toHaveLength(EXPECTED_AREAS.length);
 
   items.forEach((item, index) => {
-    const [heading, description] = AREAS[index];
+    const [heading, description] = EXPECTED_AREAS[index];
     const h3s = headingsAt(item, 3);
     expect(h3s).toHaveLength(1);
     const [h3] = h3s;

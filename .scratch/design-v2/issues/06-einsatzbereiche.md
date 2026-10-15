@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 (Theme foundation and shared primitives)
 
-**Status:** claimed
+**Status:** ready-for-human
 
 - [x] The section is anchored at `#einsatzbereiche` on the navy background
 - [x] All four areas appear with their existing headings and descriptions:
@@ -109,3 +109,17 @@ edited, no token or primitive was added, and no dependency was added (`Zap`, `Fl
    explicit `alt={RENDER.alt}` to silence it.
 4. **The same long-compound break may affect other headings at 375 px.** It is visible here only
    because this H2 contains "Versorgungsnetzausbau"; ticket 11 may want to scan the other H1/H2s.
+
+**Review fixes (code-review on `b4a327b`):**
+
+- `Status:` set to `ready-for-human` to match tickets 04, 05 and 07.
+- The area data key is now `Icon`, matching `WarumWir.jsx`.
+- The test oracle is renamed `EXPECTED_AREAS`, so it no longer shares a name with the source's `AREAS`.
+
+**Raised for a human (not changed; ticket 02's domain):**
+
+1. `Einsatzbereiche.test.jsx` hand-rolls `matchMedia`/`IntersectionObserver` stubs that repeat
+   `stubReducedMotion` in `src/prototype/ui/useReveal.test.js`, and it defines the `headingsAt`
+   workaround locally. A shared test helper under `src/prototype/ui/` would remove the copies.
+2. `useReveal` reads `prefers-reduced-motion` once, when the component mounts, so changing the OS
+   setting mid-session takes effect only after a reload.
