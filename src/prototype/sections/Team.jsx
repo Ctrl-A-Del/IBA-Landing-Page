@@ -12,8 +12,13 @@ import PortraitCard from "../ui/PortraitCard";
  * which also keeps Marcus Auner's crop identical to the one ticket 09 (Kontakt) renders.
  *
  * LAYOUT: one column on phones, three across from `md` (768px) up — never two, which would orphan
- * the third card. In the single-column range the list item (not the card's ratio) is capped at
- * `max-w-xs`, so a portrait does not balloon to 600px wide between 640 and 767px.
+ * the third card. In the single-column range the card is capped at `max-w-xs` (and centred) through
+ * PortraitCard's documented `className` width hook, so a portrait does not balloon to 600px wide
+ * between 640 and 767px. The ratio and crop stay the primitive's.
+ *
+ * ALT TEXT: empty on purpose. The figcaption directly under each portrait already names the person
+ * and their role; repeating the name as alt would make screen readers announce it twice. The photo
+ * conveys nothing beyond "this is <name>", which the caption says.
  *
  * COPY (C8, flagged for diffing against `data.json`):
  *   names, roles, image paths = data.json `Team`, verbatim, hardcoded per parallelisation.md §3
@@ -41,8 +46,7 @@ const Team = () => (
       </h2>
       {/* C8-NEW */}
       <p className="mt-5 text-body-lg">
-        Geschäftsführung, Einkauf und Technik: Drei Ansprechpartner, die die Grabenfräse gemeinsam
-        entwickeln.
+        Geschäftsführung, Einkauf und Technik entwickeln die Grabenfräse gemeinsam.
       </p>
     </Reveal>
 
@@ -52,8 +56,14 @@ const Team = () => (
       className="mt-12 grid gap-10 sm:mt-16 md:grid-cols-3 md:gap-8"
     >
       {PEOPLE.map(({ img, name, role }) => (
-        <li key={name} className="mx-auto w-full max-w-xs md:max-w-none">
-          <PortraitCard src={img} alt={name} name={name} role={role} />
+        <li key={name}>
+          <PortraitCard
+            src={img}
+            alt=""
+            name={name}
+            role={role}
+            className="mx-auto max-w-xs md:max-w-none"
+          />
         </li>
       ))}
     </Reveal>
