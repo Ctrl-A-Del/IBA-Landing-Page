@@ -11,3 +11,6 @@
  */
 export const PHONE_HREF = "tel:+4917661877599";
 export const PHONE_DISPLAY = "0176 618 77 599";
+
+/** The accessible name every call CTA shares (nav, mobile call bar, hero). */
+export const CALL_LABEL = `Anrufen: ${PHONE_DISPLAY}`;

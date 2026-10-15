@@ -53,7 +53,8 @@ first paint and a reveal would start the H1 at opacity 0. No red-list file was e
 ### Verification evidence
 
 - **Tests**: `src/prototype/sections/Hero.test.jsx` has 6 tests: the `#start` anchor plus the exact H1
-  (en dash as `–`), the single phone CTA (href / local number / accessible name), the subline
+  (en dash written as the `\u2013` escape in the test source), the single phone CTA (href / local number /
+  accessible name), the subline
   directly under the H1 naming *fräs…* and *Energie- und Versorgungsnetzausbau*, the trust line as a
   non-heading with the H1 the only heading, no image or `fraese` reference, and no figures or claim
   wording. The full prototype suite is 15/15 green. The anchor/H1, CTA, subline and trust-line slices
@@ -92,3 +93,35 @@ first paint and a reveal would start the H1 at opacity 0. No red-list file was e
    hero, so it stays. Note it for ticket 11, together with ticket 03's "one call stop per width" goal.
 4. **CTA label.** The hero CTA shows the number at every width, not "Anrufen" (C16 governs the nav
    only). Say if the hero should read "Jetzt anrufen" instead.
+
+## Review
+
+### Review outcome (2026-10-15)
+
+Review findings on the ticket-04 merge (920b348) and what happened to them (branch
+`design-v2/04-hero-review`). The prototype suite is green after the fixes and after merging
+`design/v2`.
+
+**Fixed:**
+
+- **The H1 test's comment said the en dash was written as an escape, but the source used a literal
+  dash.** The expected string in `Hero.test.jsx` now spells it `\u2013`, so the comment is true and
+  an editor can't silently swap the character. The verification evidence above was corrected to
+  match.
+- **`CALL_LABEL` was defined twice** (`Hero.jsx` and `Nav.jsx`, both `` `Anrufen: ${PHONE_DISPLAY}` ``).
+  It is now exported once from `phone.js` and imported by both. Rename/move only: the value is
+  unchanged, and `Nav.test.jsx` and `Hero.test.jsx` stay green. The one-line `Nav.jsx` edit touches
+  ticket 03's finished file; it was approved for this review.
+
+**Left for a human / ticket 11:**
+
+- **Mobile nav clearance is exactly 0 px.** Below `sm`, `Section`'s top padding `py-20` (5rem) equals
+  `h-nav` (5rem), so the hero's content box starts exactly at the nav's bottom edge. That is correct
+  but coupled: shrinking `Section`'s padding or growing the nav would put the H1 under the nav, with
+  only the vertical centring in `min-h-svh` as slack. jsdom has no layout, so no unit test can guard
+  it. Ticket 11 should re-check it in its browser pass.
+- **Subline wording** ("Wir entwickeln Grabenfräsen …", raised item 1): "Grabenfräsen" needs sign-off.
+- **Trust-line placement** below the CTA (raised item 2) is a taste call.
+- **Duplicate call CTA on the first screen** (raised item 3): two tab stops with the same name, which
+  works against ticket 03's "one call stop per width" goal. For ticket 11.
+- **The hero CTA label always shows the number** (raised item 4), not "Anrufen" / "Jetzt anrufen".
