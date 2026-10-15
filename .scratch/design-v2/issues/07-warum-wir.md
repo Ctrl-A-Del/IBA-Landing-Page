@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 (Theme foundation and shared primitives)
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] The section is anchored at `#warum` on the light background
 - [ ] The three points are present: getting on faster · using resources efficiently · relieving skilled workers
