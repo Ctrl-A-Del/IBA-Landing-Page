@@ -4,7 +4,7 @@
 
 **Blocked by:** 11.1 (Human review fixes) and explicit user approval
 
-**Status:** claimed
+**Status:** resolved
 
 - [x] The approved page no longer depends on the temporary prototype pointer — the app entry renders the real sections directly
 - [x] All approved copy lives in the content data, including the heading strings currently hardcoded inside the services, Team and contact components
@@ -65,3 +65,5 @@ Worktree branch, based on `design/v2` @ `628e628`. Nothing pushed; no PR.
 - **Worktree note.** Under `.claude/worktrees/…`, CRA's generated `testMatch` turns `\.claude` into
   an escaped dot and finds no tests. There, tests were run with an explicit forward-slash
   `--testMatch "<abs path>/src/**/*.test.{js,jsx}"`. A normal checkout is not affected.
+
+**2026-10-16 (orchestrator):** Code review ran on two axes, standards and spec. Every finding was fixed and merged into `design/v2` (merge "ticket 12 review fixes"): 13 test suites and 86 tests pass, and the build is clean. Ticket resolved.
