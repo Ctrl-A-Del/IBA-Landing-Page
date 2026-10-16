@@ -1,4 +1,5 @@
 import Emblem from "../ui/Emblem";
+import { GUTTER, TONES } from "../ui/Section";
 import { FOCUS_ON_DARK } from "./focus";
 import data from "../../data/data.json";
 
@@ -12,7 +13,7 @@ import data from "../../data/data.json";
  *
  * WHY NOT `<Section tone="navy">`: the primitive renders a <section> with the content-section
  * rhythm (`py-20 … lg:py-36`). The footer must be a <footer> landmark and is not a content section,
- * so it reuses the primitive's navy tone classes and page gutter verbatim instead of the element.
+ * so it imports the primitive's `TONES.navy` and `GUTTER` class strings instead of the element.
  *
  * NO FULL LOGO PLATE (B6 amended): the plate read as a pasted-in grey photo on the near-black
  * footer. The brand block is instead the same emblem crop the nav uses (`../ui/Emblem`), larger,
@@ -36,8 +37,8 @@ const LEGAL_LINKS = data.Footer.legalLinks.map(({ file, label }) => ({
 const COMPANY = data.Footer.company;
 
 const Footer = () => (
-  <footer className="bg-brand py-12 text-mist-300 sm:py-16">
-    <div className="mx-auto flex w-full max-w-container flex-col items-center gap-8 px-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+  <footer className={`${TONES.navy} py-12 sm:py-16`}>
+    <div className={`${GUTTER} flex flex-col items-center gap-8 sm:flex-row sm:items-center sm:justify-between`}>
       <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:gap-4 sm:text-left">
         <Emblem className="h-14 w-14 shrink-0 sm:h-16 sm:w-16" />
         <div>

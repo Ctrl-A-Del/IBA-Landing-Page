@@ -2,11 +2,12 @@ import { Droplets, Flame, Waypoints, Zap } from "lucide-react";
 import Section from "../ui/Section";
 import Reveal from "../ui/Reveal";
 import data from "../../data/data.json";
+import { withIcons } from "./withIcons";
 
 /**
  * Ticket 06 — Einsatzbereiche (DESIGN_PLAN.md §4 row 4, §4.1, decisions B2, B5, C12).
  *
- * The four application areas from `data.json` `About`, on the navy surface. They stop being white
+ * The four application areas from `data.json` `Einsatzbereiche`, on the navy surface. They stop being white
  * rounded tiles with soft shadows and become hard-edged rectangles drawn with a 1 px rule (§4.1:
  * "rectangles and 1 px rules rather than rounded cards and soft shadows").
  *
@@ -26,13 +27,14 @@ import data from "../../data/data.json";
  * size, and the base `break-words` would split it as "…ausb / au". The soft hyphen is invisible
  * unless the line breaks there, and then it renders a real hyphen.
  *
- * ICONS are decorative and are not content, so they live here, matched to `areas` by position:
+ * ICONS are decorative and are not content, so they live here, matched to `areas` by position
+ * (`withIcons` throws if the counts ever differ):
  * Stromtrassen, Wasserstoff & Fernwärme, Wasser & Abwasser, Weitere Infrastruktur.
  */
 const ICONS = [Zap, Flame, Droplets, Waypoints];
 
 const { eyebrow: EYEBROW, heading: HEADING, listLabel: LIST_LABEL } = data.Einsatzbereiche;
-const AREAS = data.Einsatzbereiche.areas.map((area, i) => ({ ...area, Icon: ICONS[i] }));
+const AREAS = withIcons(data.Einsatzbereiche.areas, ICONS, "Einsatzbereiche");
 
 const HEADING_ID = "einsatzbereiche-heading";
 

@@ -2,7 +2,7 @@
   "Contact": {
     "phone": "+49 176 618 77 599",
     "phoneDisplay": "0176 618 77 599",
-    "callLabel": "Anrufen",
+    "callVerb": "Anrufen",
     "email": "info@ingenieurbuero-auner.com",
     "mailSubject": "Anfrage zur Grabenfräse"
   },
@@ -17,7 +17,8 @@
     ]
   },
   "Hero": {
-    "title": "Wir schaufeln nicht – wir fräsen",
+    "titleLead": "Wir schaufeln nicht – ",
+    "titleTail": "wir fräsen",
     "subline": "Wir entwickeln Grabenfräsen für den Energie- und Versorgungsnetzausbau.",
     "trustLine": "Maschinenbau aus NRW"
   },

@@ -17,7 +17,7 @@ const headingsAt = (root, level) =>
     .getAllByRole("heading")
     .filter((heading) => heading.tagName === `H${level}`);
 
-// DESIGN_PLAN.md §1.5 / data.json `About` — written out here as the independent source of truth.
+// DESIGN_PLAN.md §1.5 / data.json `Einsatzbereiche` — written out here as the independent source of truth.
 const EXPECTED_AREAS = [
   ["Stromtrassen", "Erdkabel und Energieübertragung"],
   ["Wasserstoff & Fernwärme", "Neue Leitungsnetze der Energiewende"],

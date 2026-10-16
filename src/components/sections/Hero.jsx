@@ -2,7 +2,7 @@ import { Phone } from "lucide-react";
 import CTA from "../ui/CTA";
 import Section from "../ui/Section";
 import data from "../../data/data.json";
-import { CALL_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
+import { CALL_ARIA_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
 
 /**
  * Ticket 04 — Hero (DESIGN_PLAN.md §4 row 2, decisions B8, C2, C8).
@@ -23,16 +23,18 @@ import { CALL_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
  *
  * NO REVEAL: this is the first paint. A scroll reveal would start the H1 at opacity 0.
  *
- * COPY: `data.json` `Hero` (title with its U+2013 EN DASH, subline, trust line); the CTA uses the
- * C16 number formats from `./phone`.
+ * COPY: `data.json` `Hero` (the title in two parts, the lead ending in its U+2013 EN DASH and a
+ * space; subline; trust line); the CTA uses the C16 number formats from `./phone`.
+ *
+ * The title is stored split so "wir fräsen" never splits: on wide screens the line breaks after the
+ * dash instead of stranding "fräsen" alone on line 2, because the tail sits in a no-wrap span.
  */
-const { title, subline, trustLine } = data.Hero;
-
-// "wir fräsen" never splits, so on wide screens the line breaks at the dash instead of stranding
-// "fräsen" alone on line 2: everything after the last dash goes into a no-wrap span.
-const DASH = "– ";
-const cut = title.lastIndexOf(DASH) + DASH.length;
-const [TITLE_LEAD, TITLE_TAIL] = cut >= DASH.length ? [title.slice(0, cut), title.slice(cut)] : ["", title];
+const {
+  titleLead: TITLE_LEAD,
+  titleTail: TITLE_TAIL,
+  subline: SUBLINE,
+  trustLine: TRUST_LINE,
+} = data.Hero;
 
 const Hero = () => (
   <Section
@@ -48,11 +50,11 @@ const Hero = () => (
       <span className="whitespace-nowrap">{TITLE_TAIL}</span>
     </h1>
     <p className="mt-6 max-w-2xl text-body-lg font-light text-mist-300 sm:mt-8">
-      {subline}
+      {SUBLINE}
     </p>
 
     <div className="mt-10 sm:mt-12">
-      <CTA href={PHONE_HREF} aria-label={CALL_LABEL}>
+      <CTA href={PHONE_HREF} aria-label={CALL_ARIA_LABEL}>
         <Phone aria-hidden="true" className="h-5 w-5" strokeWidth={2.25} />
         <span>{PHONE_DISPLAY}</span>
       </CTA>
@@ -61,7 +63,7 @@ const Hero = () => (
     {/* Trust line: a 1px rule and a letter-spaced line in sentence case (B8 — `eyebrow` is never
         uppercased). A paragraph, not a heading: it is a credential, not a section title. */}
     <p className="mt-12 max-w-2xl border-t border-mist-500/40 pt-6 text-eyebrow text-mist-400 sm:mt-16">
-      {trustLine}
+      {TRUST_LINE}
     </p>
   </Section>
 );

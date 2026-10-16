@@ -2,6 +2,7 @@ import { FastForward, Recycle, User } from "lucide-react";
 import Section from "../ui/Section";
 import Reveal from "../ui/Reveal";
 import data from "../../data/data.json";
+import { withIcons } from "./withIcons";
 
 /**
  * Ticket 07 — Warum wir (DESIGN_PLAN.md §4 row 5, decisions C2, C8, C12).
@@ -29,7 +30,8 @@ import data from "../../data/data.json";
  *
  * COPY: `data.json` `WarumWir`. The H2 is the old Services heading, kept verbatim.
  *
- * ICONS are decorative, not content, so they live here, matched to `points` by position.
+ * ICONS are decorative, not content, so they live here, matched to `points` by position
+ * (`withIcons` throws if the counts ever differ).
  */
 
 const HEADING_ID = "warum-heading";
@@ -37,7 +39,7 @@ const HEADING_ID = "warum-heading";
 const ICONS = [FastForward, Recycle, User];
 
 const { eyebrow: EYEBROW, heading: HEADING, intro: INTRO } = data.WarumWir;
-const POINTS = data.WarumWir.points.map((point, i) => ({ ...point, Icon: ICONS[i] }));
+const POINTS = withIcons(data.WarumWir.points, ICONS, "WarumWir");
 
 const WarumWir = () => (
   <Section id="warum" tone="light" aria-labelledby={HEADING_ID}>
