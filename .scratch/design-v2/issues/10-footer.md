@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 (Theme foundation and shared primitives)
 
-**Status:** claimed
+**Status:** ready-for-human
 
 - [ ] The footer sits on the alternate dark background and is visually distinguishable from the navy Kontakt section above it
 - [x] Links to the Impressum and Datenschutz pages resolve, and both pages load
@@ -33,9 +33,9 @@ Branch `design-v2/10-footer`. Only `Footer.jsx`, `Footer.test.jsx` and this file
 - **Legal links.** `${PUBLIC_URL}/impressum.html` and `/datenschutz.html`, the same targets as the
   legacy `Footer.jsx`. The test resolves each href against `public/` and fails if the file is not
   shipped. `public/impressum.html` and `public/datenschutz.html` are untouched (`git diff` empty).
-- **No contact details.** Kontakt (ticket 09) was still a stub when this was built, and C15 makes it
-  the single home of the contact details. The footer repeats none, so the "match Kontakt exactly"
-  box holds by construction; a test asserts the footer has no `tel:`/`mailto:` link. Ticket 11:
+- **No contact details.** The footer repeats none of Kontakt's phone/email, so it cannot drift from
+  Kontakt and the "match Kontakt exactly" box holds by construction; a test asserts the footer has
+  no `tel:`/`mailto:` link. Ticket 11:
   if the page later wants contact details in the footer, they must be shared with Kontakt, not
   retyped.
 - Text: links `mist-300`, copyright line `mist-400` (both AA on `#14171a`, which is darker than
@@ -52,3 +52,40 @@ Branch `design-v2/10-footer`. Only `Footer.jsx`, `Footer.test.jsx` and this file
 **Tests.** `Footer.test.jsx`, 5 tests at the rendered-component seam (landmark, both legal links
 resolving to shipped files, plate with intrinsic ratio, no repeated contact links). Full suite green
 (44/44) with the `.claude/` worktree `--testMatch` workaround. `BUILD_PATH=build-10` build clean.
+
+### Review follow-up (agent, 2026-10-16)
+
+Branch `design-v2/10-review-fixes`, based on `design/v2` after ticket 09 Kontakt merged. Only
+`Footer.jsx`, `Footer.test.jsx` and this file were edited.
+
+**Fixed:**
+
+- **Unrequested copyright line removed.** `© Ingenieurbüro-Auner GmbH` was new copy; the ticket and
+  DESIGN_PLAN §4 row 8 ask only for the legal links and the logo plate. New test (red first): the
+  footer's text content is exactly the two legal link labels and contains no `©`.
+- **Wrong citation.** The header comment and the implementation note cited C15 as making Kontakt the
+  single home of the contact details; C15 says no such thing (it is about Marcus Auner and his
+  portrait). Both now give the actual reason: the footer repeats no contact details, so it cannot
+  drift from Kontakt, and a test guards it.
+- **Stale context.** The "Kontakt was still a stub" wording is gone; `Kontakt.jsx` now exists. The
+  no-`tel:`/`mailto:` test still passes against the merged branch.
+- **Focus constant naming.** `FOCUS_ON_DARK` renamed to `FOCUS_ON_NAVY` with the "same recipe as
+  Nav's" comment, matching `Kontakt.jsx`. Value unchanged; still a local constant.
+
+**Escalated / deferred to ticket 11 or the user:**
+
+- (a) **Footer vs Kontakt contrast.** Footer `bg-brand-alt` `#14171a` against Kontakt navy
+  `#0a1f2e` is ≈1.07:1 luminance contrast, so the `border-t` hairline does most of the separating.
+  That conflicts with frozen C12's "structure without borders". Needs a user decision (different
+  footer tone, accept the hairline, or amend C12). Hairline left in place.
+- (b) **Section primitive has no `as`/element prop**, so the footer duplicates `TONES.alt` and the
+  container gutter instead of reusing `<Section>`. The ticket 02 owner should add one; the footer's
+  `<footer>` approach is unchanged until then.
+- (c) **Duplication for a shared helper in ticket 11:** this is the third copy of the white
+  focus-outline constant (Nav, Kontakt, Footer) and the fourth copy of the jsdom `getComputedStyle`
+  pseudo-element shim in tests.
+- (d) **`Prototype.jsx` still renders `<Showcase />` after `<Footer />`**, so the footer is not
+  yet the last thing on the page.
+
+**Tests.** Footer: 6 tests (was 5). Full suite green (55/55) with the `.claude/` worktree
+`--testMatch` workaround.

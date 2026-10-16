@@ -132,7 +132,11 @@ Branch `design-v2/09-review-fixes`. Edited: `Kontakt.jsx`, `Kontakt.test.jsx`, `
   `phone.js` pattern. `Kontakt.jsx` and `Kontakt.test.jsx` import it. `Showcase.jsx` is untouched.
 - **Focus class string.** `FOCUS_ON_DARK` lives in `sections/focus.js` as one full literal string
   (§2.5). Nav (was `FOCUS_ON_NAVY`), Footer and Kontakt import it. `CTA_CLASSES` in `ui/` is
-  untouched. Nav and Footer tests are unchanged and green. This settles Raised item 4 above.
+  untouched. Nav and Footer tests are unchanged and green. This settles Raised item 4 above and
+  ticket 10's deferred item (c) for the focus constant. Merge note: ticket 10's review had renamed
+  the Footer's local constant to `FOCUS_ON_NAVY` to match Nav and Kontakt. The local constants are
+  gone now, and the shared export is named `FOCUS_ON_DARK` because the footer tone `#14171a` is not
+  navy.
 - **Formatting.** The `render(<PortraitCard …/>); const referenceImage = …` line is split in two.
 - **Tests (red first).** Two new tests. (1) In the fallback, the selection is the address, it is not
   inside an `<a>`, it is visible and focused, and the status names both the keyboard shortcut and
@@ -149,7 +153,8 @@ Branch `design-v2/09-review-fixes`. Edited: `Kontakt.jsx`, `Kontakt.test.jsx`, `
    Does the long-press on the focused, selected span offer "Kopieren" in iOS Safari and Android
    Chrome? That needs to be checked over plain `http`.
 
-**Tests / build.** Full suite 56/56 green (9 suites), run with the `.claude/` worktree `--testMatch`
+**Tests / build.** Full suite 56/56 green before the merge, and 57/57 (9 suites) after merging the
+`design/v2` tip with ticket 10's review fixes. Run with the `.claude/` worktree `--testMatch`
 workaround from ticket 03. `npm run build` (`BUILD_PATH` in a scratch directory) reports "Compiled
 with warnings". These are only the two known `jsx-a11y/alt-text` warnings in `Verfahren.jsx`, and
 none are new. The compiled CSS contains `select-all`.

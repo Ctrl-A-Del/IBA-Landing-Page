@@ -13,8 +13,9 @@ import { FOCUS_ON_DARK } from "./focus";
  * A hairline top rule (the same `mist-500/40` rule the nav uses) separates it from the navy Kontakt
  * section above, since `#14171a` against `#0a1f2e` alone is a quiet step.
  *
- * NO CONTACT DETAILS here: the Kontakt section directly above owns them (C15), and repeating them
- * would create a second copy that can drift. The legal pages in `public/` are linked, not touched.
+ * NO CONTACT DETAILS here: the footer repeats none of the phone/email shown in the Kontakt section
+ * directly above, so it cannot drift from Kontakt; a test guards that it has no tel:/mailto: link.
+ * The legal pages in `public/` are linked, not touched.
  *
  * THE MOBILE CALL BAR does not cover this footer: ticket 03's `Nav` reserves the bar's height as
  * `<body>` bottom padding below `md`, so the footer's last line scrolls clear of it.
@@ -56,7 +57,6 @@ const Footer = () => (
             </li>
           ))}
         </ul>
-        <p className="font-body text-body-sm text-mist-400">© Ingenieurbüro-Auner GmbH</p>
       </div>
     </div>
   </footer>
