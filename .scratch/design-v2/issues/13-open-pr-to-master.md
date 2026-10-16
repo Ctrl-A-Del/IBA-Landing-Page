@@ -4,15 +4,15 @@
 
 **Blocked by:** 12 (Post-approval migration) and explicit user approval
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [x] Explicit approval from the user is on record before the PR is created
 - [x] Nothing was ever pushed directly to `master` — the branch is the only source
-- [ ] The PR is opened against `master`, and the PR body states plainly that the deploy workflow runs on pull requests to `master` as well as on pushes, so **opening** this PR is itself a deploy, not only merging it
+- [x] The PR is opened against `master`, and the PR body states plainly that the deploy workflow runs on pull requests to `master` as well as on pushes, so **opening** this PR is itself a deploy, not only merging it
 - [x] The PR body links the evidence gathered in the QA pass, including the before/after comparison
 - [x] The PR body lists the deleted components and the pruned assets, so the reviewer sees the full blast radius
 - [x] The branch still contains nothing that touches the legal pages
-- [ ] The PR is opened without merging it
+- [x] The PR is opened without merging it
 
 ## Comments
 
@@ -33,3 +33,7 @@
   `https://github.com/Ctrl-A-Del/IBA-Landing-Page/compare/master...design/v2?expand=1` with the
   title "Design v2: landing page redesign" and the body from `evidence/13/pr-body.md`, then tick the
   two remaining boxes.
+
+**2026-10-16 (agent):** `gh` installed and authenticated by the user. PR opened, not merged:
+https://github.com/Ctrl-A-Del/IBA-Landing-Page/pull/2. Opening it started the deploy run
+https://github.com/Ctrl-A-Del/IBA-Landing-Page/actions/runs/38899643780.
