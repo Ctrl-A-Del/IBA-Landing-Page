@@ -3,6 +3,7 @@ import { Phone } from "lucide-react";
 import CTA from "../ui/CTA";
 import { CALL_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
 import useScrolled from "./useScrolled";
+import { FOCUS_ON_DARK } from "./focus";
 
 /**
  * Ticket 03 — Sticky nav + mobile call bar (DESIGN_PLAN.md §4 row 1, decisions B6, B9, C6, C16).
@@ -46,11 +47,6 @@ const LINKS = [
 const CALL_BAR_HEIGHT =
   "h-[calc(4.5rem+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)]";
 const CALL_BAR_RESERVE = "max-md:pb-[calc(4.5rem+env(safe-area-inset-bottom))]";
-
-// Visible keyboard focus for the text links and the emblem on navy: a white outline (16.8:1
-// against #0a1f2e). Outline, not ring, so it survives forced-colours mode — same choice as the CTA.
-const FOCUS_ON_NAVY =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
 
 /**
  * Emblem disc, cropped with CSS from the framed plate `logo.jpg` (B6). The source is an opaque
@@ -99,7 +95,7 @@ const Nav = () => {
           <a
             href="#start"
             aria-label="Ingenieurbüro Auner – zum Seitenanfang"
-            className={`shrink-0 rounded-full ${FOCUS_ON_NAVY}`}
+            className={`shrink-0 rounded-full ${FOCUS_ON_DARK}`}
           >
             <Emblem />
           </a>
@@ -118,7 +114,7 @@ const Nav = () => {
               <li key={href} className="shrink-0">
                 <a
                   href={href}
-                  className={`block whitespace-nowrap rounded-edge py-2 font-body text-[0.8125rem] font-medium text-mist-200 no-underline transition-colors duration-150 hover:text-white sm:text-body sm:font-semibold ${FOCUS_ON_NAVY}`}
+                  className={`block whitespace-nowrap rounded-edge py-2 font-body text-[0.8125rem] font-medium text-mist-200 no-underline transition-colors duration-150 hover:text-white sm:text-body sm:font-semibold ${FOCUS_ON_DARK}`}
                 >
                   {label}
                 </a>

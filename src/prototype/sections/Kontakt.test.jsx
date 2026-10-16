@@ -16,8 +16,7 @@ import { act, fireEvent, render, within } from "@testing-library/react";
 import Kontakt from "./Kontakt";
 import PortraitCard from "../ui/PortraitCard";
 import CTA from "../ui/CTA";
-
-const EMAIL = "info@ingenieurbuero-auner.com";
+import { EMAIL } from "./email";
 
 let originalGetComputedStyle;
 
@@ -62,7 +61,8 @@ test("names Marcus Auner as 'Marcus Auner · Geschäftsführung' in the page's s
   expect(img).toHaveAttribute("alt", "");
 
   // Same crop as Team, because it is the same primitive: compared as a class set, not restated.
-  const { container: reference } = render(<PortraitCard src="img/reference.png" alt="" />);  const referenceImage = reference.querySelector("figure img");
+  const { container: reference } = render(<PortraitCard src="img/reference.png" alt="" />);
+  const referenceImage = reference.querySelector("figure img");
   expect([...img.classList].sort()).toEqual([...referenceImage.classList].sort());
 });
 
@@ -172,6 +172,52 @@ describe("copy the email address", () => {
     expect(window.getSelection().toString()).toBe(EMAIL);
     expect(status).not.toHaveTextContent(/kopiert\b/i);
     expect(status).toHaveTextContent(/markiert/i);
+  });
+
+  test("the fallback selects the address outside the link, in a focused element, for touch and keyboard", async () => {
+    stubClipboard(undefined);
+    document.execCommand = undefined;
+
+    const { status } = await clickCopy();
+
+    const selection = window.getSelection();
+    expect(selection.toString()).toBe(EMAIL);
+    // A long-press inside a link opens the link menu instead of the copy menu, so the selection
+    // must not live inside the mailto <a>.
+    const selectedNode = selection.anchorNode;
+    const selectedElement =
+      selectedNode.nodeType === Node.ELEMENT_NODE ? selectedNode : selectedNode.parentElement;
+    expect(selectedElement.closest("a")).toBeNull();
+    expect(selectedElement).toBeVisible();
+    // Focused, so the keyboard shortcut acts on it and the page scrolls it into view.
+    expect(selectedElement.contains(document.activeElement) || document.activeElement.contains(selectedElement)).toBe(true);
+    // Instructions work on a keyboard and on a touch screen.
+    expect(status).toHaveTextContent(/Strg\+C/);
+    expect(status).toHaveTextContent(/gedrückt halten|lange tippen|antippen/i);
+  });
+
+  test("the success message clears itself, the fallback guidance stays", async () => {
+    jest.useFakeTimers();
+    try {
+      stubClipboard({ writeText: jest.fn(() => Promise.resolve()) });
+      const { status, unmount } = await clickCopy();
+      expect(status).toHaveTextContent(/kopiert/i);
+      act(() => {
+        jest.advanceTimersByTime(10000);
+      });
+      expect(status).toHaveTextContent(/^$/);
+      unmount();
+
+      stubClipboard(undefined);
+      document.execCommand = undefined;
+      const { status: fallbackStatus } = await clickCopy();
+      act(() => {
+        jest.advanceTimersByTime(60000);
+      });
+      expect(fallbackStatus).toHaveTextContent(/markiert/i);
+    } finally {
+      jest.useRealTimers();
+    }
   });
 
   test("a refused clipboard permission degrades the same way", async () => {

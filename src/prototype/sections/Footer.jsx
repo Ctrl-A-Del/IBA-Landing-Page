@@ -1,3 +1,5 @@
+import { FOCUS_ON_DARK } from "./focus";
+
 /**
  * Ticket 10 — Footer (DESIGN_PLAN.md §4 row 8, decisions B6, C12).
  *
@@ -22,11 +24,6 @@ const LEGAL_LINKS = [
   { href: `${process.env.PUBLIC_URL}/impressum.html`, label: "Impressum" },
   { href: `${process.env.PUBLIC_URL}/datenschutz.html`, label: "Datenschutzerklärung" },
 ];
-
-// Same white focus outline as the nav (16.8:1 on navy; higher still on #14171a). Outline, not ring,
-// so it survives forced-colours mode.
-const FOCUS_ON_DARK =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
 
 const Footer = () => (
   <footer className="border-t border-mist-500/40 bg-brand-alt py-12 text-mist-300 sm:py-16">
