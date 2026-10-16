@@ -23,7 +23,8 @@
  *
  * `fill` (boolean, default `false`, 11.1/C19): lets the card fill the height of its grid cell, so
  * cards in the same row share one height even when a wrapped name makes one caption taller than the
- * others. Default behaviour is unchanged when the caller does not opt in. Exposed as `data-fill` so
+ * others. The spare height falls below the caption, so names in a row stay on one top line.
+ * Default behaviour is unchanged when the caller does not opt in. Exposed as `data-fill` so
  * a consumer's test can observe the option without asserting a class string.
  */
 const PortraitCard = ({ src, alt, name, role, fill = false, className = "" }) => (
@@ -46,7 +47,7 @@ const PortraitCard = ({ src, alt, name, role, fill = false, className = "" }) =>
       className={`aspect-[3/4] w-full rounded-edge object-cover object-top ${fill ? "shrink-0" : ""}`}
     />
     {(name || role) && (
-      <figcaption className={`px-1 pb-1 pt-4 ${fill ? "flex flex-1 flex-col justify-center" : ""}`}>
+      <figcaption className="px-1 pb-1 pt-4">
         {name && (
           <span className="block font-heading text-display-md font-bold text-ink-900">{name}</span>
         )}

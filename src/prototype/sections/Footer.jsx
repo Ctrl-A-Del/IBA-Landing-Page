@@ -36,7 +36,7 @@ const COMPANY = "Ingenieurbüro-Auner GmbH";
 const Footer = () => (
   <footer className="bg-brand py-12 text-mist-300 sm:py-16">
     <div className="mx-auto flex w-full max-w-container flex-col items-center gap-8 px-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-      <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-4 sm:text-left">
+      <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:gap-4 sm:text-left">
         <Emblem className="h-14 w-14 shrink-0 ring-1 ring-white/10 sm:h-16 sm:w-16" />
         <div>
           <p className="font-heading text-body font-bold text-mist-100">{COMPANY}</p>
