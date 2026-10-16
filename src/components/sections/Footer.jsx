@@ -15,10 +15,10 @@ import data from "../../data/data.json";
  * rhythm (`py-20 … lg:py-36`). The footer must be a <footer> landmark and is not a content section,
  * so it imports the primitive's `TONES.navy` and `GUTTER` class strings instead of the element.
  *
- * NO FULL LOGO PLATE (B6 amended): the plate read as a pasted-in grey photo on the near-black
- * footer. The brand block is instead the same emblem crop the nav uses (`../ui/Emblem`), larger,
+ * NO LOGO PLATE (B6 amended): the Logo plate read as a pasted-in grey photo on the near-black
+ * footer. The brand block is instead the same Emblem the nav uses (`../ui/Emblem`), larger,
  * plus the company name set as real text — so the name is announced once, not twice as image alt
- * and text. The emblem is decorative (empty alt) for that reason.
+ * and text. The Emblem is decorative (empty alt) for that reason.
  *
  * NO CONTACT DETAILS here: the footer repeats none of the phone/email shown in the Kontakt section
  * above, so it cannot drift from Kontakt; a test guards that it has no tel:/mailto: link.

@@ -125,6 +125,30 @@ describe("image references", () => {
   });
 });
 
+const PNG_SIGNATURE_LENGTH = 8;
+const PNG_IHDR_DATA_OFFSET = PNG_SIGNATURE_LENGTH + 8; // after signature + IHDR length/type
+const PNG_COLOUR_PALETTE = 3;
+const PNG_COLOUR_GREY_ALPHA = 4;
+const PNG_COLOUR_RGBA = 6;
+
+/** Reads the PNG signature, IHDR fields and the type of every chunk, by walking the chunk list. */
+function readPngHeader(buf) {
+  const chunkTypes = [];
+  let offset = PNG_SIGNATURE_LENGTH;
+  while (offset + 8 <= buf.length) {
+    const dataLength = buf.readUInt32BE(offset);
+    chunkTypes.push(buf.toString("latin1", offset + 4, offset + 8));
+    offset += 8 + dataLength + 4; // length + type + data + CRC
+  }
+  return {
+    signature: buf.subarray(0, PNG_SIGNATURE_LENGTH).toString("hex"),
+    width: buf.readUInt32BE(PNG_IHDR_DATA_OFFSET),
+    height: buf.readUInt32BE(PNG_IHDR_DATA_OFFSET + 4),
+    colourType: buf[PNG_IHDR_DATA_OFFSET + 9],
+    chunkTypes,
+  };
+}
+
 describe("shipped images (ticket 12 pruning, D4)", () => {
   const walk = (dir) =>
     fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -137,12 +161,24 @@ describe("shipped images (ticket 12 pruning, D4)", () => {
       .map((file) => path.relative(PUBLIC_DIR, file).split(path.sep).join("/"))
       .sort();
     expect(shipped).toEqual([
+      "img/emblem.png",
       "img/fraese.png",
       "img/jan.png",
       "img/klaus.png",
-      "img/logo.jpg",
       "img/marcus.png",
     ]);
+  });
+
+  test("the shipped Emblem is a 256x256 PNG with an alpha channel", () => {
+    const png = readPngHeader(fs.readFileSync(path.join(PUBLIC_DIR, "img", "emblem.png")));
+    expect(png.signature).toBe("89504e470d0a1a0a");
+    expect(png.width).toBe(256);
+    expect(png.height).toBe(256);
+    // Alpha = grey+alpha (4), RGBA (6), or palette (3) carrying a tRNS chunk.
+    const hasAlpha =
+      [PNG_COLOUR_GREY_ALPHA, PNG_COLOUR_RGBA].includes(png.colourType) ||
+      (png.colourType === PNG_COLOUR_PALETTE && png.chunkTypes.includes("tRNS"));
+    expect(hasAlpha).toBe(true);
   });
 
   test("every image and icon the page head references still exists after pruning", () => {
@@ -168,19 +204,18 @@ describe("one face, one brand mark (B6, C15, C18)", () => {
     expect(portraits[0].closest("section").id).toBe("team");
   });
 
-  test("the full logo plate is never shown whole: every logo.jpg sits inside a round emblem crop", () => {
+  test("the brand mark is the Emblem asset in nav and footer; the Logo plate is never referenced", () => {
     const { container } = renderPage();
-    const logos = [...container.querySelectorAll("img")].filter((img) =>
-      /\/img\/logo\.jpg$/.test(img.getAttribute("src"))
-    );
+    const images = [...container.querySelectorAll("img")];
+    const emblems = images.filter((img) => /\/img\/emblem\.png$/.test(img.getAttribute("src")));
     // Nav and footer.
-    expect(logos).toHaveLength(2);
-    logos.forEach((img) => {
-      // Inside the shared emblem's round crop wrapper, never free-standing as the plate.
-      expect(img.parentElement).toHaveAttribute("data-emblem");
-      // Decorative crop: no alt naming the company (the name is text where it is needed).
+    expect(emblems).toHaveLength(2);
+    emblems.forEach((img) => {
+      expect(img).toHaveAttribute("data-emblem");
+      // Decorative: the company name is text where it is needed.
       expect(img).toHaveAttribute("alt", "");
     });
+    expect(images.filter((img) => /logo\.jpg/.test(img.getAttribute("src")))).toHaveLength(0);
     expect(container.querySelector('img[alt="Ingenieurbüro-Auner GmbH"]')).toBeNull();
   });
 

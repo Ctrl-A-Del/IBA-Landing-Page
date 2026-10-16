@@ -1,6 +1,6 @@
 /**
  * Tests for ticket 10 — Footer: brand block and legal links on the navy background.
- * Rewritten in 11.1 (R6): the full logo plate is gone, replaced by the emblem crop, the company
+ * Rewritten in 11.1 (R6): the Logo plate is gone, replaced by the Emblem, the company
  * name as text, and a copyright line.
  *
  * SEAM: the rendered `<Footer />` component, observed through the DOM a visitor (or a screen reader)
@@ -58,7 +58,7 @@ test("the emblem is decorative: the company name sits beside it as text, not as 
   const { footer } = renderFooter();
 
   const emblem = footer.querySelector("img");
-  expect(emblem.getAttribute("src")).toMatch(/\/img\/logo\.jpg$/);
+  expect(emblem.getAttribute("src")).toMatch(/\/img\/emblem\.png$/);
   expect(emblem).toHaveAttribute("alt", "");
   // Named once, as text — not a second time via alt (that would announce it twice).
   expect(within(footer).getAllByText("Ingenieurbüro-Auner GmbH")).toHaveLength(1);
