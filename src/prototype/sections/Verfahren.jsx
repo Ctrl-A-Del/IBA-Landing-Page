@@ -39,14 +39,11 @@ const MODULES = [
 ];
 
 // The one raster, shown inline and enlarged. Natural size, so the browser reserves the box.
-// Each <img> also restates `alt={RENDER.alt}` after the spread: jsx-a11y/alt-text cannot see an
-// alt inside a spread, and under CI=true (GitHub Actions) CRA fails the build on that warning.
-const RENDER = {
-  src: "img/fraese.png",
-  alt: "3D-Darstellung der Fräsmaschine mit ihren vier Modulen",
-  width: 1342,
-  height: 738,
-};
+// The alt is kept out of the spread object and written on each <img> as `alt={RENDER_ALT}`:
+// jsx-a11y/alt-text cannot see an alt inside a spread, and under CI=true (GitHub Actions) CRA fails
+// the build on that warning.
+const RENDER = { src: "img/fraese.png", width: 1342, height: 738 };
+const RENDER_ALT = "3D-Darstellung der Fräsmaschine mit ihren vier Modulen";
 // C14: the only text a screen-reader user gets when the render opens full-screen.
 const CAPTION = "Fräsmodul, Aufnahme-, Förder- und Antriebsmodul";
 
@@ -120,7 +117,7 @@ const Verfahren = () => {
         */}
         <img
           {...RENDER}
-          alt={RENDER.alt}
+          alt={RENDER_ALT}
           loading="lazy"
           decoding="async"
           tabIndex={-1}
@@ -189,7 +186,7 @@ const Verfahren = () => {
           >
             <img
               {...RENDER}
-              alt={RENDER.alt}
+              alt={RENDER_ALT}
               decoding="async"
               className="block h-auto max-h-full w-auto max-w-full"
             />
