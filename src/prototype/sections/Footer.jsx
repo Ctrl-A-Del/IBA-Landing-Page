@@ -1,3 +1,5 @@
+import { FOCUS_ON_DARK } from "./focus";
+
 /**
  * Ticket 10 — Footer (DESIGN_PLAN.md §4 row 8, decisions B6, C12).
  *
@@ -24,12 +26,6 @@ const LEGAL_LINKS = [
   { href: `${process.env.PUBLIC_URL}/datenschutz.html`, label: "Datenschutzerklärung" },
 ];
 
-// White focus outline (16.8:1 on navy; higher still on #14171a). Outline, not ring, so it survives
-// forced-colours mode. Same recipe as Nav's FOCUS_ON_NAVY (not imported: Nav is ticket 03's file and
-// does not export it; shared primitives are ticket 02's).
-const FOCUS_ON_NAVY =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
-
 const Footer = () => (
   <footer className="border-t border-mist-500/40 bg-brand-alt py-12 text-mist-300 sm:py-16">
     <div className="mx-auto flex w-full max-w-container flex-col items-center gap-8 px-5 sm:flex-row sm:items-end sm:justify-between sm:px-6 lg:px-8">
@@ -54,7 +50,7 @@ const Footer = () => (
             <li key={href}>
               <a
                 href={href}
-                className={`rounded-edge font-body text-body-sm text-mist-300 underline-offset-4 transition-colors duration-150 hover:text-white hover:underline ${FOCUS_ON_NAVY}`}
+                className={`rounded-edge font-body text-body-sm text-mist-300 underline-offset-4 transition-colors duration-150 hover:text-white hover:underline ${FOCUS_ON_DARK}`}
               >
                 {label}
               </a>

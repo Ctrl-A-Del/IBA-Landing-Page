@@ -109,3 +109,52 @@ primitives rendered on their own. The jsdom `getComputedStyle` shim is repeated,
    the call to be the section's most prominent action at every width.
 4. **`FOCUS_ON_NAVY` is now duplicated** (Nav, Kontakt). A candidate for a ticket-02-owned shared
    export, along with the duplicated `getComputedStyle` test shim already noted in 07/08.
+
+### Review findings (agent, 2026-10-16)
+
+Branch `design-v2/09-review-fixes`. Edited: `Kontakt.jsx`, `Kontakt.test.jsx`, `Nav.jsx`,
+`Footer.jsx`, and this file. New: `src/prototype/sections/email.js` and
+`src/prototype/sections/focus.js`.
+
+**Fixed:**
+
+- **Mobile copy fallback.** Step 3 used to select the address inside the `mailto:` `<a>`, where a
+  long-press opens the link menu, and the instructions only named "Strg+C / ⌘+C". Now the fallback
+  reveals a plain copy of the address below the link: a `<span tabIndex={-1}>` with `select-all`,
+  outside any `<a>`, hidden until needed. It is revealed synchronously (`flushSync`), focused and
+  selected, and then the legacy `execCommand("copy")` is tried on it. No `<input>` is used, so the
+  "no form, no input" test still holds. The new status text covers both cases (`C8-NEW`, needs copy
+  approval): "Adresse unten markiert – mit Strg+C (Mac: ⌘+C) kopieren oder auf dem Handy gedrückt
+  halten und „Kopieren“ wählen." After a successful copy the fallback is hidden again.
+- **Auto-clear.** The 5 s timer now runs only for the success message. The fallback guidance stays
+  until the next click.
+- **Email literal.** `EMAIL`, `MAIL_SUBJECT` and `MAIL_HREF` moved into `sections/email.js`, using the
+  `phone.js` pattern. `Kontakt.jsx` and `Kontakt.test.jsx` import it. `Showcase.jsx` is untouched.
+- **Focus class string.** `FOCUS_ON_DARK` lives in `sections/focus.js` as one full literal string
+  (§2.5). Nav (was `FOCUS_ON_NAVY`), Footer and Kontakt import it. `CTA_CLASSES` in `ui/` is
+  untouched. Nav and Footer tests are unchanged and green. This settles Raised item 4 above and
+  ticket 10's deferred item (c) for the focus constant. Merge note: ticket 10's review had renamed
+  the Footer's local constant to `FOCUS_ON_NAVY` to match Nav and Kontakt. The local constants are
+  gone now, and the shared export is named `FOCUS_ON_DARK` because the footer tone `#14171a` is not
+  navy.
+- **Formatting.** The `render(<PortraitCard …/>); const referenceImage = …` line is split in two.
+- **Tests (red first).** Two new tests. (1) In the fallback, the selection is the address, it is not
+  inside an `<a>`, it is visible and focused, and the status names both the keyboard shortcut and
+  the touch route. (2) With fake timers, the success message is empty after 10 s and the fallback
+  guidance is still there after 60 s. Both were red against the old code. The import of `./email`
+  was red until the module existed.
+
+**Deferred (unchanged, for a human or ticket 11's browser pass):**
+
+1. Label placement and the caption question (C15), Raised item 2.
+2. The label's visual weight compared with the call button.
+3. Copy approval for all `C8-NEW` texts, including the new fallback status line.
+4. Focus visibility on navy, the mobile call bar check, and a real-device check of the fallback.
+   Does the long-press on the focused, selected span offer "Kopieren" in iOS Safari and Android
+   Chrome? That needs to be checked over plain `http`.
+
+**Tests / build.** Full suite 56/56 green before the merge, and 57/57 (9 suites) after merging the
+`design/v2` tip with ticket 10's review fixes. Run with the `.claude/` worktree `--testMatch`
+workaround from ticket 03. `npm run build` (`BUILD_PATH` in a scratch directory) reports "Compiled
+with warnings". These are only the two known `jsx-a11y/alt-text` warnings in `Verfahren.jsx`, and
+none are new. The compiled CSS contains `select-all`.
