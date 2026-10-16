@@ -20,12 +20,35 @@
 }
 
 @layer base {
+  /*
+   * Sticky-nav / anchor contract (ticket 02 -> ticket 03).
+   *
+   * Ticket 03's sticky nav must render exactly `h-nav` tall, i.e. `spacing.nav` in
+   * `tailwind.config.js` (5rem). Every `<section id>` carries a matching scroll-margin so a jump to
+   * `#verfahren` lands with the heading clear of the nav.
+   *
+   * There is deliberately NO second copy of that number: this rule derives it from the config with
+   * `theme()`, so `spacing.nav` is the single source of truth. The `Section` primitive used to also
+   * apply a `scroll-mt-nav` utility — that was removed, because this rule (unlayered, specificity
+   * 0,1,1) outranks a utility class (0,1,0) and the duplicated literal made both wrong.
+   *
+   * If the nav height changes, change `spacing.nav`. The nav must render at exactly `h-nav`; a
+   * taller nav is a change to this contract, not a local tweak.
+   */
   html {
     scroll-behavior: smooth;
   }
 
+  section[id] {
+    scroll-margin-top: theme("spacing.nav");
+  }
+
   body {
-    @apply font-body text-neutral-600 antialiased;
+    /* `text-ink-600` is a token from the neutral ramp, not an ad-hoc opacity (see ticket 02). */
+    /* `break-words` mirrors what headings already have: a long unbreakable token (a file path, a
+       URL, a phone number typed without spaces) must never force a horizontal scrollbar on a phone,
+       which is the device the whole page is optimised for. */
+    @apply font-body text-ink-600 break-words antialiased;
   }
 
   h1,
@@ -34,6 +57,28 @@
   h4,
   h5,
   h6 {
-    @apply font-heading break-words;
+    /* `normal-case` encodes DESIGN_PLAN.md decision B8: sentence case, never uppercased. */
+    @apply font-heading normal-case break-words;
+  }
+
+  /*
+   * Motion (B5): everything animates through CSS only, and all of it stops here. This is the
+   * stylesheet half of the guarantee — the JS half is the `useReveal` hook, which never starts an
+   * IntersectionObserver when this media query matches.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
+

@@ -1,0 +1,406 @@
+== browser
+"Edg/155.0.4283.45"
+== layout@375
+{
+ "horizontalOverflowPx": 0,
+ "kontaktBg": "rgb(255, 255, 255)",
+ "footerBg": "rgb(10, 31, 46)",
+ "footerBorderTop": "0px solid",
+ "kontaktToFooterGapPx": 0,
+ "kontaktVsFooterContrast": 16.82,
+ "ctaFill": "rgb(240, 138, 36)",
+ "ctaText": "rgb(10, 31, 46)",
+ "ctaEdgeVsWhite": 2.51,
+ "ctaTextVsFill": 6.7,
+ "kontaktImages": 0,
+ "kontaktColumns": 1,
+ "teamCardRows": 3,
+ "teamCardHeights": [
+  493,
+  493,
+  493
+ ],
+ "teamCardsEqualHeight": true,
+ "nameLines": 1,
+ "roleLines": 1,
+ "nameRightPx": 355,
+ "viewport": 375,
+ "footerEmblem": {
+  "size": "56x56",
+  "radius": "9999px",
+  "alt": ""
+ },
+ "navEmblem": "40x40",
+ "footerText": "Ingenieurbüro-Auner GmbH © 2026 Ingenieurbüro-Auner GmbH Impressum Datenschutzerklärung"
+}
+== layout@768
+{
+ "horizontalOverflowPx": 0,
+ "kontaktBg": "rgb(255, 255, 255)",
+ "footerBg": "rgb(10, 31, 46)",
+ "footerBorderTop": "0px solid",
+ "kontaktToFooterGapPx": 0,
+ "kontaktVsFooterContrast": 16.82,
+ "ctaFill": "rgb(240, 138, 36)",
+ "ctaText": "rgb(10, 31, 46)",
+ "ctaEdgeVsWhite": 2.51,
+ "ctaTextVsFill": 6.7,
+ "kontaktImages": 0,
+ "kontaktColumns": 2,
+ "teamCardRows": 1,
+ "teamCardHeights": [
+  402.2,
+  402.2,
+  402.2
+ ],
+ "teamCardsEqualHeight": true,
+ "nameLines": 1,
+ "roleLines": 1,
+ "nameRightPx": 744,
+ "viewport": 768,
+ "footerEmblem": {
+  "size": "64x64",
+  "radius": "9999px",
+  "alt": ""
+ },
+ "navEmblem": "48x48",
+ "footerText": "Ingenieurbüro-Auner GmbH © 2026 Ingenieurbüro-Auner GmbH Impressum Datenschutzerklärung"
+}
+== layout@1024
+{
+ "horizontalOverflowPx": 0,
+ "kontaktBg": "rgb(255, 255, 255)",
+ "footerBg": "rgb(10, 31, 46)",
+ "footerBorderTop": "0px solid",
+ "kontaktToFooterGapPx": 0,
+ "kontaktVsFooterContrast": 16.82,
+ "ctaFill": "rgb(240, 138, 36)",
+ "ctaText": "rgb(10, 31, 46)",
+ "ctaEdgeVsWhite": 2.51,
+ "ctaTextVsFill": 6.7,
+ "kontaktImages": 0,
+ "kontaktColumns": 2,
+ "teamCardRows": 1,
+ "teamCardHeights": [
+  478,
+  478,
+  478
+ ],
+ "teamCardsEqualHeight": true,
+ "nameLines": 1,
+ "roleLines": 1,
+ "nameRightPx": 992,
+ "viewport": 1024,
+ "footerEmblem": {
+  "size": "64x64",
+  "radius": "9999px",
+  "alt": ""
+ },
+ "navEmblem": "48x48",
+ "footerText": "Ingenieurbüro-Auner GmbH © 2026 Ingenieurbüro-Auner GmbH Impressum Datenschutzerklärung"
+}
+== layout@1279
+{
+ "horizontalOverflowPx": 0,
+ "kontaktBg": "rgb(255, 255, 255)",
+ "footerBg": "rgb(10, 31, 46)",
+ "footerBorderTop": "0px solid",
+ "kontaktToFooterGapPx": 0,
+ "kontaktVsFooterContrast": 16.82,
+ "ctaFill": "rgb(240, 138, 36)",
+ "ctaText": "rgb(10, 31, 46)",
+ "ctaEdgeVsWhite": 2.51,
+ "ctaTextVsFill": 6.7,
+ "kontaktImages": 0,
+ "kontaktColumns": 2,
+ "teamCardRows": 1,
+ "teamCardHeights": [
+  542.9,
+  542.9,
+  542.9
+ ],
+ "teamCardsEqualHeight": true,
+ "nameLines": 1,
+ "roleLines": 1,
+ "nameRightPx": 1120,
+ "viewport": 1279,
+ "footerEmblem": {
+  "size": "64x64",
+  "radius": "9999px",
+  "alt": ""
+ },
+ "navEmblem": "48x48",
+ "footerText": "Ingenieurbüro-Auner GmbH © 2026 Ingenieurbüro-Auner GmbH Impressum Datenschutzerklärung"
+}
+== layout@1280
+{
+ "horizontalOverflowPx": 0,
+ "kontaktBg": "rgb(255, 255, 255)",
+ "footerBg": "rgb(10, 31, 46)",
+ "footerBorderTop": "0px solid",
+ "kontaktToFooterGapPx": 0,
+ "kontaktVsFooterContrast": 16.82,
+ "ctaFill": "rgb(240, 138, 36)",
+ "ctaText": "rgb(10, 31, 46)",
+ "ctaEdgeVsWhite": 2.51,
+ "ctaTextVsFill": 6.7,
+ "kontaktImages": 0,
+ "kontaktColumns": 2,
+ "teamCardRows": 1,
+ "teamCardHeights": [
+  542.9,
+  542.9,
+  542.9
+ ],
+ "teamCardsEqualHeight": true,
+ "nameLines": 1,
+ "roleLines": 1,
+ "nameRightPx": 1120,
+ "viewport": 1280,
+ "footerEmblem": {
+  "size": "64x64",
+  "radius": "9999px",
+  "alt": ""
+ },
+ "navEmblem": "48x48",
+ "footerText": "Ingenieurbüro-Auner GmbH © 2026 Ingenieurbüro-Auner GmbH Impressum Datenschutzerklärung"
+}
+== anchor-kontakt@375x812
+{
+ "hash": "#kontakt",
+ "navBottom": 80,
+ "headingTop": 190,
+ "headingClear": true,
+ "callTop": 453,
+ "callBottom": 512,
+ "visibleAreaBottom": 740,
+ "callVisibleWithoutScroll": true
+}
+== anchor-kontakt@375x667
+{
+ "hash": "#kontakt",
+ "navBottom": 80,
+ "headingTop": 190,
+ "headingClear": true,
+ "callTop": 453,
+ "callBottom": 512,
+ "visibleAreaBottom": 595,
+ "callVisibleWithoutScroll": true
+}
+== anchor-kontakt@768x1024
+{
+ "hash": "#kontakt",
+ "navBottom": 80,
+ "headingTop": 419,
+ "headingClear": true,
+ "callTop": 476,
+ "callBottom": 535,
+ "visibleAreaBottom": 1024,
+ "callVisibleWithoutScroll": true
+}
+== anchor-kontakt@1280x800
+{
+ "hash": "#kontakt",
+ "navBottom": 80,
+ "headingTop": 254,
+ "headingClear": true,
+ "callTop": 315,
+ "callBottom": 375,
+ "visibleAreaBottom": 800,
+ "callVisibleWithoutScroll": true
+}
+== keyboard@375
+{
+ "order": [
+  "nav a[#start] \"Ingenieurbüro Auner – zum Seitenanfang\"",
+  "nav a[#verfahren] \"Verfahren\"",
+  "nav a[#einsatzbereiche] \"Einsatzbereiche\"",
+  "nav a[#team] \"Team\"",
+  "nav a[#kontakt] \"Kontakt\"",
+  "callbar a[tel:+4917661877599] \"Anrufen: 0176 618 77 599\"",
+  "#start a[tel:+4917661877599] \"Anrufen: 0176 618 77 599\"",
+  "#verfahren button \"Größer ansehen\"",
+  "#kontakt a[tel:+4917661877599] \"Anrufen: 0176 618 77 599\"",
+  "#kontakt a[mailto:info@ingenieurbuero-auner.com?subject=Anfrage%20zur%20Grabenfr%C3%A4se] \"info@ingenieurbuero-auner.com\"",
+  "#kontakt button \"Adresse kopieren\"",
+  "footer a[/impressum.html] \"Impressum\"",
+  "footer a[/datenschutz.html] \"Datenschutzerklärung\""
+ ],
+ "kontaktAndFooter": [
+  {
+   "el": "a[tel:+4917661877599] \"Anrufen: 0176 618 77 599\"",
+   "where": "#kontakt",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(255, 255, 255)",
+   "ring": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(10, 31, 46) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+   "surface": "rgb(255, 255, 255)",
+   "outlineVsSurface": 1
+  },
+  {
+   "el": "a[mailto:info@ingenieurbuero-auner.com?subject=Anfrage%20zur%20Grabenfr%C3%A4se] \"info@ingenieurbuero-auner.com\"",
+   "where": "#kontakt",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(15, 23, 32)",
+   "ring": "none",
+   "surface": "rgb(255, 255, 255)",
+   "outlineVsSurface": 18.05
+  },
+  {
+   "el": "button \"Adresse kopieren\"",
+   "where": "#kontakt",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(15, 23, 32)",
+   "ring": "none",
+   "surface": "rgb(255, 255, 255)",
+   "outlineVsSurface": 18.05
+  },
+  {
+   "el": "a[/impressum.html] \"Impressum\"",
+   "where": "footer",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(255, 255, 255)",
+   "ring": "none",
+   "surface": "rgb(10, 31, 46)",
+   "outlineVsSurface": 16.82
+  },
+  {
+   "el": "a[/datenschutz.html] \"Datenschutzerklärung\"",
+   "where": "footer",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(255, 255, 255)",
+   "ring": "none",
+   "surface": "rgb(10, 31, 46)",
+   "outlineVsSurface": 16.82
+  }
+ ]
+}
+== keyboard@768
+{
+ "order": [
+  "nav a[#start] \"Ingenieurbüro Auner – zum Seitenanfang\"",
+  "nav a[#verfahren] \"Verfahren\"",
+  "nav a[#einsatzbereiche] \"Einsatzbereiche\"",
+  "nav a[#team] \"Team\"",
+  "nav a[#kontakt] \"Kontakt\"",
+  "nav a[tel:+4917661877599] \"Anrufen: 0176 618 77 599\"",
+  "#start a[tel:+4917661877599] \"Anrufen: 0176 618 77 599\"",
+  "#verfahren button \"Größer ansehen\"",
+  "#kontakt a[tel:+4917661877599] \"Anrufen: 0176 618 77 599\"",
+  "#kontakt a[mailto:info@ingenieurbuero-auner.com?subject=Anfrage%20zur%20Grabenfr%C3%A4se] \"info@ingenieurbuero-auner.com\"",
+  "#kontakt button \"Adresse kopieren\"",
+  "footer a[/impressum.html] \"Impressum\"",
+  "footer a[/datenschutz.html] \"Datenschutzerklärung\""
+ ],
+ "kontaktAndFooter": [
+  {
+   "el": "a[tel:+4917661877599] \"Anrufen: 0176 618 77 599\"",
+   "where": "#kontakt",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(255, 255, 255)",
+   "ring": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(10, 31, 46) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+   "surface": "rgb(255, 255, 255)",
+   "outlineVsSurface": 1
+  },
+  {
+   "el": "a[mailto:info@ingenieurbuero-auner.com?subject=Anfrage%20zur%20Grabenfr%C3%A4se] \"info@ingenieurbuero-auner.com\"",
+   "where": "#kontakt",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(15, 23, 32)",
+   "ring": "none",
+   "surface": "rgb(255, 255, 255)",
+   "outlineVsSurface": 18.05
+  },
+  {
+   "el": "button \"Adresse kopieren\"",
+   "where": "#kontakt",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(15, 23, 32)",
+   "ring": "none",
+   "surface": "rgb(255, 255, 255)",
+   "outlineVsSurface": 18.05
+  },
+  {
+   "el": "a[/impressum.html] \"Impressum\"",
+   "where": "footer",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(255, 255, 255)",
+   "ring": "none",
+   "surface": "rgb(10, 31, 46)",
+   "outlineVsSurface": 16.82
+  },
+  {
+   "el": "a[/datenschutz.html] \"Datenschutzerklärung\"",
+   "where": "footer",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(255, 255, 255)",
+   "ring": "none",
+   "surface": "rgb(10, 31, 46)",
+   "outlineVsSurface": 16.82
+  }
+ ]
+}
+== keyboard@1280
+{
+ "order": [
+  "nav a[#start] \"Ingenieurbüro Auner – zum Seitenanfang\"",
+  "nav a[#verfahren] \"Verfahren\"",
+  "nav a[#einsatzbereiche] \"Einsatzbereiche\"",
+  "nav a[#team] \"Team\"",
+  "nav a[#kontakt] \"Kontakt\"",
+  "nav a[tel:+4917661877599] \"Anrufen: 0176 618 77 599\"",
+  "#start a[tel:+4917661877599] \"Anrufen: 0176 618 77 599\"",
+  "#verfahren button \"Größer ansehen\"",
+  "#kontakt a[tel:+4917661877599] \"Anrufen: 0176 618 77 599\"",
+  "#kontakt a[mailto:info@ingenieurbuero-auner.com?subject=Anfrage%20zur%20Grabenfr%C3%A4se] \"info@ingenieurbuero-auner.com\"",
+  "#kontakt button \"Adresse kopieren\"",
+  "footer a[/impressum.html] \"Impressum\"",
+  "footer a[/datenschutz.html] \"Datenschutzerklärung\""
+ ],
+ "kontaktAndFooter": [
+  {
+   "el": "a[tel:+4917661877599] \"Anrufen: 0176 618 77 599\"",
+   "where": "#kontakt",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(255, 255, 255)",
+   "ring": "rgb(255, 255, 255) 0px 0px 0px 0px, rgb(10, 31, 46) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+   "surface": "rgb(255, 255, 255)",
+   "outlineVsSurface": 1
+  },
+  {
+   "el": "a[mailto:info@ingenieurbuero-auner.com?subject=Anfrage%20zur%20Grabenfr%C3%A4se] \"info@ingenieurbuero-auner.com\"",
+   "where": "#kontakt",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(15, 23, 32)",
+   "ring": "none",
+   "surface": "rgb(255, 255, 255)",
+   "outlineVsSurface": 18.05
+  },
+  {
+   "el": "button \"Adresse kopieren\"",
+   "where": "#kontakt",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(15, 23, 32)",
+   "ring": "none",
+   "surface": "rgb(255, 255, 255)",
+   "outlineVsSurface": 18.05
+  },
+  {
+   "el": "a[/impressum.html] \"Impressum\"",
+   "where": "footer",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(255, 255, 255)",
+   "ring": "none",
+   "surface": "rgb(10, 31, 46)",
+   "outlineVsSurface": 16.82
+  },
+  {
+   "el": "a[/datenschutz.html] \"Datenschutzerklärung\"",
+   "where": "footer",
+   "focusVisible": true,
+   "outline": "solid 2px rgb(255, 255, 255)",
+   "ring": "none",
+   "surface": "rgb(10, 31, 46)",
+   "outlineVsSurface": 16.82
+  }
+ ]
+}
