@@ -67,3 +67,11 @@ test("does not repeat the contact details owned by the Kontakt section", () => {
   const { footer } = renderFooter();
   expect(footer.querySelectorAll('a[href^="tel:"], a[href^="mailto:"]')).toHaveLength(0);
 });
+
+test("adds no copy beyond the legal links and the logo plate (no copyright line)", () => {
+  const { footer } = renderFooter();
+  // DESIGN_PLAN §4 row 8 asks for the legal links and the plate only; the plate's alt carries the
+  // company name, so any other visible text in the footer is unrequested copy.
+  expect(footer).toHaveTextContent(/^ImpressumDatenschutzerklärung$/);
+  expect(footer).not.toHaveTextContent("©");
+});
