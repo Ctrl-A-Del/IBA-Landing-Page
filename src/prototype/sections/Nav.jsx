@@ -79,7 +79,7 @@ const Nav = () => {
             aria-label="Ingenieurbüro Auner – zum Seitenanfang"
             className={`shrink-0 rounded-full ${FOCUS_ON_DARK}`}
           >
-            <Emblem className="h-10 w-10 ring-1 ring-white/10 sm:h-12 sm:w-12" />
+            <Emblem className="h-10 w-10 sm:h-12 sm:w-12" />
           </a>
 
           {/*

@@ -29,7 +29,7 @@
  */
 const PortraitCard = ({ src, alt, name, role, fill = false, className = "" }) => (
   <figure
-    data-fill={fill}
+    data-fill={fill || undefined}
     className={`w-full bg-white p-3 text-ink-600 shadow-frame ring-1 ring-frame rounded-edge ${
       fill ? "flex h-full flex-col" : ""
     } ${className}`}

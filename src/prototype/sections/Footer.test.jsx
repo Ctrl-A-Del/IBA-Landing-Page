@@ -61,7 +61,7 @@ test("the emblem is decorative: the company name sits beside it as text, not as 
   expect(emblem.getAttribute("src")).toMatch(/\/img\/logo\.jpg$/);
   expect(emblem).toHaveAttribute("alt", "");
   // Named once, as text — not a second time via alt (that would announce it twice).
-  expect(within(footer).getAllByText("Ingenieurbüro-Auner GmbH").length).toBeGreaterThan(0);
+  expect(within(footer).getAllByText("Ingenieurbüro-Auner GmbH")).toHaveLength(1);
 });
 
 test("does not repeat the contact details owned by the Kontakt section", () => {
@@ -69,26 +69,16 @@ test("does not repeat the contact details owned by the Kontakt section", () => {
   expect(footer.querySelectorAll('a[href^="tel:"], a[href^="mailto:"]')).toHaveLength(0);
 });
 
-describe("copyright line", () => {
-  test("shows the current year, from the system clock", () => {
-    jest.useFakeTimers();
-    try {
-      jest.setSystemTime(new Date("2031-05-01T00:00:00Z"));
-      const { footer } = renderFooter();
-      expect(footer).toHaveTextContent("© 2031 Ingenieurbüro-Auner GmbH");
-    } finally {
-      jest.useRealTimers();
-    }
-  });
-
-  test("follows the clock to a different year", () => {
-    jest.useFakeTimers();
-    try {
-      jest.setSystemTime(new Date("2040-01-01T00:00:00Z"));
-      const { footer } = renderFooter();
-      expect(footer).toHaveTextContent("© 2040 Ingenieurbüro-Auner GmbH");
-    } finally {
-      jest.useRealTimers();
-    }
-  });
+test.each([
+  ["2031-05-01T12:00:00Z", "2031"],
+  ["2040-07-01T12:00:00Z", "2040"],
+])("the copyright line shows the year the system clock reads (%s)", (now, year) => {
+  jest.useFakeTimers();
+  try {
+    jest.setSystemTime(new Date(now));
+    const { footer } = renderFooter();
+    expect(footer).toHaveTextContent(`© ${year} Ingenieurbüro-Auner GmbH`);
+  } finally {
+    jest.useRealTimers();
+  }
 });

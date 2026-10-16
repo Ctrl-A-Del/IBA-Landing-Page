@@ -22,11 +22,10 @@ import { FOCUS_ON_LIGHT } from "./focus";
  * Below `md` the columns stack in DOM order, heading first, so the "Kontakt" nav anchor lands on the
  * heading and the call sits near the top of the screen.
  *
- * ON-LIGHT COLOURS: every colour here is the on-light counterpart of what the navy version used,
- * from the mapping table in the ticket (11.1) — `ink-900`/`ink-700`/`ink-500`/`ink-600`/`ink-400` in
- * place of `mist-100`/`mist-200`/`mist-300`/`mist-400`/`mist-500`, and `FOCUS_ON_LIGHT` in place of
- * `FOCUS_ON_DARK`. The orange call CTA is unchanged — the locked primitive already carries its own
- * focus indicator that works on both tones.
+ * ON-LIGHT COLOURS: text and rules use the `ink` ramp (the light-surface tokens in
+ * `tailwind.config.js`), and links/buttons use `FOCUS_ON_LIGHT`, whose `ink-900` outline clears
+ * 18:1 on white where a white outline would vanish. The orange call CTA needs no change: its own
+ * two-tone indicator already carries a navy ring that works on white.
  *
  * PHONE FIRST: the call is the only orange `CTA` in the section and the first action in reading
  * and tab order. The `CTA` primitive locks navy-on-orange, so white text on orange is

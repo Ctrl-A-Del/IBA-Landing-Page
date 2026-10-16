@@ -126,7 +126,7 @@ describe("image references", () => {
   });
 });
 
-describe("human review fixes (11.1, R6)", () => {
+describe("one face, one brand mark (B6, C15, C18)", () => {
   test("Marcus Auner's portrait appears exactly once on the page, in Team", () => {
     const { container } = renderPage();
     const portraits = [...container.querySelectorAll("img")].filter((img) =>
@@ -144,6 +144,8 @@ describe("human review fixes (11.1, R6)", () => {
     // Nav and footer.
     expect(logos).toHaveLength(2);
     logos.forEach((img) => {
+      // Inside the shared emblem's round crop wrapper, never free-standing as the plate.
+      expect(img.parentElement).toHaveAttribute("data-emblem");
       // Decorative crop: no alt naming the company (the name is text where it is needed).
       expect(img).toHaveAttribute("alt", "");
     });

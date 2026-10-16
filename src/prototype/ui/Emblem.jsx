@@ -11,10 +11,15 @@
  * of the (square) circle. `rounded-full` + `overflow-hidden` then clip the plate's wall away.
  *
  * `className` sizes the disc (e.g. `h-10 w-10 sm:h-12 sm:w-12` in the nav, larger in the footer);
- * the crop percentages are scale-invariant, so one `<img>` serves every size.
+ * the crop percentages are scale-invariant, so one `<img>` serves every size. The hairline ring is
+ * part of the mark: both consumers sit on navy. `data-emblem` marks the crop wrapper so the page
+ * test can prove `logo.jpg` is never shown as the full plate.
  */
 const Emblem = ({ className = "" }) => (
-  <span className={`relative block overflow-hidden rounded-full ${className}`}>
+  <span
+    data-emblem
+    className={`relative block overflow-hidden rounded-full ring-1 ring-white/10 ${className}`}
+  >
     <img
       src={`${process.env.PUBLIC_URL}/img/logo.jpg`}
       alt=""
