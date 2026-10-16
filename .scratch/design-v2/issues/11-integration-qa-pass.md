@@ -248,7 +248,10 @@ for the code review of this ticket. Full suite: 69/69 green across 10 suites, ru
 reason given there). `CI=true BUILD_PATH=build-11r npm run build`: `Compiled successfully`
 (main.js 50.69 kB, main.css 5.94 kB gzipped); `grep -rlE "favicon\.ico|apple-touch-icon" build-11r`
 finds nothing. `build-11r/` was deleted afterwards.
-`git diff master -- public/impressum.html public/datenschutz.html public/index.html` is empty.
+`git diff master -- public/impressum.html public/datenschutz.html` is empty. `public/index.html`
+is untouched by this follow-up (`git diff design/v2 -- public` is empty); it differs from master
+only by ticket 01's page-head commits on `design/v2` (`2e347d9`, `eac1476`), so a diff against
+master for that file cannot be empty.
 
 | # | What | Why | Commit |
 | --- | --- | --- | --- |
