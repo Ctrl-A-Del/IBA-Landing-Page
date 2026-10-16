@@ -4,7 +4,7 @@
 
 **Blocked by:** 11.1 (Human review fixes) and explicit user approval
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] The approved page no longer depends on the temporary prototype pointer — the app entry renders the real sections directly
 - [ ] All approved copy lives in the content data, including the heading strings currently hardcoded inside the services, Team and contact components
