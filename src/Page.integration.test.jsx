@@ -1,5 +1,6 @@
 /**
- * Ticket 11 — integration QA guards for the assembled page.
+ * Ticket 11 — integration QA guards for the assembled page (moved from `src/prototype/` and
+ * extended with the image-pruning guards in ticket 12).
  *
  * SEAM: the whole page as `src/App.jsx` mounts it (`<App />`), observed only through the DOM a
  * visitor gets, plus the files CRA ships verbatim from `public/`. These are the acceptance boxes
@@ -9,8 +10,7 @@
  * landing under the fixed nav) is verified in a real browser; the evidence is in the ticket.
  *
  * THE PAGE: the `nav`, `main` and `footer` landmarks plus the mobile call bar, and nothing after
- * the footer (ticket 02's dev-only token showcase was removed from the shell in ticket 11's review
- * follow-up; "page composition" below keeps it out). The content audits read exactly that.
+ * the footer ("page composition" below keeps it that way). The content audits read exactly that.
  */
 import fs from "fs";
 import path from "path";

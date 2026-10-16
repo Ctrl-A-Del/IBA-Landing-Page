@@ -4,7 +4,7 @@
  * Why this seam and nothing else: `useReveal` is the only piece of the theme foundation with real
  * branching logic (browser capability detection, observer lifecycle, cleanup). Everything else in
  * ticket 02 is a Tailwind token or a presentational primitive, which the ticket verifies through
- * build output, the compiled CSS and the showcase — asserting Tailwind class strings would test the
+ * build output and the compiled CSS (and, until ticket 12 deleted it, a dev-only showcase) — asserting Tailwind class strings would test the
  * implementation, not behaviour, so it is deliberately not done here.
  *
  * The hook is exercised through its public interface only: a probe component consumes it, spreads

@@ -10,7 +10,15 @@ are human-gated (`13` **publishes the live site**).
 
 **Last updated:** 2026-10-16 · branch `design/v2` with tickets `01`–`11.1` landed; nothing pushed,
 `master` untouched at `e5ffdd6`. A human review of the assembled page reopened B6, C12 and C15 in
-round `R6` (§3); ticket `11.1` implemented those fixes. Next is `12`, which needs user approval.
+round `R6` (§3); ticket `11.1` implemented those fixes. The user approved the prototype on
+2026-10-16. Ticket `12` (post-approval migration, D6) is implemented and awaiting review: v2 is now
+the source of truth, all copy is in `data.json`, and the legacy components, dead tokens and template
+images are gone. Next is `13`, which **publishes the live site** and needs explicit approval.
+
+**Note on §1:** §1.3–§1.6 describe `master` at `e5ffdd6`. After ticket 12, `src/App.jsx` renders
+the v2 sections from `src/components/sections/` with primitives in `src/components/ui/`. `data.json`
+is keyed by v2 section and has no BOM. `brand.alt`, `surface`, `link` and `accent` are gone. Only
+the five images in use remain in `public/img`.
 
 **Progress:** all five interview rounds are closed; there are **no open questions** (§5). Everything
 decided is in §3. Ticket `01` is complete and reviewed; ticket `02` is complete and verified, with
@@ -338,12 +346,12 @@ If implementation turns up a genuine conflict with a decision in §3, raise it w
 - [x] Fix the four broken favicon references in `public/index.html`
 - [x] Fill the meta description
 - [x] Add Open Graph + Twitter card tags
-- [ ] Prune dead images **only after** the design lands
+- [x] Prune dead images **only after** the design lands (ticket 12)
 
 ### Review & ship
 - [ ] `npm start` and self-review at ~375 / ~768 / ~1280 px, keyboard-only, and with reduced motion
-- [ ] Present the prototype to the user; collect feedback
-- [ ] On approval: migrate copy into `data.json`, delete the old components (D6), prune dead assets
+- [x] Present the prototype to the user; collect feedback (R6 → ticket 11.1; approved 2026-10-16)
+- [x] On approval: migrate copy into `data.json`, delete the old components (D6), prune dead assets (ticket 12, awaiting review)
 - [ ] Open a PR to `master` **only after explicit approval** — merging deploys the live site
 
 ---
