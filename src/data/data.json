@@ -1,64 +1,99 @@
 {
-  "Header": {
-    "title": "Wir schaufeln nicht – wir fräsen"
+  "Contact": {
+    "phone": "+49 176 618 77 599",
+    "phoneDisplay": "0176 618 77 599",
+    "callLabel": "Anrufen",
+    "email": "info@ingenieurbuero-auner.com",
+    "mailSubject": "Anfrage zur Grabenfräse"
   },
-  "About": {
-    "heading": "Entwickelt für den Energie- und Versorgungsnetzausbau",
-    "cards": [
+  "Nav": {
+    "label": "Hauptnavigation",
+    "homeLabel": "Ingenieurbüro Auner – zum Seitenanfang",
+    "links": [
+      { "anchor": "verfahren", "label": "Verfahren" },
+      { "anchor": "einsatzbereiche", "label": "Einsatzbereiche" },
+      { "anchor": "team", "label": "Team" },
+      { "anchor": "kontakt", "label": "Kontakt" }
+    ]
+  },
+  "Hero": {
+    "title": "Wir schaufeln nicht – wir fräsen",
+    "subline": "Wir entwickeln Grabenfräsen für den Energie- und Versorgungsnetzausbau.",
+    "trustLine": "Maschinenbau aus NRW"
+  },
+  "Verfahren": {
+    "eyebrow": "Verfahren",
+    "heading": "Die Maschine",
+    "intro": "Die Maschine ist in Entwicklung. Vier Module sollen Bodenabtrag und Materialtransport in einem kontinuierlichen Arbeitsgang bündeln.",
+    "renderAlt": "3D-Darstellung der Fräsmaschine mit ihren vier Modulen",
+    "enlargeLabel": "Größer ansehen",
+    "closeLabel": "Schließen",
+    "caption": "Fräsmodul, Aufnahme-, Förder- und Antriebsmodul",
+    "modulesLabel": "Die vier Module der Maschine",
+    "modules": [
+      { "numeral": "01", "name": "Fräsmodul", "line": "Zwei Arme, gegenläufige Fräsköpfe" },
+      { "numeral": "02", "name": "Aufnahmemodul", "line": "Nimmt das gelöste Material auf" },
+      { "numeral": "03", "name": "Fördermodul", "line": "Kontinuierlicher Austrag, beidseitig" },
+      { "numeral": "04", "name": "Antriebsmodul", "line": "Energie, Hydraulik, Steuerung" }
+    ]
+  },
+  "Einsatzbereiche": {
+    "eyebrow": "Einsatzbereiche",
+    "heading": "Entwickelt für den Energie- und Versorgungs­netzausbau",
+    "listLabel": "Die vier Einsatzbereiche",
+    "areas": [
+      { "title": "Stromtrassen", "text": "Erdkabel und Energieübertragung" },
+      { "title": "Wasserstoff & Fernwärme", "text": "Neue Leitungsnetze der Energiewende" },
+      { "title": "Wasser & Abwasser", "text": "Großformatige Versorgungsgräben" },
+      { "title": "Weitere Infrastruktur", "text": "Gas-, Drainage- und industrielle Leitungstrassen" }
+    ]
+  },
+  "WarumWir": {
+    "eyebrow": "Warum wir",
+    "heading": "Neue Netze brauchen leistungsfähigere Bauprozesse.",
+    "intro": "Unsere Maschine ist in Entwicklung. Diese drei Ziele geben ihr die Richtung vor.",
+    "points": [
       {
-        "title": "Stromtrassen",
-        "text": "Erdkabel und Energieübertragung"
+        "name": "Schneller vorankommen",
+        "text": "Ziel ist ein durchgehender Arbeitsgang, in dem die Maschine den Boden fräst und das Material im selben Zug abfördert."
       },
       {
-        "title": "Wasserstoff & Fernwärme",
-        "text": "Neue Leitungsnetze der Energiewende"
+        "name": "Ressourcen effizient nutzen",
+        "text": "Das Konzept bündelt Fräsen, Aufnehmen und Fördern in einer Maschine. Ziel ist, unnötige Fahr- und Schwenkbewegungen und zusätzliche Maschineneinsätze zu vermeiden."
       },
       {
-        "title": "Wasser & Abwasser",
-        "text": "Großformatige Versorgungsgräben"
-      },
-      {
-        "title": "Weitere Infrastruktur",
-        "text": "Gas-, Drainage- und industrielle Leitungstrassen"
+        "name": "Fachkräfte entlasten",
+        "text": "Die Maschine wird auf Fernsteuerung und ineinandergreifende Arbeitsschritte ausgelegt. Ziel ist, dass Fachkräfte seltener direkt im Gefahrenbereich stehen und dort arbeiten, wo ihr Können gebraucht wird."
       }
     ]
   },
-  "Services": [
-    {
-      "icon": "fast-forward",
-      "name": "Schneller vorankommen",
-      "text": "Kontinuierlicher Bodenabtrag und Materialtransport sollen höhere Tagesleistungen ermöglichen als klassische Einzelzyklen."
-    },
-    {
-      "icon": "recycle",
-      "name": "Ressourcen effizient nutzen",
-      "text": "Ein gebündelter Arbeitsprozess soll unnötige Fahr- und Schwenkbewegungen sowie zusätzliche Maschineneinsätze reduzieren."
-    },
-    {
-      "icon": "user",
-      "name": "Fachkräfte entlasten",
-      "text": "Integrierte Prozessschritte und Fernsteuerung sollen Fachkräfte effizienter einsetzen und Tätigkeiten direkt im Gefahrenbereich reduzieren."
+  "Team": {
+    "eyebrow": "Team",
+    "heading": "Die Menschen hinter der Maschine",
+    "intro": "Geschäftsführung, Einkauf und Technik entwickeln die Grabenfräse gemeinsam.",
+    "listLabel": "Das Team",
+    "people": [
+      { "img": "img/marcus.png", "name": "Marcus Auner", "role": "Geschäftsführung" },
+      { "img": "img/klaus.png", "name": "Klaus Auner", "role": "Einkauf" },
+      { "img": "img/jan.png", "name": "Jan Hönninger", "role": "Technischer Leiter" }
+    ]
+  },
+  "Kontakt": {
+    "eyebrow": "Kontakt",
+    "heading": "Sprechen Sie direkt mit uns",
+    "intro": "Lassen Sie uns über den Grabenaushub von morgen sprechen.",
+    "person": { "name": "Marcus Auner", "role": "Geschäftsführung" },
+    "copyLabel": "Adresse kopieren",
+    "status": {
+      "copied": "E-Mail-Adresse kopiert.",
+      "selected": "Adresse unten markiert – mit Strg+C (Mac: ⌘+C) kopieren oder auf dem Handy gedrückt halten und „Kopieren“ wählen."
     }
-  ],
-  "Team": [
-    {
-      "img": "img/marcus.png",
-      "name": "Marcus Auner",
-      "job": "Geschäftsführung"
-    },
-    {
-      "img": "img/klaus.png",
-      "name": "Klaus Auner",
-      "job": "Einkauf"
-    },
-    {
-      "img": "img/jan.png",
-      "name": "Jan Hönninger",
-      "job": "Technischer Leiter"
-    }
-  ],
-  "Contact": {
-    "phone": "+49 176 618 77 599",
-    "email": "info@ingenieurbuero-auner.com"
+  },
+  "Footer": {
+    "company": "Ingenieurbüro-Auner GmbH",
+    "legalLinks": [
+      { "file": "impressum.html", "label": "Impressum" },
+      { "file": "datenschutz.html", "label": "Datenschutzerklärung" }
+    ]
   }
 }
