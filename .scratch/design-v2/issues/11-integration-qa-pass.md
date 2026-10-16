@@ -4,7 +4,7 @@
 
 **Blocked by:** 03, 04, 05, 06, 07, 08, 09 and 10
 
-**Status:** ready-for-human
+**Status:** resolved
 
 - [x] The full page renders at ~375 / ~768 / ~1280 px with no horizontal overflow at any width
 - [x] Tab order through the whole page is logical, every interactive element is reachable, every one has a visible focus state, and nothing traps focus *(ticked in the review follow-up, after the showcase was removed: 13/13 stops at 375/768/1280)*
@@ -292,3 +292,12 @@ every stop. Raw output: `run2/out.txt`, `run2/results.json`; screenshots: `run2/
 - **Bottom of the page:** the footer is the last thing; at 360/375 it ends at the call bar's top
   edge (667.7 vs 668, 740.1 vs 740), legal links at 617/690. `bottom-<w>-shipping.png`.
 - Only non-2xx request: `/favicon.ico` 404 (F3, E2), as before.
+
+### Closed (human, 2026-10-16)
+
+The user has accepted this ticket as done. Their review of the assembled page reopened B6, C12 and
+C15 (DESIGN_PLAN §3, round R6). The fixes moved to
+`.scratch/design-v2/issues/11.1-human-review-fixes.md`, which now owns **E4** (footer vs Kontakt
+separation, decided: white Kontakt, navy footer, no hairline), **E5** (Kontakt stacking on phones),
+**E6/F7** (equal-height Team cards) and **F6** (label wrap at 375). **E2, E3, E7 and E8 stay open**,
+not part of 11.1, waiting for their own decisions.

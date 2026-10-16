@@ -2,7 +2,7 @@
 
 **What to build:** Once the reviewer approves the prototype, the approved design becomes the single source of truth: the copy lands in the content data, the superseded components are deleted, and the template's dead assets are pruned.
 
-**Blocked by:** 11 (Integration QA pass) and explicit user approval
+**Blocked by:** 11.1 (Human review fixes) and explicit user approval
 
 **Status:** ready-for-agent
 
@@ -19,3 +19,4 @@
 - [ ] The technical envelope is intact: no router, no new heavy dependency, no external PostCSS config, self-hosted subsets only, Tailwind v3, React 17
 - [ ] `package-lock.json` stays in sync with `package.json`, and no dependency was added or upgraded
 - [ ] The legal pages are still untouched
+- [ ] The `brand.alt` colour token and the shared Section primitive's `alt` tone are removed, since nothing in v2 uses them after ticket 11.1 (DESIGN_PLAN C12, R6)

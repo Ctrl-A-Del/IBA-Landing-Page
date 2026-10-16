@@ -31,7 +31,8 @@ graph TD
   T08 --> T11
   T09 --> T11
   T10 --> T11
-  T11 --> T12["12 Post-approval migration"]
+  T11 --> T111["11.1 Human review fixes"]
+  T111 --> T12["12 Post-approval migration"]
   T12 --> T13["13 Open PR to master"]
 ```
 
@@ -143,6 +144,7 @@ wave 1  T01                       1 agent   (hard serial)
 wave 2  T02                       1 agent   (hard serial)
 wave 3  T03 T04 T05 T06 T07 T08 T09 T10     fan out — see §3 for the cap and the red list
 wave 4  T11                       1 agent   (hard serial)
+wave 4.1 T11.1                    1 agent   (hard serial — touches Kontakt, Footer, Team, PortraitCard, Section, focus)
 wave 5  T12                       1 agent   ✋ needs user approval
 wave 6  T13                       1 agent   ⛔ PUBLISHES THE LIVE SITE — needs user approval
 ```

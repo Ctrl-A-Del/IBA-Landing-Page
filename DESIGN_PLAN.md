@@ -8,8 +8,9 @@ Decision log, verified facts and task tracker for the redesign of `ingenieurbuer
 `design/v2`. Tickets `03`–`10` are the section wave, `11` is the integration QA pass, and `12`–`13`
 are human-gated (`13` **publishes the live site**).
 
-**Last updated:** 2026-10-15 · branch `design/v2` with ticket `02` landed; nothing pushed, `master`
-untouched at `e5ffdd6`.
+**Last updated:** 2026-10-16 · branch `design/v2` with tickets `01`–`11` landed; nothing pushed,
+`master` untouched at `e5ffdd6`. A human review of the assembled page reopened B6, C12 and C15 in
+round `R6` (§3). The fixes are ticket `11.1`, which runs between `11` and `12`.
 
 **Progress:** all five interview rounds are closed; there are **no open questions** (§5). Everything
 decided is in §3. Ticket `01` is complete and reviewed; ticket `02` is complete and verified, with
@@ -218,7 +219,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | **B3** | **Signal colour = the machine's own orange `#f08a24`**, used **exclusively for primary CTAs**, always with **dark navy text on it**. The `#6372ff → #5ca9fb` gradient is retired from CTAs. | `R3 Q1a`. The machine render and the logo wordmark are both orange, so blue CTAs compete with the brand's own imagery. Contrast: 6.7:1 navy-on-orange (passes AA) |
 | **B4** | **Keep Raleway (100–900) + Open Sans (300–800)**, self-hosted. The new look comes purely from scale, weight contrast, tracking and line-height. **No new font files, no new licence.** | `R2 Q5a`. The variable Raleway already goes to 900 — that range is simply not being used today |
 | **B5** | **Motion = CSS-only**: Tailwind transitions, hover/focus states, and a light scroll-reveal via a small `IntersectionObserver` hook — **all gated behind `prefers-reduced-motion`**. No animation library. | `R2 Q6a` |
-| **B6** | **Logo handling:** the full framed plate (`logo.jpg`) is kept as a brand element **outside the nav**; the nav mark is a **tight CSS crop of the emblem disc**. No vector or transparent PNG is available, and a JPEG can never be transparent. | `R3 Q5a` |
+| **B6** | **Logo handling:** the full framed plate (`logo.jpg`) is kept as a brand element **outside the nav**; the nav mark is a **tight CSS crop of the emblem disc**. No vector or transparent PNG is available, and a JPEG can never be transparent. **Amended in R6:** the full plate no longer appears on the page. The footer uses a larger emblem crop plus the company name as text (C18). `logo.jpg` stays in `public/` as the crop source. | `R3 Q5a`; amended `R6 Q2a`. On the footer the plate read as a pasted-in grey photo |
 | **B7** | **Team section stays on the dark background**; each portrait gets a **consistent framed light card**. | `R3 Q4b` — this overrides the agent's recommendation to move Team onto the light `surface` background |
 | **B8** | **Type & heading hierarchy: sentence case, not uppercase.** The H1 drops the current `uppercase` in favour of sentence case with tight tracking and fluid sizing; H2s step down from it. **CTA buttons are solid orange rectangles with a small radius (2–4 px), not pills.** | `R4 Q1a`. Uppercase at ~5rem makes a 32-character German headline hard to read; the tagline already carries enough force without shouting |
 | **B9** | **Nav behaviour: transparent over the hero, turning solid navy on scroll**, with a subtle bottom border, the anchors and the orange phone CTA. | `R4 Q2b` |
@@ -238,11 +239,14 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | **C9** | **The machine render stays full-width at every breakpoint**, even though its baked-in annotations become illegible on mobile — the HTML module list (`C4`) carries the meaning. | `R4 Q3a` |
 | **C10** | **A lightbox "view larger" affordance is added for the machine render** — a labelled button plus a click on the image opens it full-screen, gallery-style. Behaviour is specified by `C13`/`C14`. | `R4 Q3` — user addition |
 | **C11** | **Marcus Auner is the named contact person for calls.** The Kontakt section names him rather than presenting an anonymous number. | `R4 Q5` |
-| **C12** | **Background rhythm confirmed** (as proposed in `R3 Q3a`): navy (nav + hero) → light (Verfahren) → navy (Einsatzbereiche) → light (Warum wir) → navy (Team) → navy (Kontakt) → `brand.alt` (Footer). | `R4 Q4a`. Alternating gives the page structure without borders or shadows, and stops the light-backdropped render and the white studio portraits from reading as mistakes |
+| **C12** | **Background rhythm** (amended in R6): navy (nav + hero) → light (Verfahren) → navy (Einsatzbereiche) → light (Warum wir) → navy (Team) → **light (Kontakt)** → **navy `#0a1f2e` (Footer), with no hairline**. `brand.alt` `#14171a` no longer has a v2 consumer; ticket 12 retires it together with Section's `alt` tone. | `R4 Q4a`; amended `R6 Q4` (E4, from the throwaway prototype on local branch `prototype/footer-tone`, verdict commit `e9ce850`). The old navy Kontakt → `brand.alt` footer step was only about 1.07:1, so a hairline was the only separator, which contradicts "structure without borders". White → navy is 15.6:1. Alternating also stops the light-backdropped render and the white studio portraits from reading as mistakes |
 | **C13** | **Lightbox mechanism: the native `<dialog>` element opened with `showModal()`**, styled with Tailwind. No library, no hand-rolled focus trap, no manual scroll lock. | `R5 Q1a`. Attached via a ref; the browser supplies the focus trap, Esc-to-close and `::backdrop` for free. Hand-rolling a focus trap is the most common way an overlay like this ends up unusable by keyboard |
 | **C14** | **Lightbox affordances:** the render shown as large as the viewport allows on a dark navy backdrop; closes on **Esc**, an explicit **close button** and a **backdrop click**; **focus returns to the trigger** on close; **no pan/zoom UI** (the source is a 1342 px raster — magnifying past 1:1 only shows interpolation). The trigger is a **labelled button reading "Größer ansehen" with a `Maximize2` icon**; the render itself is also clickable for pointer users, but the button is the accessible affordance. A caption reads **"Fräsmodul, Aufnahme-, Förder- und Antriebsmodul"**. | `R5 Q2a`. The caption is the only text a screen-reader user gets when the image opens full-screen |
-| **C15** | **Marcus Auner is the person you call, and he appears in the Kontakt section with his portrait reused from the Team section**, labelled "Marcus Auner · Geschäftsführung". | `R5 Q3a`. It is a real asset and the same person the Team section already shows; for `A2`'s call-KPI a face beside a mobile number outperforms a bare number |
+| **C15** | **Marcus Auner is the person you call, named in Kontakt without a portrait** (amended in R6). His label sits directly beside the number on two lines: "Marcus Auner" in display type, "Geschäftsführung" beneath in smaller type, no middle dot (the Team caption pattern). His face appears once on the page, in Team. | `R5 Q3a`; amended `R6 Q1a` + `R6 Q9`. With Team directly above, the reused portrait put the same photo twice about a section apart. On white (C12) the framed card would also lose its frame. The one-line label wrapped badly on phones (F6) |
 | **C16** | **Nav CTA label and number format:** on `lg` and up the button shows the number, below that the verb **"Anrufen"**. The **displayed** number is the local **`0176 618 77 599`** (what an NRW Bauunternehmer reads fastest), while the `tel:` href keeps the international **`+49 176 618 77 599`** exactly as `data.json` stores it. | `R5 Q4b` |
+| **C17** | **Kontakt layout without the portrait:** two columns from `md` up, with the eyebrow, H2 and intro on the left and the contact block on the right (name and role, orange call, divider, email and copy). Below `md` it stacks heading first. | `R6 Q8a`. Fills the white section's width, and on phones the "Kontakt" anchor lands on the heading with the call near the top (resolves E5/F5) |
+| **C18** | **Footer content:** brand block on the left (emblem crop, "Ingenieurbüro-Auner GmbH" as text, "© {current year} Ingenieurbüro-Auner GmbH" with the year computed at render), legal links on the right from `sm` up; stacked and centred below. **No address, no trust line, no phone, no email.** | `R6 Q2a` + `R6 Q3` + `R6 Q10`. The user declined the address line. Contact details stay in Kontakt only |
+| **C19** | **Team cards share one height per row** where they sit side by side, through a documented fill option on the portrait-card primitive (the default stays unchanged). | `R6 Q6` (E6/F7) |
 
 ### D. Technical & workflow
 
@@ -267,14 +271,14 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | 4 | Einsatzbereiche | `#einsatzbereiche` | navy | The four areas: Stromtrassen · Wasserstoff & Fernwärme · Wasser & Abwasser · Weitere Infrastruktur |
 | 5 | Warum wir | `#warum` | light | The three Services points, reworded from hedged to plain (within C2) |
 | 6 | Team | `#team` | navy | The three real people, framed light cards (B7) |
-| 7 | Kontakt | `#kontakt` | navy | **Marcus Auner · Geschäftsführung, with his portrait reused from Team** (C11, C15); phone-first; email with pre-filled `mailto:` + copy-to-clipboard (C5) |
-| 8 | Footer | — | `brand.alt` | Links to Impressum / Datenschutz, logo plate (B6) |
+| 7 | Kontakt | `#kontakt` | light | **Marcus Auner named beside the number, no portrait** (C11, C15); two columns from `md` (C17); phone-first; email with pre-filled `mailto:` + copy-to-clipboard (C5) |
+| 8 | Footer | — | navy, no hairline (C12) | Emblem crop + company name + © line, links to Impressum / Datenschutz (B6, C18) |
 
 ### 4.1 Concrete visual spec
 
 What "industrial-technical" (`B2`) means in practice, so a fresh agent does not reinterpret it:
 
-- **Surface**: navy `#0a1f2e` dominant; `brand.alt` `#14171a` for the footer. No decorative gradients — the `accent` gradient is retired from CTAs (`B3`).
+- **Surface**: navy `#0a1f2e` dominant, including the footer (C12, amended in R6). `brand.alt` `#14171a` is no longer used by v2. No decorative gradients — the `accent` gradient is retired from CTAs (`B3`).
 - **CTA**: solid orange `#f08a24` with **navy `#0a1f2e` text**, radius 2–4 px, **never a pill** (`B8`). Hover/focus = a darkened shade of the same orange. **Never white text on orange** (§1.9).
 - **Type**: Raleway 700–900 for display, fluid sizing (~2.5rem → 5rem for the H1), **sentence case, not uppercase** (`B8`), tight tracking at display sizes. Open Sans 300–800 for body — `text-neutral-600` on light surfaces, a light neutral on navy.
 - **Edges**: hard — rectangles and 1 px rules rather than rounded cards and soft shadows. The one deliberate exception is the framed Team cards (`B7`).
@@ -300,6 +304,8 @@ What "industrial-technical" (`B2`) means in practice, so a fresh agent does not 
 Every branch of the design tree has been visited and recorded in §3, with nothing left silently assumed. All five interview rounds are closed.
 
 If implementation turns up a genuine conflict with a decision in §3, raise it with the user rather than silently changing a settled decision.
+
+**Round 6 (2026-10-16, closed):** after reviewing the assembled page, the user reopened B6, C12 and C15 and added C17–C19. Implementation is ticket `.scratch/design-v2/issues/11.1-human-review-fixes.md`.
 
 ---
 
