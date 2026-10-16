@@ -8,21 +8,48 @@
  * Everything that needs layout, focus or motion (widths, tab order, lightbox, reduced motion, anchor
  * landing under the fixed nav) is verified in a real browser; the evidence is in the ticket.
  *
- * PAGE vs SHOWCASE: `Prototype.jsx` still renders ticket 02's dev-only token showcase after the
- * footer (escalated in the ticket). The visitor-facing page is the `nav`, `main` and `footer`
- * landmarks plus the mobile call bar, so the content audits below read only that.
+ * THE PAGE: the `nav`, `main` and `footer` landmarks plus the mobile call bar, and nothing after
+ * the footer (ticket 02's dev-only token showcase was removed from the shell in ticket 11's review
+ * follow-up; "page composition" below keeps it out). The content audits read exactly that.
  */
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, within } from "@testing-library/react";
 import Prototype from "./Prototype";
+import CTA from "./ui/CTA";
 
 const PUBLIC_DIR = path.resolve(__dirname, "../../public");
 const DATA = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "../data/data.json"), "utf8").replace(/^﻿/, "")
 );
+
+let originalGetComputedStyle;
+
+beforeAll(() => {
+  // Same jsdom 16 pseudo-element workaround as the section tests: `getAllByRole(..., { name })`
+  // asks for ::before/::after styles, which jsdom does not implement.
+  originalGetComputedStyle = window.getComputedStyle;
+  window.getComputedStyle = (elt) => originalGetComputedStyle(elt);
+});
+
+afterAll(() => {
+  window.getComputedStyle = originalGetComputedStyle;
+});
+
+const DISPLAY = "0176 618 77 599"; // C16 local format, written out independently
+const CALL_NAME = `Anrufen: ${DISPLAY}`;
+
+// Every text node under `root`, joined with spaces. `textContent` glues adjacent elements together
+// ("01" + "Fräsmodul" -> "01Fräsmodul", "bis" + "zu" -> "biszu"), which can both hide a banned
+// phrase that spans two elements and invent words that are not on the page.
+const textOf = (root) => {
+  const walker = root.ownerDocument.createTreeWalker(root, 4 /* NodeFilter.SHOW_TEXT */);
+  const parts = [];
+  while (walker.nextNode()) parts.push(walker.currentNode.nodeValue);
+  return parts.join(" ").replace(/\s+/g, " ");
+};
 
 const renderPage = () => {
   const utils = render(<Prototype />);
@@ -30,16 +57,33 @@ const renderPage = () => {
   const nav = container.querySelector("nav");
   const main = container.querySelector("main");
   const footer = container.querySelector("footer");
-  // The mobile call bar is Nav's fixed sibling; it is the element that follows the <nav>.
-  const callBar = nav.nextElementSibling;
+  // The mobile call bar: the one call link outside every landmark (a fixed overlay, not part of the
+  // nav). The bar is that link's top-level ancestor.
+  const barCalls = within(container)
+    .getAllByRole("link", { name: CALL_NAME })
+    .filter((a) => !a.closest("nav, main, footer"));
+  expect(barCalls).toHaveLength(1);
+  let callBar = barCalls[0];
+  while (callBar.parentElement !== container) callBar = callBar.parentElement;
   const page = [nav, callBar, main, footer];
   const pageQueryAll = (selector) => page.flatMap((root) => [...root.querySelectorAll(selector)]);
-  const pageText = page.map((root) => root.textContent).join("\n");
+  const pageText = page.map(textOf).join("\n");
   return { ...utils, nav, main, footer, callBar, pageQueryAll, pageText };
 };
 
+describe("page composition", () => {
+  test("the footer is the last landmark and nothing renders after it", () => {
+    const { container, footer } = renderPage();
+    const landmarks = [...container.querySelectorAll("nav, main, footer")].filter(
+      (el) => !el.parentElement.closest("nav, main, footer")
+    );
+    expect(landmarks.map((el) => el.tagName)).toEqual(["NAV", "MAIN", "FOOTER"]);
+    expect(container.lastElementChild).toBe(footer);
+  });
+});
+
 describe("internal anchors", () => {
-  test("every in-page link resolves to a section inside <main>, and the nav reaches all four §4 sections", () => {
+  test("every in-page link resolves to a section inside <main>, and the nav links the page top plus the four §4 nav sections", () => {
     const { container, main, pageQueryAll } = renderPage();
     const hashLinks = pageQueryAll('a[href^="#"]');
     expect(hashLinks.length).toBeGreaterThan(0);
@@ -83,15 +127,21 @@ describe("image references", () => {
 });
 
 describe("signal colour", () => {
-  test("every orange fill carries navy text, and nothing white sits on or inside it", () => {
+  // WHY CLASSES: jsdom loads no Tailwind CSS and computes no colours, so the class contract is the
+  // only seam it offers. As in Kontakt.test and Team.test, the expected classes come from a
+  // reference render of the locked primitive, not a hand-written list. The computed-colour check
+  // (every text/SVG node on an orange background is navy) is done in the real browser; see the ticket.
+  test("every orange fill is the locked CTA primitive (navy text), and nothing white sits on or inside it", () => {
     const { pageQueryAll } = renderPage();
+    const { container: reference } = render(<CTA href="tel:x">x</CTA>);
+    const ctaClasses = [...reference.querySelector("a").classList];
     const orange = pageQueryAll("*").filter((el) =>
       [...el.classList].some((c) => /(^|:|!)bg-signal/.test(c))
     );
     expect(orange.length).toBeGreaterThan(0);
 
     orange.forEach((el) => {
-      expect([...el.classList]).toContain("!text-brand");
+      expect(ctaClasses.filter((cls) => !el.classList.contains(cls))).toEqual([]);
       [el, ...el.querySelectorAll("*")].forEach((node) => {
         const white = [...node.classList].filter((c) => /text-white/.test(c));
         expect(white).toEqual([]);
@@ -102,7 +152,6 @@ describe("signal colour", () => {
 
 describe("contact details", () => {
   const PHONE_INTERNATIONAL = DATA.Contact.phone; // "+49 176 618 77 599"
-  const DISPLAY = "0176 618 77 599"; // C16 local format, written out independently
 
   test("every tel: link dials the data.json number and is named with the C16 local format", () => {
     const { pageQueryAll } = renderPage();
@@ -111,7 +160,7 @@ describe("contact details", () => {
     expect(calls).toHaveLength(4);
     calls.forEach((a) => {
       expect(a.getAttribute("href")).toBe(`tel:${PHONE_INTERNATIONAL.replace(/\s+/g, "")}`);
-      expect(a.getAttribute("aria-label")).toBe(`Anrufen: ${DISPLAY}`);
+      expect(a.getAttribute("aria-label")).toBe(CALL_NAME);
       expect(a.textContent).toContain(DISPLAY);
     });
   });
@@ -141,7 +190,7 @@ describe("no fabricated content (C2, C7, §2.7)", () => {
   };
 
   test("the only digits on the page are the phone number, the module numerals 01–04 and '3D'", () => {
-    // textContent runs "01" straight into "Fräsmodul", so digit lookarounds, not \b.
+    // Digit lookarounds, not \b, so "01" is caught whatever text sits next to it.
     const copy = visibleCopy(renderPage())
       .split("0176 618 77 599")
       .join(" ")
@@ -180,11 +229,32 @@ describe("legal pages and page head", () => {
     expect(hrefs).toContain(`/${file}`);
   });
 
-  test("public/index.html (the build's HTML template) references none of the four missing favicons", () => {
-    const html = fs.readFileSync(path.join(PUBLIC_DIR, "index.html"), "utf8");
-    // Only attribute values count; the explanatory HTML comment may name the old paths.
-    const refs = [...html.matchAll(/(?:href|content|src)="([^"]*)"/g)].map((m) => m[1]);
+  // SOURCE GUARD ONLY: this checks what goes into the build (the HTML template and every source
+  // file). The build output itself (a grep over the built directory, plus the network log for
+  // 404s) is checked by the build and browser pass recorded in the ticket, not here.
+  test("neither public/index.html nor any file in src/ references the four missing favicons", () => {
     const ICONS = ["favicon.ico", "apple-touch-icon.png", "apple-touch-icon-72x72.png", "apple-touch-icon-114x114.png"];
-    expect(refs.filter((ref) => ICONS.some((icon) => ref.endsWith(icon)))).toEqual([]);
+    // Quoted values only, single or double quotes: prose in a comment may name the old paths.
+    const iconRefs = (text) =>
+      [...text.matchAll(/(["'])([^"'\n]*)\1/g)]
+        .map((m) => m[2])
+        .filter((value) => ICONS.some((icon) => value.endsWith(icon)));
+
+    const SRC_DIR = path.resolve(__dirname, "..");
+    const walk = (dir) =>
+      fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+        const full = path.join(dir, entry.name);
+        return entry.isDirectory() ? walk(full) : [full];
+      });
+    // Test files are skipped: this one has to name the icons to look for them.
+    const sources = walk(SRC_DIR).filter(
+      (file) => /\.(jsx?|css|html)$/.test(file) && !/\.test\.jsx?$/.test(file)
+    );
+    expect(sources.length).toBeGreaterThan(0);
+
+    const hits = [path.join(PUBLIC_DIR, "index.html"), ...sources].flatMap((file) =>
+      iconRefs(fs.readFileSync(file, "utf8")).map((ref) => `${path.basename(file)}: ${ref}`)
+    );
+    expect(hits).toEqual([]);
   });
 });
