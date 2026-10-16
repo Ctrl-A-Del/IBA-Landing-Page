@@ -87,7 +87,7 @@ test("each name is announced once: the caption names the person, the portrait do
 test("every portrait uses the page's shared framed card, with identical crop", () => {
   const { section } = renderSection();
   const { container: reference } = render(
-    <PortraitCard src="img/reference.png" alt="" name="Referenz" role="Rolle" />
+    <PortraitCard src="img/reference.png" alt="" name="Referenz" role="Rolle" fill />
   );
   const referenceFrame = reference.querySelector("figure");
   const referenceImage = referenceFrame.querySelector("img");
@@ -108,4 +108,12 @@ test("every portrait uses the page's shared framed card, with identical crop", (
     // Same crop as the primitive, compared as a set rather than a restated class string.
     expect([...frame.querySelector("img").classList].sort()).toEqual(referenceCrop);
   });
+});
+
+test("every card opts into the fill option, so the three cards share one height per row (C19)", () => {
+  const { section } = renderSection();
+
+  const frames = section.querySelectorAll("li > figure");
+  expect(frames).toHaveLength(3);
+  frames.forEach((frame) => expect(frame).toHaveAttribute("data-fill", "true"));
 });

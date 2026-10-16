@@ -1,12 +1,14 @@
 /**
- * Tests for ticket 10 — Footer: brand plate and legal links on the alternate dark background.
+ * Tests for ticket 10 — Footer: brand block and legal links on the navy background.
+ * Rewritten in 11.1 (R6): the full logo plate is gone, replaced by the emblem crop, the company
+ * name as text, and a copyright line.
  *
  * SEAM: the rendered `<Footer />` component, observed through the DOM a visitor (or a screen reader)
- * gets: the footer landmark, its links and the logo image. Link targets are additionally resolved
- * against `public/`, the directory CRA serves verbatim, so "the link resolves" means "the file the
- * href names is shipped". No Tailwind class string is asserted: the `brand.alt` backdrop, the plate's
- * rendered aspect ratio and the clearance above the mobile call bar cannot be observed in jsdom and
- * are verified in the browser pass recorded in the ticket.
+ * gets: the footer landmark, its links, the emblem image and the text. Link targets are additionally
+ * resolved against `public/`, the directory CRA serves verbatim, so "the link resolves" means "the
+ * file the href names is shipped". No Tailwind class string is asserted: the navy backdrop and the
+ * clearance above the mobile call bar cannot be observed in jsdom and are verified in the browser
+ * pass recorded in the ticket.
  */
 import fs from "fs";
 import path from "path";
@@ -52,15 +54,14 @@ test.each([
   expect(fs.existsSync(path.join(PUBLIC_DIR, href))).toBe(true);
 });
 
-test("shows the full framed logo plate, at its intrinsic 540x935 ratio", () => {
+test("the emblem is decorative: the company name sits beside it as text, not as alt", () => {
   const { footer } = renderFooter();
-  const plate = within(footer).getByRole("img", { name: "Ingenieurbüro-Auner GmbH" });
 
-  expect(plate.getAttribute("src")).toMatch(/\/img\/logo\.jpg$/);
-  // The intrinsic size lets the browser reserve the plate's true ratio before the JPEG loads and
-  // keeps `h-auto` scaling proportional (the plate is never cropped like the nav emblem).
-  expect(plate).toHaveAttribute("width", "540");
-  expect(plate).toHaveAttribute("height", "935");
+  const emblem = footer.querySelector("img");
+  expect(emblem.getAttribute("src")).toMatch(/\/img\/logo\.jpg$/);
+  expect(emblem).toHaveAttribute("alt", "");
+  // Named once, as text — not a second time via alt (that would announce it twice).
+  expect(within(footer).getAllByText("Ingenieurbüro-Auner GmbH")).toHaveLength(1);
 });
 
 test("does not repeat the contact details owned by the Kontakt section", () => {
@@ -68,10 +69,16 @@ test("does not repeat the contact details owned by the Kontakt section", () => {
   expect(footer.querySelectorAll('a[href^="tel:"], a[href^="mailto:"]')).toHaveLength(0);
 });
 
-test("adds no copy beyond the legal links and the logo plate (no copyright line)", () => {
-  const { footer } = renderFooter();
-  // DESIGN_PLAN §4 row 8 asks for the legal links and the plate only; the plate's alt carries the
-  // company name, so any other visible text in the footer is unrequested copy.
-  expect(footer).toHaveTextContent(/^ImpressumDatenschutzerklärung$/);
-  expect(footer).not.toHaveTextContent("©");
+test.each([
+  ["2031-05-01T12:00:00Z", "2031"],
+  ["2040-07-01T12:00:00Z", "2040"],
+])("the copyright line shows the year the system clock reads (%s)", (now, year) => {
+  jest.useFakeTimers();
+  try {
+    jest.setSystemTime(new Date(now));
+    const { footer } = renderFooter();
+    expect(footer).toHaveTextContent(`© ${year} Ingenieurbüro-Auner GmbH`);
+  } finally {
+    jest.useRealTimers();
+  }
 });

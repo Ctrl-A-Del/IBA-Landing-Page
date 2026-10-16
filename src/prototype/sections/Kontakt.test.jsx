@@ -1,20 +1,21 @@
 /**
- * Tests for ticket 09 — Kontakt: Marcus Auner beside the call, email without a form.
+ * Tests for ticket 09 — Kontakt: Marcus Auner named beside the call, email without a form.
+ * Rewritten in 11.1 (R6): the portrait is gone, the section sits on the light tone, and the name
+ * and role split into two lines.
  *
  * SEAMS
  *   1. The rendered `<Kontakt />`, observed through the DOM a visitor (or a screen reader) gets:
  *      anchor, heading, link targets, accessible names, the live region. Same seam as 03–08.
  *   2. The browser clipboard (`navigator.clipboard`, `document.execCommand`) — the one external
  *      boundary, so it is the one thing stubbed. Nothing internal is mocked.
- * No Tailwind class string is asserted. The navy backdrop, visible focus against navy and the
- * clearance above the fixed mobile call bar cannot be observed in jsdom; see the ticket.
- * "Same framed card / same CTA as the rest of the page" is checked by comparison with the shared
- * primitives rendered on their own, not by restating their classes.
+ * No Tailwind class string is asserted. The light backdrop, the two-column layout, visible focus
+ * against white and the clearance above the fixed mobile call bar cannot be observed in jsdom; see
+ * the ticket. "Same CTA as the rest of the page" is checked by comparison with the shared primitive
+ * rendered on its own, not by restating its classes.
  */
 import React from "react";
 import { act, fireEvent, render, within } from "@testing-library/react";
 import Kontakt from "./Kontakt";
-import PortraitCard from "../ui/PortraitCard";
 import CTA from "../ui/CTA";
 import { EMAIL } from "./email";
 
@@ -45,25 +46,17 @@ test("renders the #kontakt section, named by its heading", () => {
   expect(getByRole("region", { name: heading.textContent })).toBe(section);
 });
 
-test("names Marcus Auner as 'Marcus Auner · Geschäftsführung' in the page's shared framed card", () => {
+test("no image in the section: Marcus Auner's face appears once on the page, in Team, not here", () => {
   const { section } = renderSection();
 
-  const frames = section.querySelectorAll("figure");
-  expect(frames).toHaveLength(1);
-  const [frame] = frames;
-  // The label reads as one line, joined by a U+00B7 MIDDLE DOT. PortraitCard's caption stacks name
-  // and role in two spans and cannot render that line, so the label lives beside the call instead.
-  const label = within(section).getByText("Marcus Auner · Geschäftsführung");
-  expect(label.tagName).toBe("P");
-  // His existing Team portrait, not a new asset; the label names him, so the alt stays empty.
-  const img = frame.querySelector("img");
-  expect(img.getAttribute("src")).toBe("img/marcus.png");
-  expect(img).toHaveAttribute("alt", "");
+  expect(section.querySelectorAll("img")).toHaveLength(0);
+});
 
-  // Same crop as Team, because it is the same primitive: compared as a class set, not restated.
-  const { container: reference } = render(<PortraitCard src="img/reference.png" alt="" />);
-  const referenceImage = reference.querySelector("figure img");
-  expect([...img.classList].sort()).toEqual([...referenceImage.classList].sort());
+test("names Marcus Auner and his role exactly once each, beside the call", () => {
+  const { section } = renderSection();
+
+  expect(within(section).getAllByText("Marcus Auner")).toHaveLength(1);
+  expect(within(section).getAllByText("Geschäftsführung")).toHaveLength(1);
 });
 
 test("the call is the primary action: the first action, dialling the international number, showing the local one", () => {
@@ -79,6 +72,18 @@ test("the call is the primary action: the first action, dialling the internation
   // Primary = first in reading and tab order, before any email action.
   const actions = section.querySelectorAll("a[href], button");
   expect(actions[0]).toBe(call);
+});
+
+test("DOM order: the heading comes before the call, and the call before the email link", () => {
+  const { section } = renderSection();
+
+  const heading = within(section).getByRole("heading", { level: 2 });
+  const call = section.querySelector('a[href^="tel:"]');
+  const mail = section.querySelector('a[href^="mailto:"]');
+
+  // compareDocumentPosition's FOLLOWING bit (4) means "comes after" the node it is compared against.
+  expect(heading.compareDocumentPosition(call) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(call.compareDocumentPosition(mail) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 });
 
 test("the call uses the page's one CTA appearance, so it can never be white text on orange", () => {

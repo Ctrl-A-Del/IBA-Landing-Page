@@ -16,6 +16,11 @@ import PortraitCard from "../ui/PortraitCard";
  * PortraitCard's documented `className` width hook, so a portrait does not balloon to 600px wide
  * between 640 and 767px. The ratio and crop stay the primitive's.
  *
+ * EQUAL HEIGHTS (11.1, C19): each card opts into PortraitCard's `fill` option, so a wrapped name
+ * (e.g. "Jan Hönninger" at tablet widths) that makes one caption taller does not leave the other two
+ * cards shorter than their row. The grid's default `align-items: stretch` already gives each `<li>`
+ * the row's full height; `fill` is what makes the card itself stretch to match.
+ *
  * ALT TEXT: empty on purpose. The figcaption directly under each portrait already names the person
  * and their role; repeating the name as alt would make screen readers announce it twice. The photo
  * conveys nothing beyond "this is <name>", which the caption says.
@@ -62,6 +67,7 @@ const Team = () => (
             alt=""
             name={name}
             role={role}
+            fill
             className="mx-auto max-w-xs md:max-w-none"
           />
         </li>

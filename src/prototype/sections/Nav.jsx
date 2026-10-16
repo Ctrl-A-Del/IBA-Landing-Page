@@ -1,6 +1,7 @@
 import { useLayoutEffect } from "react";
 import { Phone } from "lucide-react";
 import CTA from "../ui/CTA";
+import Emblem from "../ui/Emblem";
 import { CALL_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
 import useScrolled from "./useScrolled";
 import { FOCUS_ON_DARK } from "./focus";
@@ -27,6 +28,9 @@ import { FOCUS_ON_DARK } from "./focus";
  * bottom padding below `md` (see `useReserveCallBarSpace`), so the last line of the footer scrolls
  * clear of it. This is done from here rather than in the footer or shell because both are owned by
  * other tickets (parallelisation.md §3).
+ *
+ * THE EMBLEM is `../ui/Emblem`, shared with the footer (11.1/R6) so the crop geometry has one
+ * source of truth; this file only sizes it.
  */
 
 const LINKS = [
@@ -47,28 +51,6 @@ const LINKS = [
 const CALL_BAR_HEIGHT =
   "h-[calc(4.5rem+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)]";
 const CALL_BAR_RESERVE = "max-md:pb-[calc(4.5rem+env(safe-area-inset-bottom))]";
-
-/**
- * Emblem disc, cropped with CSS from the framed plate `logo.jpg` (B6). The source is an opaque
- * 540x935 JPEG, so the full plate cannot sit on the nav; only the disc is shown.
- *
- * Crop maths (measured on the source): the gear ring sits in the 340x340 px square whose top-left
- * corner is at (135, 222). Scaling the image so 340 px fill the circle gives
- *   width = 540 / 340 = 158.8 %, left = -135 / 340 = -39.7 %, top = -222 / 340 = -65.3 %
- * of the (square) circle. `rounded-full` + `overflow-hidden` then clip the plate's wall away.
- */
-const Emblem = () => (
-  <span className="relative block h-10 w-10 overflow-hidden rounded-full ring-1 ring-white/10 sm:h-12 sm:w-12">
-    <img
-      src={`${process.env.PUBLIC_URL}/img/logo.jpg`}
-      alt=""
-      width="540"
-      height="935"
-      decoding="async"
-      className="absolute left-[-39.7%] top-[-65.3%] h-auto w-[158.8%] max-w-none"
-    />
-  </span>
-);
 
 const useReserveCallBarSpace = () => {
   // Layout effect, so the padding is in place before the first paint — the bar is too.
@@ -97,7 +79,7 @@ const Nav = () => {
             aria-label="Ingenieurbüro Auner – zum Seitenanfang"
             className={`shrink-0 rounded-full ${FOCUS_ON_DARK}`}
           >
-            <Emblem />
+            <Emblem className="h-10 w-10 sm:h-12 sm:w-12" />
           </a>
 
           {/*

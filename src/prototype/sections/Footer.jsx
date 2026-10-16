@@ -1,20 +1,25 @@
+import Emblem from "../ui/Emblem";
 import { FOCUS_ON_DARK } from "./focus";
 
 /**
- * Ticket 10 — Footer (DESIGN_PLAN.md §4 row 8, decisions B6, C12).
+ * Ticket 10 — Footer (DESIGN_PLAN.md §4 row 8, decisions B6, C12, C18, amended 11.1/R6).
  *
  * Renders the page's <footer> landmark, outside <main> (shell contract in `../Prototype.jsx`):
- * the full framed logo plate as the brand element (B6 — the nav only carries a crop of the emblem)
- * and the two legal links, on the `brand.alt` surface that closes the background rhythm (C12).
+ * the brand block (emblem + company name + copyright line, C18) and the two legal links, on the
+ * brand navy that closes the background rhythm (C12 amended — navy, not `brand.alt`, and no
+ * hairline, since white-to-navy is already a 15.6:1 step).
  *
- * WHY NOT `<Section tone="alt">`: the primitive renders a <section> with the content-section
+ * WHY NOT `<Section tone="navy">`: the primitive renders a <section> with the content-section
  * rhythm (`py-20 … lg:py-36`). The footer must be a <footer> landmark and is not a content section,
- * so it reuses the primitive's `alt` tone classes and page gutter verbatim instead of the element.
- * A hairline top rule (the same `mist-500/40` rule the nav uses) separates it from the navy Kontakt
- * section above, since `#14171a` against `#0a1f2e` alone is a quiet step.
+ * so it reuses the primitive's navy tone classes and page gutter verbatim instead of the element.
+ *
+ * NO FULL LOGO PLATE (B6 amended): the plate read as a pasted-in grey photo on the near-black
+ * footer. The brand block is instead the same emblem crop the nav uses (`../ui/Emblem`), larger,
+ * plus the company name set as real text — so the name is announced once, not twice as image alt
+ * and text. The emblem is decorative (empty alt) for that reason.
  *
  * NO CONTACT DETAILS here: the footer repeats none of the phone/email shown in the Kontakt section
- * directly above, so it cannot drift from Kontakt; a test guards that it has no tel:/mailto: link.
+ * above, so it cannot drift from Kontakt; a test guards that it has no tel:/mailto: link.
  * The legal pages in `public/` are linked, not touched.
  *
  * THE MOBILE CALL BAR does not cover this footer: ticket 03's `Nav` reserves the bar's height as
@@ -26,38 +31,33 @@ const LEGAL_LINKS = [
   { href: `${process.env.PUBLIC_URL}/datenschutz.html`, label: "Datenschutzerklärung" },
 ];
 
-const Footer = () => (
-  <footer className="border-t border-mist-500/40 bg-brand-alt py-12 text-mist-300 sm:py-16">
-    <div className="mx-auto flex w-full max-w-container flex-col items-center gap-8 px-5 sm:flex-row sm:items-end sm:justify-between sm:px-6 lg:px-8">
-      {/*
-        The full plate (B6). `logo.jpg` is an opaque 540x935 JPEG, so it is shown whole, never
-        cropped: a fixed width with `h-auto` scales it proportionally, and the intrinsic width/height
-        attributes let the browser reserve that ratio before the image loads.
-      */}
-      <img
-        src={`${process.env.PUBLIC_URL}/img/logo.jpg`}
-        alt="Ingenieurbüro-Auner GmbH"
-        width="540"
-        height="935"
-        loading="lazy"
-        decoding="async"
-        className="h-auto w-28 shrink-0 sm:w-32"
-      />
+const COMPANY = "Ingenieurbüro-Auner GmbH";
 
-      <div className="flex flex-col items-center gap-4 sm:items-end">
-        <ul className="flex flex-wrap justify-center gap-x-8 gap-y-2">
-          {LEGAL_LINKS.map(({ href, label }) => (
-            <li key={href}>
-              <a
-                href={href}
-                className={`rounded-edge font-body text-body-sm text-mist-300 underline-offset-4 transition-colors duration-150 hover:text-white hover:underline ${FOCUS_ON_DARK}`}
-              >
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
+const Footer = () => (
+  <footer className="bg-brand py-12 text-mist-300 sm:py-16">
+    <div className="mx-auto flex w-full max-w-container flex-col items-center gap-8 px-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+      <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:gap-4 sm:text-left">
+        <Emblem className="h-14 w-14 shrink-0 sm:h-16 sm:w-16" />
+        <div>
+          <p className="font-heading text-body font-bold text-mist-100">{COMPANY}</p>
+          <p className="mt-1 text-body-sm text-mist-400">
+            © {new Date().getFullYear()} {COMPANY}
+          </p>
+        </div>
       </div>
+
+      <ul className="flex flex-wrap justify-center gap-x-8 gap-y-2">
+        {LEGAL_LINKS.map(({ href, label }) => (
+          <li key={href}>
+            <a
+              href={href}
+              className={`rounded-edge font-body text-body-sm text-mist-300 underline-offset-4 transition-colors duration-150 hover:text-white hover:underline ${FOCUS_ON_DARK}`}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   </footer>
 );

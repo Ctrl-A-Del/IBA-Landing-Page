@@ -126,6 +126,41 @@ describe("image references", () => {
   });
 });
 
+describe("one face, one brand mark (B6, C15, C18)", () => {
+  test("Marcus Auner's portrait appears exactly once on the page, in Team", () => {
+    const { container } = renderPage();
+    const portraits = [...container.querySelectorAll("img")].filter((img) =>
+      /(^|\/)img\/marcus\.png$/.test(img.getAttribute("src"))
+    );
+    expect(portraits).toHaveLength(1);
+    expect(portraits[0].closest("section").id).toBe("team");
+  });
+
+  test("the full logo plate is never shown whole: every logo.jpg sits inside a round emblem crop", () => {
+    const { container } = renderPage();
+    const logos = [...container.querySelectorAll("img")].filter((img) =>
+      /\/img\/logo\.jpg$/.test(img.getAttribute("src"))
+    );
+    // Nav and footer.
+    expect(logos).toHaveLength(2);
+    logos.forEach((img) => {
+      // Inside the shared emblem's round crop wrapper, never free-standing as the plate.
+      expect(img.parentElement).toHaveAttribute("data-emblem");
+      // Decorative crop: no alt naming the company (the name is text where it is needed).
+      expect(img).toHaveAttribute("alt", "");
+    });
+    expect(container.querySelector('img[alt="Ingenieurbüro-Auner GmbH"]')).toBeNull();
+  });
+
+  test("the footer names the company and carries a copyright line with the current year, but no tel:/mailto:", () => {
+    const { footer } = renderPage();
+    const year = new Date().getFullYear();
+    expect(textOf(footer)).toContain("Ingenieurbüro-Auner GmbH");
+    expect(textOf(footer)).toContain(`© ${year} Ingenieurbüro-Auner GmbH`);
+    expect(footer.querySelectorAll('a[href^="tel:"], a[href^="mailto:"]')).toHaveLength(0);
+  });
+});
+
 describe("signal colour", () => {
   // WHY CLASSES: jsdom loads no Tailwind CSS and computes no colours, so the class contract is the
   // only seam it offers. As in Kontakt.test and Team.test, the expected classes come from a
@@ -189,10 +224,14 @@ describe("no fabricated content (C2, C7, §2.7)", () => {
     return `${utils.pageText}\n${attrs.join("\n")}`;
   };
 
-  test("the only digits on the page are the phone number, the module numerals 01–04 and '3D'", () => {
+  test("the only digits on the page are the phone number, the module numerals 01–04, '3D' and the copyright year", () => {
+    // The year comes from the same clock the footer reads, never a hardcoded literal.
+    const year = String(new Date().getFullYear());
     // Digit lookarounds, not \b, so "01" is caught whatever text sits next to it.
     const copy = visibleCopy(renderPage())
       .split("0176 618 77 599")
+      .join(" ")
+      .split(`© ${year}`)
       .join(" ")
       .replace(/(?<!\d)0[1-4](?!\d)/g, " ")
       .replace(/\b3D-/g, " ");
