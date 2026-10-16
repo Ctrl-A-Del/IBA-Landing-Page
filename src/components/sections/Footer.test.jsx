@@ -58,7 +58,7 @@ test("the emblem is decorative: the company name sits beside it as text, not as 
   const { footer } = renderFooter();
 
   const emblem = footer.querySelector("img");
-  expect(emblem.getAttribute("src")).toMatch(/\/img\/logo\.jpg$/);
+  expect(emblem.getAttribute("src")).toMatch(/\/img\/emblem\.png$/);
   expect(emblem).toHaveAttribute("alt", "");
   // Named once, as text — not a second time via alt (that would announce it twice).
   expect(within(footer).getAllByText("Ingenieurbüro-Auner GmbH")).toHaveLength(1);

@@ -137,12 +137,23 @@ describe("shipped images (ticket 12 pruning, D4)", () => {
       .map((file) => path.relative(PUBLIC_DIR, file).split(path.sep).join("/"))
       .sort();
     expect(shipped).toEqual([
+      "img/emblem.png",
       "img/fraese.png",
       "img/jan.png",
       "img/klaus.png",
-      "img/logo.jpg",
       "img/marcus.png",
     ]);
+  });
+
+  test("the shipped Emblem is a 256x256 PNG with an alpha channel", () => {
+    const png = fs.readFileSync(path.join(PUBLIC_DIR, "img", "emblem.png"));
+    expect(png.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
+    expect(png.readUInt32BE(16)).toBe(256); // IHDR width
+    expect(png.readUInt32BE(20)).toBe(256); // IHDR height
+    // IHDR colour type: 4 = grey+alpha, 6 = RGBA, or 3 = palette carrying a tRNS (alpha) chunk.
+    const colourType = png[25];
+    const hasAlpha = [4, 6].includes(colourType) || (colourType === 3 && png.includes("tRNS", 0, "latin1"));
+    expect(hasAlpha).toBe(true);
   });
 
   test("every image and icon the page head references still exists after pruning", () => {
@@ -168,19 +179,18 @@ describe("one face, one brand mark (B6, C15, C18)", () => {
     expect(portraits[0].closest("section").id).toBe("team");
   });
 
-  test("the full logo plate is never shown whole: every logo.jpg sits inside a round emblem crop", () => {
+  test("the brand mark is the Emblem asset in nav and footer; the Logo plate is never referenced", () => {
     const { container } = renderPage();
-    const logos = [...container.querySelectorAll("img")].filter((img) =>
-      /\/img\/logo\.jpg$/.test(img.getAttribute("src"))
-    );
+    const images = [...container.querySelectorAll("img")];
+    const emblems = images.filter((img) => /\/img\/emblem\.png$/.test(img.getAttribute("src")));
     // Nav and footer.
-    expect(logos).toHaveLength(2);
-    logos.forEach((img) => {
-      // Inside the shared emblem's round crop wrapper, never free-standing as the plate.
-      expect(img.parentElement).toHaveAttribute("data-emblem");
-      // Decorative crop: no alt naming the company (the name is text where it is needed).
+    expect(emblems).toHaveLength(2);
+    emblems.forEach((img) => {
+      expect(img).toHaveAttribute("data-emblem");
+      // Decorative: the company name is text where it is needed.
       expect(img).toHaveAttribute("alt", "");
     });
+    expect(images.filter((img) => /logo\.jpg/.test(img.getAttribute("src")))).toHaveLength(0);
     expect(container.querySelector('img[alt="Ingenieurbüro-Auner GmbH"]')).toBeNull();
   });
 

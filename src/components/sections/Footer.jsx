@@ -16,7 +16,7 @@ import data from "../../data/data.json";
  * so it imports the primitive's `TONES.navy` and `GUTTER` class strings instead of the element.
  *
  * NO FULL LOGO PLATE (B6 amended): the plate read as a pasted-in grey photo on the near-black
- * footer. The brand block is instead the same emblem crop the nav uses (`../ui/Emblem`), larger,
+ * footer. The brand block is instead the same Emblem the nav uses (`../ui/Emblem`), larger,
  * plus the company name set as real text — so the name is announced once, not twice as image alt
  * and text. The emblem is decorative (empty alt) for that reason.
  *

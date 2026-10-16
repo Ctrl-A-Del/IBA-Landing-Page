@@ -152,7 +152,7 @@ Top-level keys: `Header`, `About`, `Services`, `Team`, `Contact`. Nothing else. 
 | File | Reality |
 | --- | --- |
 | `public/img/fraese.png` | **3D CAD render, not a photo.** Declared 1342×738 (16:9), **opaque** — light grey/dirt scene backdrop (`#d8d8d8`/`#c9c9c9`), brown earth `#6b5a45`. Machine is **orange `#f08a24`**. Has four German annotation boxes **baked into the pixels**: `01 · Fräsmodul / Zwei Arme, gegenläufige Fräsköpfe`, `02 · Aufnahmemodul / Nimmt das gelöste Material auf`, `03 · Fördermodul / Kontinuierlicher Austrag, beidseitig`, `04 · Antriebsmodul / Energie, Hydraulik, Steuerung`. Its own annotation navy (`#123f5c`) is close to the page navy |
-| `public/img/logo.jpg` | **Opaque JPEG — transparency is impossible.** Portrait photo-mockup of a 3D metallic logo on a slate-blue wall (`#4e6070`); circular gear/eagle emblem, `INGENIEURBÜRO` in grey metal caps, `AUNER` in **orange `#e08b3c`/`#f2a94f`**, flanked by two thin orange rules |
+| `public/img/logo.jpg` (the Logo plate; since the Emblem change it lives at `design-assets/source/logo.jpg` and `public/img/emblem.png` replaces it on the page) | **Opaque JPEG — transparency is impossible.** Portrait photo-mockup of a 3D metallic logo on a slate-blue wall (`#4e6070`); circular gear/eagle emblem, `INGENIEURBÜRO` in grey metal caps, `AUNER` in **orange `#e08b3c`/`#f2a94f`**, flanked by two thin orange rules |
 | `public/img/marcus.png` | 240×320 (3:4) studio portrait, flat white background, head-and-shoulders, white open-collar shirt |
 | `public/img/klaus.png` | 240×320 (3:4) studio portrait, flat white background, grey hair, white shirt with light-blue placket |
 | `public/img/jan.png` | 240×320 (3:4) studio portrait, **visible light-grey→white gradient backdrop and a blown-out halo** around the hair, round dark glasses. The least clean of the three |
@@ -227,7 +227,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | **B3** | **Signal colour = the machine's own orange `#f08a24`**, used **exclusively for primary CTAs**, always with **dark navy text on it**. The `#6372ff → #5ca9fb` gradient is retired from CTAs. | `R3 Q1a`. The machine render and the logo wordmark are both orange, so blue CTAs compete with the brand's own imagery. Contrast: 6.7:1 navy-on-orange (passes AA) |
 | **B4** | **Keep Raleway (100–900) + Open Sans (300–800)**, self-hosted. The new look comes purely from scale, weight contrast, tracking and line-height. **No new font files, no new licence.** | `R2 Q5a`. The variable Raleway already goes to 900 — that range is simply not being used today |
 | **B5** | **Motion = CSS-only**: Tailwind transitions, hover/focus states, and a light scroll-reveal via a small `IntersectionObserver` hook — **all gated behind `prefers-reduced-motion`**. No animation library. | `R2 Q6a` |
-| **B6** | **Logo handling:** the full framed plate (`logo.jpg`) is kept as a brand element **outside the nav**; the nav mark is a **tight CSS crop of the emblem disc**. No vector or transparent PNG is available, and a JPEG can never be transparent. **Amended in R6:** the full plate no longer appears on the page. The footer uses a larger emblem crop plus the company name as text (C18). `logo.jpg` stays in `public/` as the crop source. | `R3 Q5a`; amended `R6 Q2a`. On the footer the plate read as a pasted-in grey photo |
+| **B6** | **Logo handling:** the full framed plate (`logo.jpg`) is kept as a brand element **outside the nav**; the nav mark is the **Emblem**, a dedicated 256x256 PNG (`public/img/emblem.png`) cut once from the plate, transparent outside the circle. No vector is available, so the disc keeps the plate's slate wall inside the circle. **Amended in R6:** the full plate no longer appears on the page. The footer uses a larger emblem crop plus the company name as text (C18). The Logo plate (`logo.jpg`) moved to `design-assets/source/` as the Emblem's source (crop recorded in its README) and no longer ships. | `R3 Q5a`; amended `R6 Q2a`. On the footer the plate read as a pasted-in grey photo |
 | **B7** | **Team section stays on the dark background**; each portrait gets a **consistent framed light card**. | `R3 Q4b` — this overrides the agent's recommendation to move Team onto the light `surface` background |
 | **B8** | **Type & heading hierarchy: sentence case, not uppercase.** The H1 drops the current `uppercase` in favour of sentence case with tight tracking and fluid sizing; H2s step down from it. **CTA buttons are solid orange rectangles with a small radius (2–4 px), not pills.** | `R4 Q1a`. Uppercase at ~5rem makes a 32-character German headline hard to read; the tagline already carries enough force without shouting |
 | **B9** | **Nav behaviour: transparent over the hero, turning solid navy on scroll**, with a subtle bottom border, the anchors and the orange phone CTA. | `R4 Q2b` |
@@ -346,7 +346,7 @@ If implementation turns up a genuine conflict with a decision in §3, raise it w
 - [x] Fix the four broken favicon references in `public/index.html`
 - [x] Fill the meta description
 - [x] Add Open Graph + Twitter card tags
-- [x] Prune dead images **only after** the design lands (ticket 12)
+- [x] Prune dead images **only after** the design lands (ticket 12). Pruned set is now `emblem.png`, `fraese.png`, `jan.png`, `klaus.png`, `marcus.png`; the Logo plate moved to `design-assets/source/` (`.scratch/emblem-asset/spec.md`)
 
 ### Review & ship
 - [ ] `npm start` and self-review at ~375 / ~768 / ~1280 px, keyboard-only, and with reduced motion
@@ -363,7 +363,7 @@ If implementation turns up a genuine conflict with a decision in §3, raise it w
 - ❌ WhatsApp CTA (C6) — advertises a channel that isn't published.
 - ❌ Moving Team onto a light background (B7 overruled the agent's recommendation).
 - ❌ New fonts, a router, an animation library, a Tailwind upgrade, or any migration off CRA (`R1 Q6`).
-- ❌ Making `logo.jpg` transparent — it is a JPEG; impossible. Cropping is the only option (B6).
+- ❌ Making the Logo plate itself transparent, or a background-free phoenix cut-out — the plate is a photo mockup JPEG. Instead the Emblem is cut once as a circular, alpha-masked PNG (B6); the slate wall stays visible inside the circle.
 - ❌ Revealing the machine render's baked-in annotations as the primary content — they scale to ~4 px on mobile (C4).
 - ❌ Hiding the render on mobile, or CSS-zooming into it (`R4 Q3`) — the render is the most persuasive asset on the page, and a crop risks cutting the very detail it is meant to show.
 - ❌ An auto-hiding nav (`R4 Q2`) — it would hide the call CTA exactly when `A2` says it must be reachable, and it fights the mobile call bar (`C6`).
