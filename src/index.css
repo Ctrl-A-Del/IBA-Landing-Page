@@ -32,9 +32,8 @@
    * apply a `scroll-mt-nav` utility — that was removed, because this rule (unlayered, specificity
    * 0,1,1) outranks a utility class (0,1,0) and the duplicated literal made both wrong.
    *
-   * If the nav height changes, `spacing.nav` changes, and that file is owned by ticket 02, so a
-   * wave-3 agent escalates rather than edits it (parallelisation.md §3). Ticket 03 must build the
-   * nav at exactly `h-nav`; a taller nav is a change to this contract, not a local tweak.
+   * If the nav height changes, change `spacing.nav`. The nav must render at exactly `h-nav`; a
+   * taller nav is a change to this contract, not a local tweak.
    */
   html {
     scroll-behavior: smooth;

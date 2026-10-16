@@ -3,7 +3,7 @@ import { Phone } from "lucide-react";
 import CTA from "../ui/CTA";
 import Emblem from "../ui/Emblem";
 import data from "../../data/data.json";
-import { CALL_LABEL, CALL_VERB, PHONE_DISPLAY, PHONE_HREF } from "./phone";
+import { CALL_ARIA_LABEL, CALL_VERB, PHONE_DISPLAY, PHONE_HREF } from "./phone";
 import useScrolled from "./useScrolled";
 import { FOCUS_ON_DARK } from "./focus";
 
@@ -27,8 +27,7 @@ import { FOCUS_ON_DARK } from "./focus";
  *
  * THE BAR NEVER COVERS THE FOOTER: while it is mounted, `<body>` reserves the bar's height as
  * bottom padding below `md` (see `useReserveCallBarSpace`), so the last line of the footer scrolls
- * clear of it. This is done from here rather than in the footer or shell because both are owned by
- * other tickets (parallelisation.md §3).
+ * clear of it. It lives here, beside the bar, so the reservation mounts and unmounts with it.
  *
  * THE EMBLEM is `../ui/Emblem`, shared with the footer (11.1/R6) so the crop geometry has one
  * source of truth; this file only sizes it.
@@ -102,7 +101,7 @@ const Nav = () => {
           </ul>
 
           <div className="hidden shrink-0 md:block">
-            <CTA href={PHONE_HREF} aria-label={CALL_LABEL}>
+            <CTA href={PHONE_HREF} aria-label={CALL_ARIA_LABEL}>
               <Phone aria-hidden="true" className="h-4 w-4" strokeWidth={2.25} />
               <span className="lg:hidden">{CALL_VERB}</span>
               <span className="hidden lg:inline">{PHONE_DISPLAY}</span>
@@ -114,7 +113,7 @@ const Nav = () => {
       <div
         className={`fixed inset-x-0 bottom-0 z-40 flex items-center border-t border-mist-500/40 bg-brand px-5 md:hidden ${CALL_BAR_HEIGHT}`}
       >
-        <CTA href={PHONE_HREF} aria-label={CALL_LABEL} className="w-full">
+        <CTA href={PHONE_HREF} aria-label={CALL_ARIA_LABEL} className="w-full">
           <Phone aria-hidden="true" className="h-5 w-5" strokeWidth={2.25} />
           <span>{CALL_VERB}</span>
           <span className="font-normal">{PHONE_DISPLAY}</span>

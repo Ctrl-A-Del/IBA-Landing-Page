@@ -1,16 +1,13 @@
 /**
  * PortraitCard — the framed light card for portraits over navy (ticket 02).
  *
- * Needed by ticket 08 (Team, DESIGN_PLAN.md §3 B7) AND ticket 09 (Kontakt, §3 C15 — Marcus Auner
- * appears again with his portrait and role). Those two tickets are built independently and must not
- * depend on each other, so this primitive is the shared definition of "framed card" for both.
+ * Used by Team (DESIGN_PLAN.md §3 B7); it is the one definition of "framed card" on the page.
  *
  * WHY THE CROP IS INSIDE THE PRIMITIVE
  * `aspect-[3/4]` + `object-cover object-top` are baked in here rather than left to the callers. The
  * source portraits are all 3:4 (339×453, 481×642, 385×513) with the head near the top edge, so any
- * caller that re-derives the crop can get it subtly wrong, and `parallelisation.md` §3 flags that 11 would
- * otherwise have to check that the two Marcus Auner crops in Team and Kontakt are identical. They
- * cannot diverge now: there is only one crop. Callers may only constrain the CARD WIDTH
+ * caller that re-derives the crop can get it subtly wrong. With the crop here, every portrait
+ * shares one crop and cannot diverge. Callers may only constrain the CARD WIDTH
  * (`className="max-w-xs"`) — never the ratio or the object position.
  *
  * The frame is the one deliberate exception to §4.1's hard-edge rule: a white card, a 3px chamfer
