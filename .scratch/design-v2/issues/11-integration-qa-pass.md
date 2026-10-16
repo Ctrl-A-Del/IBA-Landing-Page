@@ -4,7 +4,7 @@
 
 **Blocked by:** 03, 04, 05, 06, 07, 08, 09 and 10
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] The full page renders at ~375 / ~768 / ~1280 px with no horizontal overflow at any width
 - [ ] Tab order through the whole page is logical, every interactive element is reachable, every one has a visible focus state, and nothing traps focus
