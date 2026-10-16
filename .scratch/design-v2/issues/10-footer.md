@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 (Theme foundation and shared primitives)
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] The footer sits on the alternate dark background and is visually distinguishable from the navy Kontakt section above it
 - [ ] Links to the Impressum and Datenschutz pages resolve, and both pages load
