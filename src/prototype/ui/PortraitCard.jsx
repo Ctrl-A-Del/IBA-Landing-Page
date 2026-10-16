@@ -20,10 +20,18 @@
  * INTERFACE
  *   <PortraitCard src={person.img} alt="Marcus Auner" name="Marcus Auner" role="Geschäftsführung" />
  * `name` and `role` are optional; when omitted only the portrait is framed.
+ *
+ * `fill` (boolean, default `false`, 11.1/C19): lets the card fill the height of its grid cell, so
+ * cards in the same row share one height even when a wrapped name makes one caption taller than the
+ * others. Default behaviour is unchanged when the caller does not opt in. Exposed as `data-fill` so
+ * a consumer's test can observe the option without asserting a class string.
  */
-const PortraitCard = ({ src, alt, name, role, className = "" }) => (
+const PortraitCard = ({ src, alt, name, role, fill = false, className = "" }) => (
   <figure
-    className={`w-full bg-white p-3 text-ink-600 shadow-frame ring-1 ring-frame rounded-edge ${className}`}
+    data-fill={fill}
+    className={`w-full bg-white p-3 text-ink-600 shadow-frame ring-1 ring-frame rounded-edge ${
+      fill ? "flex h-full flex-col" : ""
+    } ${className}`}
   >
     {/*
       No `width`/`height` attributes on purpose: the three sources are 339x453, 385x513 and 481x642
@@ -35,10 +43,10 @@ const PortraitCard = ({ src, alt, name, role, className = "" }) => (
       alt={alt}
       loading="lazy"
       decoding="async"
-      className="aspect-[3/4] w-full rounded-edge object-cover object-top"
+      className={`aspect-[3/4] w-full rounded-edge object-cover object-top ${fill ? "shrink-0" : ""}`}
     />
     {(name || role) && (
-      <figcaption className="px-1 pb-1 pt-4">
+      <figcaption className={`px-1 pb-1 pt-4 ${fill ? "flex flex-1 flex-col justify-center" : ""}`}>
         {name && (
           <span className="block font-heading text-display-md font-bold text-ink-900">{name}</span>
         )}
