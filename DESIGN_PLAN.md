@@ -152,7 +152,7 @@ Top-level keys: `Header`, `About`, `Services`, `Team`, `Contact`. Nothing else. 
 | File | Reality |
 | --- | --- |
 | `public/img/fraese.png` | **3D CAD render, not a photo.** Declared 1342×738 (16:9), **opaque** — light grey/dirt scene backdrop (`#d8d8d8`/`#c9c9c9`), brown earth `#6b5a45`. Machine is **orange `#f08a24`**. Has four German annotation boxes **baked into the pixels**: `01 · Fräsmodul / Zwei Arme, gegenläufige Fräsköpfe`, `02 · Aufnahmemodul / Nimmt das gelöste Material auf`, `03 · Fördermodul / Kontinuierlicher Austrag, beidseitig`, `04 · Antriebsmodul / Energie, Hydraulik, Steuerung`. Its own annotation navy (`#123f5c`) is close to the page navy |
-| `public/img/logo.jpg` (the Logo plate; since the Emblem change it lives at `design-assets/source/logo.jpg` and `public/img/emblem.png` replaces it on the page) | **Opaque JPEG — transparency is impossible.** Portrait photo-mockup of a 3D metallic logo on a slate-blue wall (`#4e6070`); circular gear/eagle emblem, `INGENIEURBÜRO` in grey metal caps, `AUNER` in **orange `#e08b3c`/`#f2a94f`**, flanked by two thin orange rules |
+| `design-assets/source/logo.jpg` | The **Logo plate**, moved here from `public/img/` by the Emblem change; `public/img/emblem.png` replaces it on the page. **Opaque JPEG — transparency is impossible.** Portrait photo-mockup of a 3D metallic logo on a slate-blue wall (`#4e6070`); circular gear/eagle emblem, `INGENIEURBÜRO` in grey metal caps, `AUNER` in **orange `#e08b3c`/`#f2a94f`**, flanked by two thin orange rules |
 | `public/img/marcus.png` | 240×320 (3:4) studio portrait, flat white background, head-and-shoulders, white open-collar shirt |
 | `public/img/klaus.png` | 240×320 (3:4) studio portrait, flat white background, grey hair, white shirt with light-blue placket |
 | `public/img/jan.png` | 240×320 (3:4) studio portrait, **visible light-grey→white gradient backdrop and a blown-out halo** around the hair, round dark glasses. The least clean of the three |
@@ -227,7 +227,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | **B3** | **Signal colour = the machine's own orange `#f08a24`**, used **exclusively for primary CTAs**, always with **dark navy text on it**. The `#6372ff → #5ca9fb` gradient is retired from CTAs. | `R3 Q1a`. The machine render and the logo wordmark are both orange, so blue CTAs compete with the brand's own imagery. Contrast: 6.7:1 navy-on-orange (passes AA) |
 | **B4** | **Keep Raleway (100–900) + Open Sans (300–800)**, self-hosted. The new look comes purely from scale, weight contrast, tracking and line-height. **No new font files, no new licence.** | `R2 Q5a`. The variable Raleway already goes to 900 — that range is simply not being used today |
 | **B5** | **Motion = CSS-only**: Tailwind transitions, hover/focus states, and a light scroll-reveal via a small `IntersectionObserver` hook — **all gated behind `prefers-reduced-motion`**. No animation library. | `R2 Q6a` |
-| **B6** | **Logo handling:** the full framed plate (`logo.jpg`) is kept as a brand element **outside the nav**; the nav mark is the **Emblem**, a dedicated 256x256 PNG (`public/img/emblem.png`) cut once from the plate, transparent outside the circle. No vector is available, so the disc keeps the plate's slate wall inside the circle. **Amended in R6:** the full plate no longer appears on the page. The footer uses a larger emblem crop plus the company name as text (C18). The Logo plate (`logo.jpg`) moved to `design-assets/source/` as the Emblem's source (crop recorded in its README) and no longer ships. | `R3 Q5a`; amended `R6 Q2a`. On the footer the plate read as a pasted-in grey photo |
+| **B6** | **Logo handling:** the nav and footer show the **Emblem**, a dedicated 256x256 PNG (`public/img/emblem.png`) cut once from the Logo plate and transparent outside the circle. No vector is available, so the disc keeps the plate's slate wall inside the circle. The Logo plate (`logo.jpg`) lives in `design-assets/source/` as the Emblem's source (crop recorded in its README) and does not ship. **History:** originally the plate was kept as a brand element outside the nav, with a CSS crop of the disc in the nav (`R3 Q5a`); amended in R6 so the plate no longer appears on the page and the footer uses a larger Emblem plus the company name as text (C18); amended again by the Emblem-asset change, replacing the runtime CSS crop with the pre-cut PNG. | `R3 Q5a`; amended `R6 Q2a`. On the footer the plate read as a pasted-in grey photo |
 | **B7** | **Team section stays on the dark background**; each portrait gets a **consistent framed light card**. | `R3 Q4b` — this overrides the agent's recommendation to move Team onto the light `surface` background |
 | **B8** | **Type & heading hierarchy: sentence case, not uppercase.** The H1 drops the current `uppercase` in favour of sentence case with tight tracking and fluid sizing; H2s step down from it. **CTA buttons are solid orange rectangles with a small radius (2–4 px), not pills.** | `R4 Q1a`. Uppercase at ~5rem makes a 32-character German headline hard to read; the tagline already carries enough force without shouting |
 | **B9** | **Nav behaviour: transparent over the hero, turning solid navy on scroll**, with a subtle bottom border, the anchors and the orange phone CTA. | `R4 Q2b` |
@@ -253,7 +253,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | **C15** | **Marcus Auner is the person you call, named in Kontakt without a portrait** (amended in R6). His label sits directly beside the number on two lines: "Marcus Auner" in display type, "Geschäftsführung" beneath in smaller type, no middle dot (the Team caption pattern). His face appears once on the page, in Team. | `R5 Q3a`; amended `R6 Q1a` + `R6 Q9`. With Team directly above, the reused portrait put the same photo twice about a section apart. On white (C12) the framed card would also lose its frame. The one-line label wrapped badly on phones (F6) |
 | **C16** | **Nav CTA label and number format:** on `lg` and up the button shows the number, below that the verb **"Anrufen"**. The **displayed** number is the local **`0176 618 77 599`** (what an NRW Bauunternehmer reads fastest), while the `tel:` href keeps the international **`+49 176 618 77 599`** exactly as `data.json` stores it. | `R5 Q4b` |
 | **C17** | **Kontakt layout without the portrait:** two columns from `md` up, with the eyebrow, H2 and intro on the left and the contact block on the right (name and role, orange call, divider, email and copy). Below `md` it stacks heading first. | `R6 Q8a`. Fills the white section's width, and on phones the "Kontakt" anchor lands on the heading with the call near the top (resolves E5/F5) |
-| **C18** | **Footer content:** brand block on the left (emblem crop, "Ingenieurbüro-Auner GmbH" as text, "© {current year} Ingenieurbüro-Auner GmbH" with the year computed at render), legal links on the right from `sm` up; stacked and centred below. **No address, no trust line, no phone, no email.** | `R6 Q2a` + `R6 Q3` + `R6 Q10`. The user declined the address line. Contact details stay in Kontakt only |
+| **C18** | **Footer content:** brand block on the left (Emblem, "Ingenieurbüro-Auner GmbH" as text, "© {current year} Ingenieurbüro-Auner GmbH" with the year computed at render), legal links on the right from `sm` up; stacked and centred below. **No address, no trust line, no phone, no email.** | `R6 Q2a` + `R6 Q3` + `R6 Q10`. The user declined the address line. Contact details stay in Kontakt only |
 | **C19** | **Team cards share one height per row** where they sit side by side, through a documented fill option on the portrait-card primitive (the default stays unchanged). | `R6 Q6` (E6/F7) |
 
 ### D. Technical & workflow
@@ -273,14 +273,14 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 
 | # | Section | Anchor | Background | Content |
 | --- | --- | --- | --- | --- |
-| 1 | Sticky nav | — | navy | Logo mark (CSS-cropped emblem), anchors **Verfahren · Einsatzbereiche · Team · Kontakt**, phone CTA (orange) — number on `lg+`, "Anrufen" below (C16); transparent over the hero, solid navy on scroll (B9) |
+| 1 | Sticky nav | — | navy | Emblem, anchors **Verfahren · Einsatzbereiche · Team · Kontakt**, phone CTA (orange) — number on `lg+`, "Anrufen" below (C16); transparent over the hero, solid navy on scroll (B9) |
 | 2 | Hero | `#start` | navy | `Wir schaufeln nicht – wir fräsen` as the H1, one subline naming the field, phone CTA. **Typographic — deliberately *not* the machine render.** Trust line `Maschinenbau aus NRW` |
 | 3 | Verfahren / Die Maschine | `#verfahren` | light | The render, large and full-width at every breakpoint (C9), with the lightbox trigger (C10, C13, C14), plus the four modules as real HTML text (C4) |
 | 4 | Einsatzbereiche | `#einsatzbereiche` | navy | The four areas: Stromtrassen · Wasserstoff & Fernwärme · Wasser & Abwasser · Weitere Infrastruktur |
 | 5 | Warum wir | `#warum` | light | The three Services points, reworded from hedged to plain (within C2) |
 | 6 | Team | `#team` | navy | The three real people, framed light cards (B7) |
 | 7 | Kontakt | `#kontakt` | light | **Marcus Auner named beside the number, no portrait** (C11, C15); two columns from `md` (C17); phone-first; email with pre-filled `mailto:` + copy-to-clipboard (C5) |
-| 8 | Footer | — | navy, no hairline (C12) | Emblem crop + company name + © line, links to Impressum / Datenschutz (B6, C18) |
+| 8 | Footer | — | navy, no hairline (C12) | Emblem + company name + © line, links to Impressum / Datenschutz (B6, C18) |
 
 ### 4.1 Concrete visual spec
 
@@ -332,7 +332,7 @@ If implementation turns up a genuine conflict with a decision in §3, raise it w
 - [x] Add an AA-contrast CTA button component (orange fill, navy text)
 
 ### Sections (per §4)
-- [ ] Nav + CSS-cropped logo mark (B6), transparent-over-hero behaviour (B9), with the mobile call bar (C6)
+- [ ] Nav + Emblem (B6), transparent-over-hero behaviour (B9), with the mobile call bar (C6)
 - [ ] Hero, sentence-case fluid H1 (B8)
 - [ ] Verfahren incl. the four modules as HTML text (C4) and the lightbox trigger (C10)
 - [ ] Lightbox component — native `<dialog>` + `showModal()`, "Größer ansehen" trigger, caption, focus return (C10, C13, C14)

@@ -29,8 +29,8 @@ import { FOCUS_ON_DARK } from "./focus";
  * bottom padding below `md` (see `useReserveCallBarSpace`), so the last line of the footer scrolls
  * clear of it. It lives here, beside the bar, so the reservation mounts and unmounts with it.
  *
- * THE EMBLEM is `../ui/Emblem`, shared with the footer (11.1/R6) so the brand mark (the `emblem.png` asset) has one
- * source of truth; this file only sizes it.
+ * THE EMBLEM is `../ui/Emblem`, shared with the footer (11.1/R6) so the brand mark has one source of truth
+ * (the `emblem.png` asset); this file only sizes it.
  */
 
 const { label: NAV_LABEL, homeLabel: HOME_LABEL, links } = data.Nav;

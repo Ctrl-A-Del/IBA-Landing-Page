@@ -125,6 +125,30 @@ describe("image references", () => {
   });
 });
 
+const PNG_SIGNATURE_LENGTH = 8;
+const PNG_IHDR_DATA_OFFSET = PNG_SIGNATURE_LENGTH + 8; // after signature + IHDR length/type
+const PNG_COLOUR_PALETTE = 3;
+const PNG_COLOUR_GREY_ALPHA = 4;
+const PNG_COLOUR_RGBA = 6;
+
+/** Reads the PNG signature, IHDR fields and the type of every chunk, by walking the chunk list. */
+function readPngHeader(buf) {
+  const chunkTypes = [];
+  let offset = PNG_SIGNATURE_LENGTH;
+  while (offset + 8 <= buf.length) {
+    const dataLength = buf.readUInt32BE(offset);
+    chunkTypes.push(buf.toString("latin1", offset + 4, offset + 8));
+    offset += 8 + dataLength + 4; // length + type + data + CRC
+  }
+  return {
+    signature: buf.subarray(0, PNG_SIGNATURE_LENGTH).toString("hex"),
+    width: buf.readUInt32BE(PNG_IHDR_DATA_OFFSET),
+    height: buf.readUInt32BE(PNG_IHDR_DATA_OFFSET + 4),
+    colourType: buf[PNG_IHDR_DATA_OFFSET + 9],
+    chunkTypes,
+  };
+}
+
 describe("shipped images (ticket 12 pruning, D4)", () => {
   const walk = (dir) =>
     fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -146,13 +170,14 @@ describe("shipped images (ticket 12 pruning, D4)", () => {
   });
 
   test("the shipped Emblem is a 256x256 PNG with an alpha channel", () => {
-    const png = fs.readFileSync(path.join(PUBLIC_DIR, "img", "emblem.png"));
-    expect(png.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
-    expect(png.readUInt32BE(16)).toBe(256); // IHDR width
-    expect(png.readUInt32BE(20)).toBe(256); // IHDR height
-    // IHDR colour type: 4 = grey+alpha, 6 = RGBA, or 3 = palette carrying a tRNS (alpha) chunk.
-    const colourType = png[25];
-    const hasAlpha = [4, 6].includes(colourType) || (colourType === 3 && png.includes("tRNS", 0, "latin1"));
+    const png = readPngHeader(fs.readFileSync(path.join(PUBLIC_DIR, "img", "emblem.png")));
+    expect(png.signature).toBe("89504e470d0a1a0a");
+    expect(png.width).toBe(256);
+    expect(png.height).toBe(256);
+    // Alpha = grey+alpha (4), RGBA (6), or palette (3) carrying a tRNS chunk.
+    const hasAlpha =
+      [PNG_COLOUR_GREY_ALPHA, PNG_COLOUR_RGBA].includes(png.colourType) ||
+      (png.colourType === PNG_COLOUR_PALETTE && png.chunkTypes.includes("tRNS"));
     expect(hasAlpha).toBe(true);
   });
 
