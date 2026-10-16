@@ -12,7 +12,7 @@
  *
  * The FILL and the text colour are both locked with Tailwind's important modifier (`!bg-signal`,
  * `!text-brand`), so the CTA has exactly one appearance. A caller cannot pass a colour prop because
- * there is none, and cannot override it with `className="bg-accent-from text-white"` either —
+ * there is none, and cannot override it with `className="bg-white text-white"` either —
  * `!important` wins in the cascade. The hover/active variants are important too, otherwise the
  * locked base colour would outrank them and hovering would do nothing. Making it literally
  * impossible is the point of the checklist item ("the blue gradient is no longer reachable as a CTA

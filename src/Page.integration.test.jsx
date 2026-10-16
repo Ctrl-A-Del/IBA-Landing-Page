@@ -125,6 +125,39 @@ describe("image references", () => {
   });
 });
 
+describe("shipped images (ticket 12 pruning, D4)", () => {
+  const walk = (dir) =>
+    fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+      const full = path.join(dir, entry.name);
+      return entry.isDirectory() ? walk(full) : [full];
+    });
+
+  test("public/img holds exactly the five images the v2 page uses: no template leftovers", () => {
+    const shipped = walk(path.join(PUBLIC_DIR, "img"))
+      .map((file) => path.relative(PUBLIC_DIR, file).split(path.sep).join("/"))
+      .sort();
+    expect(shipped).toEqual([
+      "img/fraese.png",
+      "img/jan.png",
+      "img/klaus.png",
+      "img/logo.jpg",
+      "img/marcus.png",
+    ]);
+  });
+
+  test("every image and icon the page head references still exists after pruning", () => {
+    const head = fs.readFileSync(path.join(PUBLIC_DIR, "index.html"), "utf8");
+    const refs = [
+      ...head.matchAll(/<(?:meta|link)\b[^>]*?(?:content|href)="([^"]+\.(?:png|jpe?g|ico|svg|webp))"/g),
+    ].map((m) => m[1].replace(/^https:\/\/ingenieurbuero-auner\.com\//, "").replace(/^\//, ""));
+    // og:image and twitter:image (no favicon exists, see ticket 01).
+    expect(refs.length).toBeGreaterThanOrEqual(2);
+    refs.forEach((ref) => {
+      expect({ ref, shipped: fs.existsSync(path.join(PUBLIC_DIR, ref)) }).toEqual({ ref, shipped: true });
+    });
+  });
+});
+
 describe("one face, one brand mark (B6, C15, C18)", () => {
   test("Marcus Auner's portrait appears exactly once on the page, in Team", () => {
     const { container } = renderPage();

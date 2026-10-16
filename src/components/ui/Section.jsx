@@ -1,10 +1,10 @@
 /**
  * Section — the page's background + rhythm primitive (ticket 02, DESIGN_PLAN.md §4 and §4.1).
  *
- * Three tones, matching the background rhythm fixed by decision C12 (§4, amended in R6):
+ * Two tones, matching the background rhythm fixed by decision C12 (§4, amended in R6):
  *   navy   -> hero, Einsatzbereiche, Team (the footer reuses these classes on its <footer>)
  *   light  -> Verfahren, Warum wir, Kontakt
- *   alt    -> no v2 consumer since 11.1; removed in ticket 12 together with `brand.alt` (R6 Q7)
+ * (The former `alt` tone and its `brand.alt` colour were removed in ticket 12: no v2 consumer.)
  *
  * The tone carries its own text colour from the neutral ramp, so a section ticket never writes
  * `text-white/70`. Body copy defaults to the AA-passing steps: `ink-600` on light (7.1:1 on white),
@@ -32,7 +32,6 @@
 const TONES = {
   navy: "bg-brand text-mist-300",
   light: "bg-white text-ink-600",
-  alt: "bg-brand-alt text-mist-300",
 };
 
 const Section = ({ id, tone = "light", className = "", containerClassName = "", children, ...rest }) => (

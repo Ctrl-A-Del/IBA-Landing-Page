@@ -12,22 +12,14 @@ module.exports = {
         // ---------------------------------------------------------------------------------------
         // Surfaces
         // ---------------------------------------------------------------------------------------
-        // Primary dark background used across sections (DESIGN_PLAN.md §3, B1 — kept).
+        // Primary dark background used across sections (DESIGN_PLAN.md §3, B1 — kept). The dark
+        // sections and the footer all use it (C12, amended in R6). Light sections are plain white.
+        //
+        // Ticket 12 removed the tokens that only the deleted pre-v2 components used: `brand.alt`
+        // (#14171a, the old footer), `surface` (#f6f6f6), `link` (#608dfd) and the `accent`
+        // gradient (#6372ff -> #5ca9fb, retired from CTAs by B3). Recover them from git if needed.
         brand: {
           DEFAULT: "#0a1f2e",
-          alt: "#14171a",
-        },
-        surface: "#f6f6f6",
-        link: "#608dfd",
-
-        // RETIRED FROM CTAs — never use this as a button/CTA fill (DESIGN_PLAN.md §3, B3 + §4.1).
-        // "No decorative gradients": v2 is solid colour, hard edges, 1px rules.
-        // It is kept (rather than deleted) only so the un-rendered legacy tree under
-        // `src/components/` — still reachable via the one-line switch in `src/App.jsx` (D5) —
-        // keeps resolving. If you are writing v2 code: use `signal` for the CTA, nothing here.
-        accent: {
-          from: "#6372ff",
-          to: "#5ca9fb",
         },
 
         // ---------------------------------------------------------------------------------------
