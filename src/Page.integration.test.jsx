@@ -1,7 +1,7 @@
 /**
  * Ticket 11 — integration QA guards for the assembled page.
  *
- * SEAM: the whole page as `src/App.jsx` mounts it (`<Prototype />`), observed only through the DOM a
+ * SEAM: the whole page as `src/App.jsx` mounts it (`<App />`), observed only through the DOM a
  * visitor gets, plus the files CRA ships verbatim from `public/`. These are the acceptance boxes
  * of ticket 11 that can be decided without layout: anchors, image references, the navy-on-orange
  * rule, the tel:/mailto: formats, the no-fabricated-content audit and the untouched legal pages.
@@ -17,13 +17,12 @@ import path from "path";
 import crypto from "crypto";
 import React from "react";
 import { render, within } from "@testing-library/react";
-import Prototype from "./Prototype";
-import CTA from "./ui/CTA";
+import App from "./App";
+import CTA from "./components/ui/CTA";
 
-const PUBLIC_DIR = path.resolve(__dirname, "../../public");
-const DATA = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, "../data/data.json"), "utf8").replace(/^﻿/, "")
-);
+const PUBLIC_DIR = path.resolve(__dirname, "../public");
+// Read raw, with no byte-order-mark stripping: ticket 12 keeps the file BOM-free (App.copy.test).
+const DATA = JSON.parse(fs.readFileSync(path.resolve(__dirname, "data/data.json"), "utf8"));
 
 let originalGetComputedStyle;
 
@@ -52,7 +51,7 @@ const textOf = (root) => {
 };
 
 const renderPage = () => {
-  const utils = render(<Prototype />);
+  const utils = render(<App />);
   const { container } = utils;
   const nav = container.querySelector("nav");
   const main = container.querySelector("main");
@@ -279,7 +278,7 @@ describe("legal pages and page head", () => {
         .map((m) => m[2])
         .filter((value) => ICONS.some((icon) => value.endsWith(icon)));
 
-    const SRC_DIR = path.resolve(__dirname, "..");
+    const SRC_DIR = __dirname;
     const walk = (dir) =>
       fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
         const full = path.join(dir, entry.name);

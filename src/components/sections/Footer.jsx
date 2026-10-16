@@ -1,10 +1,11 @@
 import Emblem from "../ui/Emblem";
 import { FOCUS_ON_DARK } from "./focus";
+import data from "../../data/data.json";
 
 /**
  * Ticket 10 — Footer (DESIGN_PLAN.md §4 row 8, decisions B6, C12, C18, amended 11.1/R6).
  *
- * Renders the page's <footer> landmark, outside <main> (shell contract in `../Prototype.jsx`):
+ * Renders the page's <footer> landmark, outside <main> (page contract in `src/App.jsx`):
  * the brand block (emblem + company name + copyright line, C18) and the two legal links, on the
  * brand navy that closes the background rhythm (C12 amended — navy, not `brand.alt`, and no
  * hairline, since white-to-navy is already a 15.6:1 step).
@@ -26,12 +27,13 @@ import { FOCUS_ON_DARK } from "./focus";
  * `<body>` bottom padding below `md`, so the footer's last line scrolls clear of it.
  */
 
-const LEGAL_LINKS = [
-  { href: `${process.env.PUBLIC_URL}/impressum.html`, label: "Impressum" },
-  { href: `${process.env.PUBLIC_URL}/datenschutz.html`, label: "Datenschutzerklärung" },
-];
+// Copy from `data.json` `Footer`; the legal pages are static files in `public/`.
+const LEGAL_LINKS = data.Footer.legalLinks.map(({ file, label }) => ({
+  href: `${process.env.PUBLIC_URL}/${file}`,
+  label,
+}));
 
-const COMPANY = "Ingenieurbüro-Auner GmbH";
+const COMPANY = data.Footer.company;
 
 const Footer = () => (
   <footer className="bg-brand py-12 text-mist-300 sm:py-16">

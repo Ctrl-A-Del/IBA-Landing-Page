@@ -1,6 +1,7 @@
 import { FastForward, Recycle, User } from "lucide-react";
 import Section from "../ui/Section";
 import Reveal from "../ui/Reveal";
+import data from "../../data/data.json";
 
 /**
  * Ticket 07 — Warum wir (DESIGN_PLAN.md §4 row 5, decisions C2, C8, C12).
@@ -26,45 +27,26 @@ import Reveal from "../ui/Reveal";
  * LAYOUT. One column, then three across from `lg` (1024 px). Each point is topped by a 1 px rule,
  * the same treatment as the Verfahren module list (§4.1 "hard edges").
  *
- * COPY (C8): the eyebrow, intro and three bodies are new prototype copy, flagged `C8-NEW`. The H2 is
- * the old Services heading, hardcoded in the legacy `services.jsx`, kept verbatim.
+ * COPY: `data.json` `WarumWir`. The H2 is the old Services heading, kept verbatim.
+ *
+ * ICONS are decorative, not content, so they live here, matched to `points` by position.
  */
 
 const HEADING_ID = "warum-heading";
 
-const POINTS = [
-  {
-    Icon: FastForward,
-    name: "Schneller vorankommen",
-    // C8-NEW
-    text: "Ziel ist ein durchgehender Arbeitsgang, in dem die Maschine den Boden fräst und das Material im selben Zug abfördert.",
-  },
-  {
-    Icon: Recycle,
-    name: "Ressourcen effizient nutzen",
-    // C8-NEW
-    text: "Das Konzept bündelt Fräsen, Aufnehmen und Fördern in einer Maschine. Ziel ist, unnötige Fahr- und Schwenkbewegungen und zusätzliche Maschineneinsätze zu vermeiden.",
-  },
-  {
-    Icon: User,
-    name: "Fachkräfte entlasten",
-    // C8-NEW
-    text: "Die Maschine wird auf Fernsteuerung und ineinandergreifende Arbeitsschritte ausgelegt. Ziel ist, dass Fachkräfte seltener direkt im Gefahrenbereich stehen und dort arbeiten, wo ihr Können gebraucht wird.",
-  },
-];
+const ICONS = [FastForward, Recycle, User];
+
+const { eyebrow: EYEBROW, heading: HEADING, intro: INTRO } = data.WarumWir;
+const POINTS = data.WarumWir.points.map((point, i) => ({ ...point, Icon: ICONS[i] }));
 
 const WarumWir = () => (
   <Section id="warum" tone="light" aria-labelledby={HEADING_ID}>
     <Reveal className="max-w-2xl">
-      {/* C8-NEW */}
-      <p className="text-eyebrow text-ink-500">Warum wir</p>
+      <p className="text-eyebrow text-ink-500">{EYEBROW}</p>
       <h2 id={HEADING_ID} className="mt-3 text-display-lg text-ink-900">
-        Neue Netze brauchen leistungsfähigere Bauprozesse.
+        {HEADING}
       </h2>
-      {/* C8-NEW */}
-      <p className="mt-5 text-body-lg">
-        Unsere Maschine ist in Entwicklung. Diese drei Ziele geben ihr die Richtung vor.
-      </p>
+      <p className="mt-5 text-body-lg">{INTRO}</p>
     </Reveal>
 
     <Reveal as="ul" className="mt-12 grid gap-x-10 gap-y-10 sm:mt-16 lg:grid-cols-3">

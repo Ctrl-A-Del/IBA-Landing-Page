@@ -1,4 +1,4 @@
-import { act, fireEvent, render, within } from "@testing-library/react";
+import { act, fireEvent, render, within } from "@testing-library/react/pure";
 
 /**
  * Captures every piece of German copy a rendered page exposes, in document order (ticket 12).

@@ -2,14 +2,15 @@ import { useLayoutEffect } from "react";
 import { Phone } from "lucide-react";
 import CTA from "../ui/CTA";
 import Emblem from "../ui/Emblem";
-import { CALL_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
+import data from "../../data/data.json";
+import { CALL_LABEL, CALL_VERB, PHONE_DISPLAY, PHONE_HREF } from "./phone";
 import useScrolled from "./useScrolled";
 import { FOCUS_ON_DARK } from "./focus";
 
 /**
  * Ticket 03 — Sticky nav + mobile call bar (DESIGN_PLAN.md §4 row 1, decisions B6, B9, C6, C16).
  *
- * Renders two siblings, per the shell contract in `../Prototype.jsx`:
+ * Renders two siblings, per the page contract in `src/App.jsx`:
  *   1. the page's <nav> landmark — fixed to the top, exactly `h-nav` tall (the anchor contract in
  *      `src/index.css` derives every section's scroll-margin from the same token), transparent over
  *      the hero and solid navy with a hairline bottom border once scrolled (B9). It never auto-hides.
@@ -33,12 +34,8 @@ import { FOCUS_ON_DARK } from "./focus";
  * source of truth; this file only sizes it.
  */
 
-const LINKS = [
-  { href: "#verfahren", label: "Verfahren" },
-  { href: "#einsatzbereiche", label: "Einsatzbereiche" },
-  { href: "#team", label: "Team" },
-  { href: "#kontakt", label: "Kontakt" },
-];
+const { label: NAV_LABEL, homeLabel: HOME_LABEL, links } = data.Nav;
+const LINKS = links.map(({ anchor, label }) => ({ href: `#${anchor}`, label }));
 
 // The bar's height and the space `<body>` reserves for it are the same literal, written twice in
 // this one file because Tailwind only compiles class names that appear verbatim (DESIGN_PLAN §2.5).
@@ -67,7 +64,7 @@ const Nav = () => {
   return (
     <>
       <nav
-        aria-label="Hauptnavigation"
+        aria-label={NAV_LABEL}
         data-state={isScrolled ? "solid" : "transparent"}
         className={`fixed inset-x-0 top-0 z-40 h-nav border-b transition-colors duration-300 motion-reduce:transition-none ${
           isScrolled ? "border-mist-500/40 bg-brand" : "border-transparent bg-transparent"
@@ -76,7 +73,7 @@ const Nav = () => {
         <div className="mx-auto flex h-full w-full max-w-container items-center gap-2 px-5 sm:gap-6 sm:px-6 lg:px-8">
           <a
             href="#start"
-            aria-label="Ingenieurbüro Auner – zum Seitenanfang"
+            aria-label={HOME_LABEL}
             className={`shrink-0 rounded-full ${FOCUS_ON_DARK}`}
           >
             <Emblem className="h-10 w-10 sm:h-12 sm:w-12" />
@@ -107,7 +104,7 @@ const Nav = () => {
           <div className="hidden shrink-0 md:block">
             <CTA href={PHONE_HREF} aria-label={CALL_LABEL}>
               <Phone aria-hidden="true" className="h-4 w-4" strokeWidth={2.25} />
-              <span className="lg:hidden">Anrufen</span>
+              <span className="lg:hidden">{CALL_VERB}</span>
               <span className="hidden lg:inline">{PHONE_DISPLAY}</span>
             </CTA>
           </div>
@@ -119,7 +116,7 @@ const Nav = () => {
       >
         <CTA href={PHONE_HREF} aria-label={CALL_LABEL} className="w-full">
           <Phone aria-hidden="true" className="h-5 w-5" strokeWidth={2.25} />
-          <span>Anrufen</span>
+          <span>{CALL_VERB}</span>
           <span className="font-normal">{PHONE_DISPLAY}</span>
         </CTA>
       </div>

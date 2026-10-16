@@ -1,7 +1,43 @@
-// Design v2 prototype switch (DESIGN_PLAN.md §3, D5).
-//
-// The redesign lives entirely under ./prototype/ and the whole app is reached through the single
-// line below. To go back to the previous design, change the specifier to "./AppLegacy" — nothing
-// else has to change. src/AppLegacy.jsx and everything under src/components/ are untouched by the
-// prototype and stay recoverable until ticket 12 (post-approval migration) removes them.
-export { default } from "./prototype/Prototype";
+import Nav from "./components/sections/Nav";
+import Hero from "./components/sections/Hero";
+import Verfahren from "./components/sections/Verfahren";
+import Einsatzbereiche from "./components/sections/Einsatzbereiche";
+import WarumWir from "./components/sections/WarumWir";
+import Team from "./components/sections/Team";
+import Kontakt from "./components/sections/Kontakt";
+import Footer from "./components/sections/Footer";
+
+/**
+ * The page — composition and order fixed by DESIGN_PLAN.md §4 (design v2, approved and migrated
+ * in ticket 12, decision D6).
+ *
+ *   slot  section           renders
+ *   ----  ----------------  -----------------------------------------------------------
+ *   1     Sticky nav        a <nav> landmark, plus the mobile call bar (fixed overlay)
+ *   2     Hero              <section id="start">
+ *   3     Verfahren         <section id="verfahren">
+ *   4     Einsatzbereiche   <section id="einsatzbereiche">
+ *   5     Warum wir         <section id="warum">
+ *   6     Team              <section id="team">
+ *   7     Kontakt           <section id="kontakt">
+ *   8     Footer            a <footer> landmark, outside <main>, last on the page
+ *
+ * The `id`s are the anchors listed in DESIGN_PLAN.md §4.1; the nav links to them. All copy comes
+ * from `src/data/data.json`.
+ */
+const App = () => (
+  <>
+    <Nav />
+    <main>
+      <Hero />
+      <Verfahren />
+      <Einsatzbereiche />
+      <WarumWir />
+      <Team />
+      <Kontakt />
+    </main>
+    <Footer />
+  </>
+);
+
+export default App;

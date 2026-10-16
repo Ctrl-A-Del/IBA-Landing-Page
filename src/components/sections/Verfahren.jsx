@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { Maximize2, X } from "lucide-react";
 import Section from "../ui/Section";
 import Reveal from "../ui/Reveal";
+import data from "../../data/data.json";
 
 /**
  * Ticket 05 — Verfahren / Die Maschine (DESIGN_PLAN.md §4 row 3, decisions C4, C9, C10, C13, C14).
@@ -26,26 +27,28 @@ import Reveal from "../ui/Reveal";
  * natural size (`w-auto h-auto max-w-full max-h-full`), so it fills the viewport on phones and
  * laptops and stops at 1:1 on larger screens instead of showing interpolation.
  *
- * COPY (C8): the eyebrow, H2 and intro are new prototype copy, flagged `C8-NEW` for the diff
- * against `data.json`. The intro is derived from the hedged Services text (C2: "soll", no claims).
+ * COPY: `data.json` `Verfahren`. The intro stays in the honest register of C2 ("soll", no
+ * claims). `modules` are the four annotation boxes baked into `public/img/fraese.png`, reproduced
+ * verbatim as text (C4).
  */
-
-// C4: the four annotation boxes baked into `public/img/fraese.png`, reproduced verbatim as text.
-const MODULES = [
-  { numeral: "01", name: "Fräsmodul", line: "Zwei Arme, gegenläufige Fräsköpfe" },
-  { numeral: "02", name: "Aufnahmemodul", line: "Nimmt das gelöste Material auf" },
-  { numeral: "03", name: "Fördermodul", line: "Kontinuierlicher Austrag, beidseitig" },
-  { numeral: "04", name: "Antriebsmodul", line: "Energie, Hydraulik, Steuerung" },
-];
+const {
+  eyebrow: EYEBROW,
+  heading: HEADING,
+  intro: INTRO,
+  renderAlt: RENDER_ALT,
+  enlargeLabel: ENLARGE_LABEL,
+  closeLabel: CLOSE_LABEL,
+  // C14: the only text a screen-reader user gets when the render opens full-screen.
+  caption: CAPTION,
+  modulesLabel: MODULES_LABEL,
+  modules: MODULES,
+} = data.Verfahren;
 
 // The one raster, shown inline and enlarged. Natural size, so the browser reserves the box.
 // The alt is kept out of the spread object and written on each <img> as `alt={RENDER_ALT}`:
 // jsx-a11y/alt-text cannot see an alt inside a spread, and under CI=true (GitHub Actions) CRA fails
 // the build on that warning.
 const RENDER = { src: "img/fraese.png", width: 1342, height: 738 };
-const RENDER_ALT = "3D-Darstellung der Fräsmaschine mit ihren vier Modulen";
-// C14: the only text a screen-reader user gets when the render opens full-screen.
-const CAPTION = "Fräsmodul, Aufnahme-, Förder- und Antriebsmodul";
 
 const HEADING_ID = "verfahren-heading";
 const CAPTION_ID = "verfahren-lightbox-caption";
@@ -94,17 +97,11 @@ const Verfahren = () => {
   return (
     <Section id="verfahren" tone="light" aria-labelledby={HEADING_ID}>
       <Reveal className="max-w-2xl">
-        {/* C8-NEW */}
-        <p className="text-eyebrow text-ink-500">Verfahren</p>
-        {/* C8-NEW */}
+        <p className="text-eyebrow text-ink-500">{EYEBROW}</p>
         <h2 id={HEADING_ID} className="mt-3 text-display-lg text-ink-900">
-          Die Maschine
+          {HEADING}
         </h2>
-        {/* C8-NEW */}
-        <p className="mt-5 text-body-lg">
-          Die Maschine ist in Entwicklung. Vier Module sollen Bodenabtrag und Materialtransport in
-          einem kontinuierlichen Arbeitsgang bündeln.
-        </p>
+        <p className="mt-5 text-body-lg">{INTRO}</p>
       </Reveal>
 
       {/* Deliberately outside <Reveal>: the render is never hidden, not even before it scrolls in (C9). */}
@@ -131,14 +128,14 @@ const Verfahren = () => {
             className={`${BUTTON_BASE} border-brand text-brand hover:bg-brand hover:text-mist-100 focus-visible:outline-brand`}
           >
             <Maximize2 aria-hidden="true" size={16} strokeWidth={2.25} />
-            Größer ansehen
+            {ENLARGE_LABEL}
           </button>
         </div>
       </div>
 
       <Reveal
         as="ol"
-        aria-label="Die vier Module der Maschine"
+        aria-label={MODULES_LABEL}
         className="mt-12 grid gap-x-8 gap-y-8 sm:mt-16 sm:grid-cols-2 lg:grid-cols-4"
       >
         {MODULES.map(({ numeral, name, line }) => (
@@ -171,7 +168,7 @@ const Verfahren = () => {
               className={`${BUTTON_BASE} border-mist-500 text-mist-100 hover:bg-mist-100 hover:text-brand focus-visible:outline-white`}
             >
               <X aria-hidden="true" size={16} strokeWidth={2.25} />
-              Schließen
+              {CLOSE_LABEL}
             </button>
           </div>
           {/*

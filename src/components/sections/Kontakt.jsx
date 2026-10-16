@@ -7,6 +7,7 @@ import CTA from "../ui/CTA";
 import { CALL_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
 import { EMAIL, MAIL_HREF } from "./email";
 import { FOCUS_ON_LIGHT } from "./focus";
+import data from "../../data/data.json";
 
 /**
  * Ticket 09 — Kontakt (DESIGN_PLAN.md §4 row 7, decisions C5, C11, C15–C17, amended 11.1/R6).
@@ -50,19 +51,22 @@ import { FOCUS_ON_LIGHT } from "./focus";
  * bottom and ticket 03's Nav reserves its height as `<body>` bottom padding, so this in-flow section
  * can always scroll clear of it.
  *
- * COPY (C8, flagged for diffing against `data.json`):
- *   number, email = data.json `Contact`, hardcoded per parallelisation.md §3 (number via `./phone`).
- *   intro         = legacy `contact.jsx` subtitle, verbatim.
- *   name, role    = data.json `Team[0]`, on two lines as C15 (amended) specifies.
- *   eyebrow, H2, mail subject, copy-button and status texts = C8-NEW.
+ * COPY: `data.json` `Kontakt` (eyebrow, H2, intro, the contact person's name and role, the
+ * copy-button label and the two status messages); number and email come from `data.json`
+ * `Contact` via `./phone` and `./email`.
  */
+const {
+  eyebrow: EYEBROW,
+  heading: HEADING,
+  intro: INTRO,
+  person: PERSON,
+  copyLabel: COPY_LABEL,
+} = data.Kontakt;
 
-// C8-NEW
 const STATUS = {
   idle: "",
-  copied: "E-Mail-Adresse kopiert.",
-  selected:
-    "Adresse unten markiert – mit Strg+C (Mac: ⌘+C) kopieren oder auf dem Handy gedrückt halten und „Kopieren“ wählen.",
+  copied: data.Kontakt.status.copied,
+  selected: data.Kontakt.status.selected,
 };
 const STATUS_CLEAR_MS = 5000;
 
@@ -132,22 +136,17 @@ const Kontakt = () => {
     <Section id="kontakt" tone="light" aria-labelledby={HEADING_ID}>
       <div className="grid gap-10 md:grid-cols-2 md:gap-16">
         <Reveal className="max-w-2xl">
-          {/* C8-NEW */}
-          <p className="text-eyebrow text-ink-500">Kontakt</p>
-          {/* C8-NEW */}
+          <p className="text-eyebrow text-ink-500">{EYEBROW}</p>
           <h2 id={HEADING_ID} className="mt-3 text-display-lg text-ink-900">
-            Sprechen Sie direkt mit uns
+            {HEADING}
           </h2>
-          {/* Legacy contact.jsx subtitle, verbatim. */}
-          <p className="mt-5 text-body-lg">
-            Lassen Sie uns über den Grabenaushub von morgen sprechen.
-          </p>
+          <p className="mt-5 text-body-lg">{INTRO}</p>
         </Reveal>
 
         <Reveal className="max-w-md">
           {/* Name and role on two lines, the same pattern as Team's caption (C15 amended). */}
-          <p className="font-heading text-display-md font-bold text-ink-900">Marcus Auner</p>
-          <p className="mt-1 text-body-sm text-ink-500">Geschäftsführung</p>
+          <p className="font-heading text-display-md font-bold text-ink-900">{PERSON.name}</p>
+          <p className="mt-1 text-body-sm text-ink-500">{PERSON.role}</p>
 
           <CTA href={PHONE_HREF} aria-label={CALL_LABEL} className="mt-6 w-full px-8 py-4 sm:w-auto">
             <Phone aria-hidden="true" className="h-5 w-5" strokeWidth={2.25} />
@@ -169,8 +168,7 @@ const Kontakt = () => {
                 className={`inline-flex items-center gap-2 rounded-edge border border-ink-400 px-3 py-2 text-body-sm font-semibold text-ink-700 transition-colors duration-150 hover:border-ink-700 hover:text-ink-900 ${FOCUS_ON_LIGHT}`}
               >
                 <Copy aria-hidden="true" className="h-4 w-4" strokeWidth={2.25} />
-                {/* C8-NEW */}
-                <span>Adresse kopieren</span>
+                <span>{COPY_LABEL}</span>
               </button>
             </div>
             {/* Copy fallback: the plain address, outside the link, so a long-press selects text

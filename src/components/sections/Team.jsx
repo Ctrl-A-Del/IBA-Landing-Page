@@ -1,6 +1,7 @@
 import Section from "../ui/Section";
 import Reveal from "../ui/Reveal";
 import PortraitCard from "../ui/PortraitCard";
+import data from "../../data/data.json";
 
 /**
  * Ticket 08 — Team (DESIGN_PLAN.md §4 row 6, decision B7).
@@ -25,39 +26,34 @@ import PortraitCard from "../ui/PortraitCard";
  * and their role; repeating the name as alt would make screen readers announce it twice. The photo
  * conveys nothing beyond "this is <name>", which the caption says.
  *
- * COPY (C8, flagged for diffing against `data.json`):
- *   names, roles, image paths = data.json `Team`, verbatim, hardcoded per parallelisation.md §3
- *     (wave 3 does not import or edit `data.json`; ticket 12 owns it).
- *   eyebrow, H2, intro = C8-NEW. The old heading `Maschinenbau aus NRW` is now the hero's trust
- *     line (§4.1 "Key moves") and is deliberately not repeated here. The intro stays in the honest
- *     development register of C2 ("entwickeln", no completed-project claims).
+ * COPY: `data.json` `Team` (eyebrow, H2, intro, list name, and each person's image path, name
+ * and role). The old heading `Maschinenbau aus NRW` is now the hero's trust line (§4.1 "Key
+ * moves") and is deliberately not repeated here. The intro stays in the honest development
+ * register of C2 ("entwickeln", no completed-project claims).
  */
-const PEOPLE = [
-  { img: "img/marcus.png", name: "Marcus Auner", role: "Geschäftsführung" },
-  { img: "img/klaus.png", name: "Klaus Auner", role: "Einkauf" },
-  { img: "img/jan.png", name: "Jan Hönninger", role: "Technischer Leiter" },
-];
+const {
+  eyebrow: EYEBROW,
+  heading: HEADING,
+  intro: INTRO,
+  listLabel: LIST_LABEL,
+  people: PEOPLE,
+} = data.Team;
 
 const HEADING_ID = "team-heading";
 
 const Team = () => (
   <Section id="team" tone="navy" aria-labelledby={HEADING_ID}>
     <Reveal className="max-w-2xl">
-      {/* C8-NEW */}
-      <p className="text-eyebrow text-mist-400">Team</p>
-      {/* C8-NEW */}
+      <p className="text-eyebrow text-mist-400">{EYEBROW}</p>
       <h2 id={HEADING_ID} className="mt-3 text-display-lg text-mist-100">
-        Die Menschen hinter der Maschine
+        {HEADING}
       </h2>
-      {/* C8-NEW */}
-      <p className="mt-5 text-body-lg">
-        Geschäftsführung, Einkauf und Technik entwickeln die Grabenfräse gemeinsam.
-      </p>
+      <p className="mt-5 text-body-lg">{INTRO}</p>
     </Reveal>
 
     <Reveal
       as="ul"
-      aria-label="Das Team"
+      aria-label={LIST_LABEL}
       className="mt-12 grid gap-10 sm:mt-16 md:grid-cols-3 md:gap-8"
     >
       {PEOPLE.map(({ img, name, role }) => (

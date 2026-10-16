@@ -1,6 +1,7 @@
 import { Droplets, Flame, Waypoints, Zap } from "lucide-react";
 import Section from "../ui/Section";
 import Reveal from "../ui/Reveal";
+import data from "../../data/data.json";
 
 /**
  * Ticket 06 — Einsatzbereiche (DESIGN_PLAN.md §4 row 4, §4.1, decisions B2, B5, C12).
@@ -20,43 +21,33 @@ import Reveal from "../ui/Reveal";
  * MOTION (B5). Header and list each sit in the shared `Reveal`, which is inert under
  * `prefers-reduced-motion: reduce` — the content is simply there.
  *
- * COPY. The H2 and the four headings/descriptions are verbatim from `data.json` `About`. The eyebrow
- * and the list's accessible name are new prototype copy, flagged `C8-NEW`. The icons are decorative.
+ * COPY: `data.json` `Einsatzbereiche`. The heading carries a soft hyphen (U+00AD) in
+ * "Versorgungs·netzausbau": at ~375 px the 21-letter compound is wider than the column at display
+ * size, and the base `break-words` would split it as "…ausb / au". The soft hyphen is invisible
+ * unless the line breaks there, and then it renders a real hyphen.
+ *
+ * ICONS are decorative and are not content, so they live here, matched to `areas` by position:
+ * Stromtrassen, Wasserstoff & Fernwärme, Wasser & Abwasser, Weitere Infrastruktur.
  */
+const ICONS = [Zap, Flame, Droplets, Waypoints];
 
-// data.json `About` — verbatim.
-const AREAS = [
-  { Icon: Zap, title: "Stromtrassen", text: "Erdkabel und Energieübertragung" },
-  { Icon: Flame, title: "Wasserstoff & Fernwärme", text: "Neue Leitungsnetze der Energiewende" },
-  { Icon: Droplets, title: "Wasser & Abwasser", text: "Großformatige Versorgungsgräben" },
-  {
-    Icon: Waypoints,
-    title: "Weitere Infrastruktur",
-    text: "Gas-, Drainage- und industrielle Leitungstrassen",
-  },
-];
+const { eyebrow: EYEBROW, heading: HEADING, listLabel: LIST_LABEL } = data.Einsatzbereiche;
+const AREAS = data.Einsatzbereiche.areas.map((area, i) => ({ ...area, Icon: ICONS[i] }));
 
 const HEADING_ID = "einsatzbereiche-heading";
 
 const Einsatzbereiche = () => (
   <Section id="einsatzbereiche" tone="navy" aria-labelledby={HEADING_ID}>
     <Reveal className="max-w-3xl">
-      {/* C8-NEW */}
-      <p className="text-eyebrow text-mist-400">Einsatzbereiche</p>
-      {/*
-        Soft hyphen (U+00AD) in "Versorgungs·netzausbau": at ~375 px the 21-letter compound is wider
-        than the column at display size, and the base `break-words` would split it as "…ausb / au".
-        The soft hyphen is invisible unless the line breaks there, and then it renders a real hyphen.
-      */}
+      <p className="text-eyebrow text-mist-400">{EYEBROW}</p>
       <h2 id={HEADING_ID} className="mt-3 text-display-lg text-mist-100">
-        Entwickelt für den Energie- und Versorgungs{"\u00AD"}netzausbau
+        {HEADING}
       </h2>
     </Reveal>
 
     <Reveal
       as="ul"
-      // C8-NEW
-      aria-label="Die vier Einsatzbereiche"
+      aria-label={LIST_LABEL}
       className="mt-12 grid gap-4 sm:mt-16 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5"
     >
       {AREAS.map(({ Icon, title, text }) => (
