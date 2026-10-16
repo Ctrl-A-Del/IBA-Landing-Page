@@ -4,7 +4,7 @@
 
 **Blocked by:** 02 (Theme foundation and shared primitives)
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] The section is anchored at `#kontakt` on the navy background
 - [ ] Marcus Auner is named, labelled "Marcus Auner · Geschäftsführung", with his existing portrait shown in the shared framed light card
