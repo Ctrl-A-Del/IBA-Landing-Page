@@ -8,9 +8,9 @@
  * Everything that needs layout, focus or motion (widths, tab order, lightbox, reduced motion, anchor
  * landing under the fixed nav) is verified in a real browser; the evidence is in the ticket.
  *
- * PAGE vs SHOWCASE: `Prototype.jsx` still renders ticket 02's dev-only token showcase after the
- * footer (escalated in the ticket). The visitor-facing page is the `nav`, `main` and `footer`
- * landmarks plus the mobile call bar, so the content audits below read only that.
+ * THE PAGE: the `nav`, `main` and `footer` landmarks plus the mobile call bar, and nothing after
+ * the footer (ticket 02's dev-only token showcase was removed from the shell in ticket 11's review
+ * follow-up; "page composition" below keeps it out). The content audits read exactly that.
  */
 import fs from "fs";
 import path from "path";
@@ -37,6 +37,17 @@ const renderPage = () => {
   const pageText = page.map((root) => root.textContent).join("\n");
   return { ...utils, nav, main, footer, callBar, pageQueryAll, pageText };
 };
+
+describe("page composition", () => {
+  test("the footer is the last landmark and nothing renders after it", () => {
+    const { container, footer } = renderPage();
+    const landmarks = [...container.querySelectorAll("nav, main, footer")].filter(
+      (el) => !el.parentElement.closest("nav, main, footer")
+    );
+    expect(landmarks.map((el) => el.tagName)).toEqual(["NAV", "MAIN", "FOOTER"]);
+    expect(container.lastElementChild).toBe(footer);
+  });
+});
 
 describe("internal anchors", () => {
   test("every in-page link resolves to a section inside <main>, and the nav reaches all four §4 sections", () => {

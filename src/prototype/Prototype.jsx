@@ -6,9 +6,6 @@ import WarumWir from "./sections/WarumWir";
 import Team from "./sections/Team";
 import Kontakt from "./sections/Kontakt";
 import Footer from "./sections/Footer";
-// TEMPORARY (ticket 02): the token showcase is a dev artefact, not a page section. Delete this
-// import and the `<Showcase />` line at the bottom (after `<Footer />`) before the page ships.
-import Showcase from "./Showcase";
 
 /**
  * Design v2 prototype shell — the composition and order fixed by DESIGN_PLAN.md §4.
@@ -34,9 +31,9 @@ import Showcase from "./Showcase";
  *
  * The `id`s above are the anchors listed in DESIGN_PLAN.md §4.1; the nav links to them.
  *
- * Everything under `./sections/` is a placeholder until its ticket lands, so `npm start` on this
- * commit renders an intentionally empty page: no old component is rendered any more, and no v2
- * section exists yet. Ticket 02's token showcase is the first thing with pixels in it.
+ * All eight slots are filled (tickets 03–10), and `<Footer />` is the last thing on the page:
+ * nothing renders after it. Ticket 02's dev-only token showcase was removed from this shell in
+ * ticket 11's review follow-up; `Showcase.jsx` itself stays until ticket 12's migration deletes it.
  *
  * The previous design is preserved untouched in `src/AppLegacy.jsx` and is re-entered through the
  * single line in `src/App.jsx` (DESIGN_PLAN.md §3, D5).
@@ -53,13 +50,6 @@ const Prototype = () => (
       <Kontakt />
     </main>
     <Footer />
-    {/*
-      TEMPORARY — ticket 02's token showcase. It sits AFTER <Footer /> on purpose: it is a dev
-      artefact, not a section, so it belongs neither between the landmarks (`nav -> main -> footer`)
-      nor inside <main>, where it would perturb the §4 anchor order. Remove this line and the import
-      at the top of this file when the page ships.
-    */}
-    <Showcase />
   </>
 );
 
