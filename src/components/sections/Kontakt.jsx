@@ -4,7 +4,7 @@ import { Copy, Mail, Phone } from "lucide-react";
 import Section from "../ui/Section";
 import Reveal from "../ui/Reveal";
 import CTA from "../ui/CTA";
-import { CALL_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
+import { CALL_ARIA_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
 import { EMAIL, MAIL_HREF } from "./email";
 import { FOCUS_ON_LIGHT } from "./focus";
 import data from "../../data/data.json";
@@ -63,11 +63,8 @@ const {
   copyLabel: COPY_LABEL,
 } = data.Kontakt;
 
-const STATUS = {
-  idle: "",
-  copied: data.Kontakt.status.copied,
-  selected: data.Kontakt.status.selected,
-};
+// Status messages keyed by outcome ("copied", "selected"); the "idle" state has none.
+const STATUS = data.Kontakt.status;
 const STATUS_CLEAR_MS = 5000;
 
 const HEADING_ID = "kontakt-heading";
@@ -148,7 +145,7 @@ const Kontakt = () => {
           <p className="font-heading text-display-md font-bold text-ink-900">{PERSON.name}</p>
           <p className="mt-1 text-body-sm text-ink-500">{PERSON.role}</p>
 
-          <CTA href={PHONE_HREF} aria-label={CALL_LABEL} className="mt-6 w-full px-8 py-4 sm:w-auto">
+          <CTA href={PHONE_HREF} aria-label={CALL_ARIA_LABEL} className="mt-6 w-full px-8 py-4 sm:w-auto">
             <Phone aria-hidden="true" className="h-5 w-5" strokeWidth={2.25} />
             <span>{PHONE_DISPLAY}</span>
           </CTA>
