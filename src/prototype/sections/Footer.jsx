@@ -11,8 +11,9 @@
  * A hairline top rule (the same `mist-500/40` rule the nav uses) separates it from the navy Kontakt
  * section above, since `#14171a` against `#0a1f2e` alone is a quiet step.
  *
- * NO CONTACT DETAILS here: the Kontakt section directly above owns them (C15), and repeating them
- * would create a second copy that can drift. The legal pages in `public/` are linked, not touched.
+ * NO CONTACT DETAILS here: the footer repeats none of the phone/email shown in the Kontakt section
+ * directly above, so it cannot drift from Kontakt; a test guards that it has no tel:/mailto: link.
+ * The legal pages in `public/` are linked, not touched.
  *
  * THE MOBILE CALL BAR does not cover this footer: ticket 03's `Nav` reserves the bar's height as
  * `<body>` bottom padding below `md`, so the footer's last line scrolls clear of it.
@@ -23,9 +24,10 @@ const LEGAL_LINKS = [
   { href: `${process.env.PUBLIC_URL}/datenschutz.html`, label: "Datenschutzerklärung" },
 ];
 
-// Same white focus outline as the nav (16.8:1 on navy; higher still on #14171a). Outline, not ring,
-// so it survives forced-colours mode.
-const FOCUS_ON_DARK =
+// White focus outline (16.8:1 on navy; higher still on #14171a). Outline, not ring, so it survives
+// forced-colours mode. Same recipe as Nav's FOCUS_ON_NAVY (not imported: Nav is ticket 03's file and
+// does not export it; shared primitives are ticket 02's).
+const FOCUS_ON_NAVY =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
 
 const Footer = () => (
@@ -52,14 +54,13 @@ const Footer = () => (
             <li key={href}>
               <a
                 href={href}
-                className={`rounded-edge font-body text-body-sm text-mist-300 underline-offset-4 transition-colors duration-150 hover:text-white hover:underline ${FOCUS_ON_DARK}`}
+                className={`rounded-edge font-body text-body-sm text-mist-300 underline-offset-4 transition-colors duration-150 hover:text-white hover:underline ${FOCUS_ON_NAVY}`}
               >
                 {label}
               </a>
             </li>
           ))}
         </ul>
-        <p className="font-body text-body-sm text-mist-400">© Ingenieurbüro-Auner GmbH</p>
       </div>
     </div>
   </footer>
