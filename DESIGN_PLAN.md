@@ -8,9 +8,9 @@ Decision log, verified facts and task tracker for the redesign of `ingenieurbuer
 `design/v2`. Tickets `03`–`10` are the section wave, `11` is the integration QA pass, and `12`–`13`
 are human-gated (`13` **publishes the live site**).
 
-**Last updated:** 2026-10-16 · branch `design/v2` with tickets `01`–`11` landed; nothing pushed,
+**Last updated:** 2026-10-16 · branch `design/v2` with tickets `01`–`11.1` landed; nothing pushed,
 `master` untouched at `e5ffdd6`. A human review of the assembled page reopened B6, C12 and C15 in
-round `R6` (§3). The fixes are ticket `11.1`, which runs between `11` and `12`.
+round `R6` (§3); ticket `11.1` implemented those fixes. Next is `12`, which needs user approval.
 
 **Progress:** all five interview rounds are closed; there are **no open questions** (§5). Everything
 decided is in §3. Ticket `01` is complete and reviewed; ticket `02` is complete and verified, with
