@@ -16,13 +16,11 @@ icons. No router. Self-hosted latin-subset fonts.
 
 `npm` only — there is no `yarn.lock`. Keep `package-lock.json` in sync; CI runs `npm ci`.
 
-## Deploy hazard
+## Deploy
 
-`.github/workflows/deploy.yml` triggers on **`push` to `master`** *and* **`pull_request` to
-`master`**, and publishes to the live site at `ingenieurbuero-auner.com`.
-
-**Opening a pull request to `master` deploys the live website — not only merging it.** Never open a PR
-to `master` without explicit human approval. Pushing a feature branch is safe.
+`.github/workflows/deploy.yml` publishes to the live site at `ingenieurbuero-auner.com` on **`push` to
+`master`** only, so merging a PR deploys. Pull requests run `.github/workflows/check.yml` (tests and
+build) and deploy nothing. Merging to `master` needs explicit human approval.
 
 ## Working notes
 
