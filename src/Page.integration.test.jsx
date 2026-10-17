@@ -185,9 +185,14 @@ describe("shipped images (ticket 12 pruning, D4)", () => {
     const head = fs.readFileSync(path.join(PUBLIC_DIR, "index.html"), "utf8");
     const refs = [
       ...head.matchAll(/<(?:meta|link)\b[^>]*?(?:content|href)="([^"]+\.(?:png|jpe?g|ico|svg|webp))"/g),
-    ].map((m) => m[1].replace(/^https:\/\/ingenieurbuero-auner\.com\//, "").replace(/^\//, ""));
-    // og:image and twitter:image (no favicon exists, see ticket 01).
-    expect(refs.length).toBeGreaterThanOrEqual(2);
+    ].map((m) =>
+      m[1]
+        .replace(/^https:\/\/ingenieurbuero-auner\.com\//, "")
+        .replace(/^%PUBLIC_URL%\//, "")
+        .replace(/^\//, "")
+    );
+    // og:image, twitter:image, favicon.ico and apple-touch-icon.png.
+    expect(refs.length).toBeGreaterThanOrEqual(4);
     refs.forEach((ref) => {
       expect({ ref, shipped: fs.existsSync(path.join(PUBLIC_DIR, ref)) }).toEqual({ ref, shipped: true });
     });
@@ -338,8 +343,23 @@ describe("legal pages and page head", () => {
   // SOURCE GUARD ONLY: this checks what goes into the build (the HTML template and every source
   // file). The build output itself (a grep over the built directory, plus the network log for
   // 404s) is checked by the build and browser pass recorded in the ticket, not here.
-  test("neither public/index.html nor any file in src/ references the four missing favicons", () => {
-    const ICONS = ["favicon.ico", "apple-touch-icon.png", "apple-touch-icon-72x72.png", "apple-touch-icon-114x114.png"];
+  test("the Favicon ships as favicon.ico (16/32/48) and a 180x180 apple-touch-icon.png, linked from the head", () => {
+    const head = fs.readFileSync(path.join(PUBLIC_DIR, "index.html"), "utf8");
+    expect(head).toContain('rel="icon" href="%PUBLIC_URL%/favicon.ico"');
+    expect(head).toContain('rel="apple-touch-icon" href="%PUBLIC_URL%/apple-touch-icon.png"');
+
+    const ico = fs.readFileSync(path.join(PUBLIC_DIR, "favicon.ico"));
+    expect(ico.readUInt16LE(2)).toBe(1); // resource type: icon
+    const frames = Array.from({ length: ico.readUInt16LE(4) }, (_, i) => ico[6 + i * 16] || 256);
+    expect(frames).toEqual([16, 32, 48]);
+
+    const apple = readPngHeader(fs.readFileSync(path.join(PUBLIC_DIR, "apple-touch-icon.png")));
+    expect(apple.signature).toBe("89504e470d0a1a0a");
+    expect([apple.width, apple.height]).toEqual([180, 180]);
+  });
+
+  test("neither public/index.html nor any file in src/ references the old, never-shipped favicon paths", () => {
+    const ICONS = ["img/favicon.ico", "img/apple-touch-icon.png", "apple-touch-icon-72x72.png", "apple-touch-icon-114x114.png"];
     // Quoted values only, single or double quotes: prose in a comment may name the old paths.
     const iconRefs = (text) =>
       [...text.matchAll(/(["'])([^"'\n]*)\1/g)]
