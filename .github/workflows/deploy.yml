@@ -3,8 +3,6 @@ name: Deploy landing page
 on:
   push:
     branches: [master]
-  pull_request:
-    branches: [master]
 
 permissions:
   contents: write # needed to push to gh-pages
