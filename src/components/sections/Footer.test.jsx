@@ -73,12 +73,12 @@ test.each([
   ["2031-05-01T12:00:00Z", "2031"],
   ["2040-07-01T12:00:00Z", "2040"],
 ])("the copyright line shows the year the system clock reads (%s)", (now, year) => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
   try {
-    jest.setSystemTime(new Date(now));
+    vi.setSystemTime(new Date(now));
     const { footer } = renderFooter();
     expect(footer).toHaveTextContent(`© ${year} Ingenieurbüro-Auner GmbH`);
   } finally {
-    jest.useRealTimers();
+    vi.useRealTimers();
   }
 });

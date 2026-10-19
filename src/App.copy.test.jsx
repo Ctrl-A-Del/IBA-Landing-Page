@@ -11,6 +11,7 @@ import path from "path";
 import React from "react";
 import { render } from "@testing-library/react";
 import { captureCopy } from "./__fixtures__/captureCopy";
+import App from "./App";
 import GOLDEN from "./__fixtures__/prototype-copy.json";
 
 const DATA_FILE = path.resolve(__dirname, "data/data.json");
@@ -50,27 +51,25 @@ const renderWithMarkedData = async () => {
   const marked = mapLeaves(data, mark);
   // A fresh module registry gets its own React, so the renderer and the capture helper are loaded
   // from the same registry as the App under test.
-  let page;
-  let isolated;
-  jest.isolateModules(() => {
-    jest.doMock("./data/data.json", () => marked);
-    const IsolatedReact = require("react");
-    page = IsolatedReact.createElement(require("./App").default);
-    isolated = {
-      render: require("@testing-library/react/pure").render,
-      captureCopy: require("./__fixtures__/captureCopy").captureCopy,
-    };
-  });
+  vi.resetModules();
+  vi.doMock("./data/data.json", () => ({ default: marked }));
+  const IsolatedReact = await import("react");
+  const { default: IsolatedApp } = await import("./App");
+  const page = IsolatedReact.createElement(IsolatedApp);
+  const isolated = {
+    render: (await import("@testing-library/react/pure")).render,
+    captureCopy: (await import("./__fixtures__/captureCopy")).captureCopy,
+  };
   const copy = await isolated.captureCopy(page);
   const { container, unmount } = isolated.render(page);
   const sources = [...container.querySelectorAll("img")].map((img) => img.getAttribute("src"));
   unmount();
-  jest.dontMock("./data/data.json");
+  vi.doUnmock("./data/data.json");
+  vi.resetModules();
   return { data, copy, sources };
 };
 
 test("the page renders exactly the approved prototype copy, character for character", async () => {
-  const App = require("./App").default;
   expect(await captureCopy(<App />)).toEqual(GOLDEN);
 });
 

@@ -65,7 +65,7 @@ describe("under prefers-reduced-motion: reduce", () => {
 
   beforeEach(() => {
     // Browser APIs jsdom lacks — a real system boundary, stubbed as in `useReveal.test.js`.
-    window.matchMedia = jest.fn((media) => ({
+    window.matchMedia = vi.fn((media) => ({
       matches: media === "(prefers-reduced-motion: reduce)",
       media,
       onchange: null,
@@ -76,7 +76,7 @@ describe("under prefers-reduced-motion: reduce", () => {
       dispatchEvent: () => false,
     }));
     // An observer that never fires: if anything waited on it, the content would stay hidden.
-    window.IntersectionObserver = jest.fn(function IntersectionObserverStub() {
+    window.IntersectionObserver = vi.fn(function IntersectionObserverStub() {
       this.observe = () => {};
       this.unobserve = () => {};
       this.disconnect = () => {};
