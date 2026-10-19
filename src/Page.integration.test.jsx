@@ -322,8 +322,9 @@ describe("no fabricated content (C2, C7, §2.7)", () => {
 
 describe("legal pages and page head", () => {
   // SHA-256 of master's files (e5ffdd6), line endings normalised to LF so a CRLF checkout matches.
+  // The Impressum pin was replaced by the fixture comparison in `LegalPages.test.jsx` (legal-pages
+  // ticket 01); the Datenschutz pin goes the same way in ticket 02.
   const MASTER = {
-    "impressum.html": "764535de8acf3d5f0304187f2bb6a4ddb0b463fe414bb36bd29fbd5f5d9747c7",
     "datenschutz.html": "28e0e37b78cebd7c9feedb1b8a5f1fb6aa4cdedad399e2e8efb4d3db65231d62",
   };
 
