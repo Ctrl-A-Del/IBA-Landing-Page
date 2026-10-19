@@ -100,8 +100,8 @@
     "a@href=tel:+4917661877599",
     "a@href=mailto:info@ingenieurbuero-auner.com?subject=Anfrage%20zur%20Grabenfr%C3%A4se",
     "img@alt=",
-    "a@href=/impressum.html",
-    "a@href=/datenschutz.html"
+    "a@href=/impressum/",
+    "a@href=/datenschutz/"
   ],
   "status": {
     "copied": "E-Mail-Adresse kopiert.",
