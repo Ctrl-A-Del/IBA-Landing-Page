@@ -53,7 +53,7 @@ beforeEach(() => {
   if (!document.querySelector("title")) document.head.appendChild(document.createElement("title"));
 });
 beforeEach(() => {
-  window.scrollTo = jest.fn(); // jsdom does not implement it
+  window.scrollTo = vi.fn(); // jsdom does not implement it
 });
 afterEach(() => window.history.pushState({}, "", "/"));
 

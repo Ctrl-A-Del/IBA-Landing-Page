@@ -21,7 +21,7 @@ module.exports = { copyRouteDocuments, ROUTES };
 
 if (require.main === module) {
   try {
-    copyRouteDocuments(process.argv[2] || path.join(__dirname, '..', 'build'));
+    copyRouteDocuments(process.argv[2] || path.join(__dirname, '..', 'dist'));
   } catch (err) {
     console.error(err.message);
     process.exit(1);

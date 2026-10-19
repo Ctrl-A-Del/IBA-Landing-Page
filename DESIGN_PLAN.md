@@ -30,7 +30,7 @@ five items raised for a human at the bottom of its ticket file.
 
 1. Read this file top to bottom.
 2. Read the repo memory file `/memories/repo/notes.md` (build/Tailwind/font/deploy gotchas).
-3. Read: `tailwind.config.js`, `src/index.css`, `src/App.jsx`, `src/data/data.json`, `public/index.html`, `.github/workflows/deploy.yml`.
+3. Read: `tailwind.config.js`, `src/index.css`, `src/App.jsx`, `src/data/data.json`, `index.html`, `vite.config.mjs`, `.github/workflows/deploy.yml`.
 4. Run `npm ci` (npm only — there is no `yarn.lock`).
 5. There are **no open questions** (§5) — the design is frozen. Do not re-open settled decisions unless the user asks.
 6. Read `.scratch/design-v2/parallelisation.md` — it says which of the 13 tickets may be worked by
@@ -49,24 +49,24 @@ Facts below were verified against the working tree. Do not re-derive them; do re
 
 | Thing | Value |
 | --- | --- |
-| Build tool | Create React App via `react-scripts` 5.0.1 (not Vite/Next) |
-| React / ReactDOM | 17.0.1 (legacy `ReactDOM.render` in `src/index.js`) |
+| Build tool / dev server | Vite 8 with `@vitejs/plugin-react` (`vite.config.mjs`); output directory `dist/` |
+| Test runner | Vitest 5 with jsdom; config in `vite.config.mjs`, setup in `src/setupTests.js` |
+| React / ReactDOM | 17.0.1 (legacy `ReactDOM.render` in `src/index.jsx`) |
 | Tailwind CSS | v3.4.19 (devDependency) — config uses `content:`, `theme.extend` |
-| postcss / autoprefixer | 8.5.29 / 10.6.1 (CRA-managed) |
+| postcss / autoprefixer | 8.5.29 / 10.6.1 (wired by `postcss.config.js`) |
 | Icons | `lucide-react` 1.54.0 |
-| npm scripts | `start`, `build`, `test`, `eject` — that's all |
-| `homepage` | `https://ingenieurbuero-auner.com` |
-| package name | `iba-landing-page` (lockfile still says `landingpage-react-template` — template leftover) |
+| npm scripts | `start` (`vite`), `build` (`vite build`), `test` (`vitest run`) — that's all |
+| package name | `iba-landing-page` |
 
-There is **no** `postcss.config.js` anywhere in the repo.
+`postcss.config.js` at the repo root wires `tailwindcss` and `autoprefixer`; Vite picks it up automatically.
 
 ### 1.2 Deploy & branch rules
 
-- Hosting: **GitHub Pages** with custom domain, `CNAME` = `ingenieurbuero-auner.com`.
-- `.github/workflows/deploy.yml`: triggers on **`push` to `master`** only. It uses first-party actions and plain `git`: `npm ci` → `npm run build` (CRA build plus `scripts/copy-route-documents.js`), then it force-pushes `build/` to the `gh-pages` branch. (It originally also ran on `pull_request` via a third-party deploy action; that was replaced.)
+- Hosting: **GitHub Pages** with custom domain `ingenieurbuero-auner.com`, set in repo Settings (Pages source: "GitHub Actions"); `public/CNAME` is inert under that source.
+- `.github/workflows/deploy.yml`: triggers on **`push` to `master`** only. It has a build job (`npm ci`, `npm test`, `npm run build` (Vite build plus `scripts/copy-route-documents.js`), then `actions/upload-pages-artifact` on `dist/`) and a deploy job (`actions/deploy-pages`).
 - `.github/workflows/check.yml` runs tests and the build on pull requests and deploys nothing.
-- **Therefore: merging or pushing to `master` publishes to the live site.** Pull requests and feature branches do not.
-- `build/` is generated and is listed in `.gitignore` (`/build`) — it exists on disk locally but is not tracked. No `gh-pages` / `predeploy` / `deploy` npm script exists.
+- **Therefore: merging to `master` (a push) publishes to the live site.** Opening a PR or pushing a feature branch does not.
+- `dist/` is generated and is listed in `.gitignore` (`/dist`) — it is not tracked. No `gh-pages` / `predeploy` / `deploy` npm script exists.
 - Git state at time of writing: current branch `master`, clean tree, HEAD `e5ffdd6 Fix images`. The earlier `refactor/tailwind-overhaul` branch was merged via PR #1, and `REFACTOR_PLAN.md` was deliberately deleted in `d9d1afd remove migration plan`.
 
 ### 1.3 Design tokens (current, in `tailwind.config.js`)
@@ -184,8 +184,8 @@ The machine is presented via a **CAD render** with **annotations baked in**, and
 
 ### 1.9 Known defects to fix in this branch
 
-- `public/index.html` references **four favicons that do not exist**: `img/favicon.ico`, `img/apple-touch-icon.png`, `img/apple-touch-icon-72x72.png`, `img/apple-touch-icon-114x114.png`.
-- `public/index.html` meta description is **empty**; no Open Graph / Twitter card tags → shared links render as a bare URL.
+- `index.html` references **four favicons that do not exist**: `img/favicon.ico`, `img/apple-touch-icon.png`, `img/apple-touch-icon-72x72.png`, `img/apple-touch-icon-114x114.png`.
+- `index.html` meta description is **empty**; no Open Graph / Twitter card tags → shared links render as a bare URL.
 - `<meta name="theme-color" content="#0a1f2e" />` is already correct; `<html lang="de">` and `<title>Ingenieurbüro Auner</title>` are fine.
 - Contrast pair measured: white on `#f08a24` ≈ **2.5:1** (fails WCAG AA) · `#0a1f2e` on `#f08a24` ≈ **6.7:1** (passes AA). This is why the CTA is orange with navy text and never the reverse.
 
@@ -193,16 +193,16 @@ The machine is presented via a **CAD render** with **annotations baked in**, and
 
 ## 2. Hard constraints (do not violate)
 
-1. **Never open a PR to `master`** (or push to `master`) until the user explicitly approves — it deploys the live site (§1.2).
-2. **Stay inside the technical envelope:** CRA 5 / `react-scripts` 5.0.1, React 17, Tailwind **v3**, no router, no new heavy dependencies. `lucide-react` 1.54 is available for icons.
-3. **Do not add `postcss.config.js`** — CRA sets PostCSS `config: false` and would ignore it; CRA auto-enables Tailwind because `tailwind.config.js` exists at the repo root.
+1. **Never merge or push to `master`** until the user explicitly approves — a push to `master` deploys the live site (§1.2).
+2. **Stay inside the technical envelope:** Vite 8 / Vitest 5 (see D7), React 17, Tailwind **v3**, no router, no new heavy dependencies. `lucide-react` 1.54 is available for icons.
+3. **Tailwind is wired through `postcss.config.js`** (`tailwindcss` + `autoprefixer`); keep it in place.
 4. **Do not re-add Google Fonts / any font CDN `<link>`.** Fonts are self-hosted, latin subset only.
-5. **New Tailwind classes only compile if they appear in the `content` globs** (`./src/**/*.{js,jsx}`, `./public/index.html`). Don't build class names dynamically from strings.
+5. **New Tailwind classes only compile if they appear in the `content` globs** (`./index.html`, `./src/**/*.{js,jsx}`). Don't build class names dynamically from strings.
 6. **The Legal pages are in scope for layout and theme, but the Legal text is untouchable.** Never reword, reformat or "fix" it; only the company changes it. `src/__fixtures__/impressum.html` and `datenschutz.html` are the verbatim reference, and a test guards the text.
 7. **No fabricated content:** no invented references, testimonials, project counts, performance figures or certifications. The machine is a concept (§1.7).
 8. **Never put white text on the orange CTA** (§1.9).
 9. **`npm` only** — there is no `yarn.lock`; keep `package-lock.json` in sync; CI runs `npm ci`.
-10. Use `npm start` / `npm run build` / `npm test` — nothing else. `npm run build` is the CRA build followed by `scripts/copy-route-documents.js`, which creates the clean-path Legal page documents (see `docs/adr/0001-clean-paths-by-copying-the-built-document.md`).
+10. Use `npm start` / `npm run build` / `npm test` — nothing else. `npm run build` is the Vite build followed by `scripts/copy-route-documents.js`, which creates the clean-path Legal page documents (see `docs/adr/0002-clean-paths-by-copying-the-built-document.md`).
 
 ---
 
@@ -260,12 +260,13 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 
 | # | Decision | Rationale |
 | --- | --- | --- |
-| **D1** | **Hold the technical envelope:** CRA 5 + `react-scripts` 5.0.1 + React 17, Tailwind v3, no router, no new heavy dependencies, self-hosted fonts only, no `postcss.config.js`, `lucide-react` for icons. | `R1 Q6` |
+| **D1** | *Superseded by D7 (build tooling only).* **Hold the technical envelope:** CRA 5 + `react-scripts` 5.0.1 + React 17, Tailwind v3, no router, no new heavy dependencies, self-hosted fonts only, no `postcss.config.js`, `lucide-react` for icons. | `R1 Q6` |
 | **D2** | **Prototype = one full single page at real fidelity**: every section, rewritten German copy, real breakpoints, on branch **`design/v2` off `master`**. Old components stay recoverable from git. | `R2 Q7a` |
 | **D3** | **Review gate:** no PR to `master` until explicit approval; review happens via local `npm start`. | `R2 Q7a`. See the hard rule in §2 for the deploy reason |
 | **D4** | **Housekeeping in the same branch:** fix the four broken favicon references, fill the empty meta description, add Open Graph / Twitter tags. **Prune the dead images only after the new design confirms they are still unused.** | `R2 Q8a`. A page optimised to be *called* should also preview properly when pasted into a WhatsApp group — which is how a Bauunternehmer will actually share it |
 | **D5** | **Prototype file layout: `src/prototype/`**, with `src/App.jsx` temporarily pointing at it, so the existing components stay untouched and the whole prototype can be reverted in one line. | `R4 Q6a`. `D2` calls the prototype throwaway — this is the only option where that is literally true |
 | **D6** | **Post-approval migration: the v2 structure becomes the source of truth.** The old components (`header.jsx`, `features.jsx`, `about.jsx`, `services.jsx`, `Team.jsx`, `contact.jsx`, `Footer.jsx`) are deleted in the same branch, and `data.json` is updated to the approved copy. | `R4 Q7a`. Keeping both sets would leave two competing component trees for the next agent to disambiguate |
+| **D7** | **Build tooling moves from CRA to Vite 8 and Vitest 5**; React 17, Tailwind v3, no router, self-hosted fonts and `lucide-react` stay as in D1. Deploy moves to the GitHub Pages actions (`actions/upload-pages-artifact` + `actions/deploy-pages`) on push to `master`. | Supersedes D1 for tooling. Reasoning and consequences: `docs/adr/0001-vite-instead-of-cra.md` |
 
 ---
 
@@ -362,7 +363,7 @@ If implementation turns up a genuine conflict with a decision in §3, raise it w
 - ❌ Testimonials, references or logo walls (C7) — no real content exists; fabricating it would break `C2`.
 - ❌ WhatsApp CTA (C6) — advertises a channel that isn't published.
 - ❌ Moving Team onto a light background (B7 overruled the agent's recommendation).
-- ❌ New fonts, a router, an animation library, a Tailwind upgrade, or any migration off CRA (`R1 Q6`).
+- ❌ New fonts, a router, an animation library, a Tailwind upgrade, or any further tooling migration beyond D7 (`R1 Q6`).
 - ❌ Making the Logo plate itself transparent, or a background-free phoenix cut-out — the plate is a photo mockup JPEG. Instead the Emblem is cut once as a circular, alpha-masked PNG (B6); the slate wall stays visible inside the circle.
 - ❌ Revealing the machine render's baked-in annotations as the primary content — they scale to ~4 px on mobile (C4).
 - ❌ Hiding the render on mobile, or CSS-zooming into it (`R4 Q3`) — the render is the most persuasive asset on the page, and a crop risks cutting the very detail it is meant to show.

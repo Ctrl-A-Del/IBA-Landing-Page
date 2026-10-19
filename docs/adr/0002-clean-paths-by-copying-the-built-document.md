@@ -10,12 +10,12 @@ Pages, which serves static files only and has no server-side rewrite. The Legal 
 
 ## Decision
 
-After the CRA build, `scripts/copy-route-documents.js` copies the built landing page document
-(`build/index.html`) to `build/impressum/index.html` and `build/datenschutz/index.html`. GitHub Pages then
+After the Vite build, `scripts/copy-route-documents.js` copies the built landing page document
+(`dist/index.html`) to `dist/impressum/index.html` and `dist/datenschutz/index.html`. GitHub Pages then
 serves a real file at each clean address, the same bundle boots, and the app picks the Legal page from the
 path (no router library). The script exits non-zero if the source document is missing. `npm run build` is
-the CRA build followed by this script, so CI, PR checks and deploy use one command. The CRA `homepage` is
-the absolute site origin, so asset URLs in the copies need no rewriting.
+the Vite build followed by this script, so CI, PR checks and deploy use one command. Vite builds with the
+default base `/`, so asset URLs are absolute and the copies need no rewriting.
 
 The old `public/impressum.html` and `public/datenschutz.html` were removed with no redirect stubs; those
 `.html` addresses now return 404 (accepted).
@@ -33,6 +33,6 @@ The old `public/impressum.html` and `public/datenschutz.html` were removed with 
 ## Consequences
 
 - The Legal pages are empty until JavaScript runs (no pre-rendering).
-- Deploys must run `npm run build`, not the bare CRA build; the deploy workflow and the PR check enforce it.
+- Deploys must run `npm run build`, not the bare Vite build; the deploy workflow and the PR check enforce it.
 - Migrating to Vite may become worthwhile later. It is out of scope here and would supersede this ADR if
   it provided pre-rendering.

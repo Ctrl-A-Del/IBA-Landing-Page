@@ -14,7 +14,7 @@
 const Emblem = ({ className = "" }) => (
   <img
     data-emblem
-    src={`${process.env.PUBLIC_URL}/img/emblem.png`}
+    src="/img/emblem.png"
     alt=""
     width="256"
     height="256"

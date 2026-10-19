@@ -46,8 +46,7 @@ const {
 
 // The one raster, shown inline and enlarged. Natural size, so the browser reserves the box.
 // The alt is kept out of the spread object and written on each <img> as `alt={RENDER_ALT}`:
-// jsx-a11y/alt-text cannot see an alt inside a spread, and under CI=true (GitHub Actions) CRA fails
-// the build on that warning.
+// jsx-a11y/alt-text cannot see an alt inside a spread, so that lint rule would flag it.
 const RENDER = { src: "img/fraese.png", width: 1342, height: 738 };
 
 const HEADING_ID = "verfahren-heading";

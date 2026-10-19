@@ -149,7 +149,7 @@ describe("copy the email address", () => {
   };
 
   test("copies the address with the clipboard API and announces success in a live region", async () => {
-    const writeText = jest.fn(() => Promise.resolve());
+    const writeText = vi.fn(() => Promise.resolve());
     stubClipboard({ writeText });
 
     const { status } = await clickCopy();
@@ -160,7 +160,7 @@ describe("copy the email address", () => {
 
   test("without the clipboard API it falls back to the legacy copy command", async () => {
     stubClipboard(undefined);
-    document.execCommand = jest.fn(() => true);
+    document.execCommand = vi.fn(() => true);
 
     const { status } = await clickCopy();
 
@@ -202,13 +202,13 @@ describe("copy the email address", () => {
   });
 
   test("the success message clears itself, the fallback guidance stays", async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     try {
-      stubClipboard({ writeText: jest.fn(() => Promise.resolve()) });
+      stubClipboard({ writeText: vi.fn(() => Promise.resolve()) });
       const { status, unmount } = await clickCopy();
       expect(status).toHaveTextContent(/kopiert/i);
       act(() => {
-        jest.advanceTimersByTime(10000);
+        vi.advanceTimersByTime(10000);
       });
       expect(status).toHaveTextContent(/^$/);
       unmount();
@@ -217,17 +217,17 @@ describe("copy the email address", () => {
       document.execCommand = undefined;
       const { status: fallbackStatus } = await clickCopy();
       act(() => {
-        jest.advanceTimersByTime(60000);
+        vi.advanceTimersByTime(60000);
       });
       expect(fallbackStatus).toHaveTextContent(/markiert/i);
     } finally {
-      jest.useRealTimers();
+      vi.useRealTimers();
     }
   });
 
   test("a refused clipboard permission degrades the same way", async () => {
-    stubClipboard({ writeText: jest.fn(() => Promise.reject(new Error("denied"))) });
-    document.execCommand = jest.fn(() => false);
+    stubClipboard({ writeText: vi.fn(() => Promise.reject(new Error("denied"))) });
+    document.execCommand = vi.fn(() => false);
 
     const { status } = await clickCopy();
 

@@ -3,7 +3,7 @@
  * extended with the image-pruning guards in ticket 12).
  *
  * SEAM: the whole page as `src/App.jsx` mounts it (`<App />`), observed only through the DOM a
- * visitor gets, plus the files CRA ships verbatim from `public/`. These are the acceptance boxes
+ * visitor gets, plus the files shipped verbatim from `public/`. These are the acceptance boxes
  * of ticket 11 that can be decided without layout: anchors, image references, the navy-on-orange
  * rule, the tel:/mailto: formats, the no-fabricated-content audit and the untouched legal pages.
  * Everything that needs layout, focus or motion (widths, tab order, lightbox, reduced motion, anchor
@@ -20,6 +20,7 @@ import App from "./App";
 import CTA from "./components/ui/CTA";
 
 const PUBLIC_DIR = path.resolve(__dirname, "../public");
+const HTML_SHELL = path.resolve(__dirname, "../index.html");
 // Read raw, with no byte-order-mark stripping: ticket 12 keeps the file BOM-free (App.copy.test).
 const DATA = JSON.parse(fs.readFileSync(path.resolve(__dirname, "data/data.json"), "utf8"));
 
@@ -117,7 +118,7 @@ describe("image references", () => {
     expect(sources.length).toBeGreaterThan(0);
 
     sources.forEach((src) => {
-      // PUBLIC_URL is "" under Jest, so both "img/x.png" and "/img/x.png" resolve from public/.
+      // `public/` is served at the site root, so both "img/x.png" and "/img/x.png" resolve from public/.
       const file = path.join(PUBLIC_DIR, src.replace(/^\//, ""));
       expect({ src, shipped: fs.existsSync(file) }).toEqual({ src, shipped: true });
     });
@@ -181,13 +182,12 @@ describe("shipped images (ticket 12 pruning, D4)", () => {
   });
 
   test("every image and icon the page head references still exists after pruning", () => {
-    const head = fs.readFileSync(path.join(PUBLIC_DIR, "index.html"), "utf8");
+    const head = fs.readFileSync(HTML_SHELL, "utf8");
     const refs = [
       ...head.matchAll(/<(?:meta|link)\b[^>]*?(?:content|href)="([^"]+\.(?:png|jpe?g|ico|svg|webp))"/g),
     ].map((m) =>
       m[1]
         .replace(/^https:\/\/ingenieurbuero-auner\.com\//, "")
-        .replace(/^%PUBLIC_URL%\//, "")
         .replace(/^\//, "")
     );
     // og:image, twitter:image, favicon.ico and apple-touch-icon.png.
@@ -336,9 +336,9 @@ describe("legal pages and page head", () => {
   // file). The build output itself (a grep over the built directory, plus the network log for
   // 404s) is checked by the build and browser pass recorded in the ticket, not here.
   test("the Favicon ships as favicon.ico (16/32/48) and a 180x180 apple-touch-icon.png, linked from the head", () => {
-    const head = fs.readFileSync(path.join(PUBLIC_DIR, "index.html"), "utf8");
-    expect(head).toContain('rel="icon" href="%PUBLIC_URL%/favicon.ico"');
-    expect(head).toContain('rel="apple-touch-icon" href="%PUBLIC_URL%/apple-touch-icon.png"');
+    const head = fs.readFileSync(HTML_SHELL, "utf8");
+    expect(head).toContain('rel="icon" href="/favicon.ico"');
+    expect(head).toContain('rel="apple-touch-icon" href="/apple-touch-icon.png"');
 
     const ico = fs.readFileSync(path.join(PUBLIC_DIR, "favicon.ico"));
     expect(ico.readUInt16LE(2)).toBe(1); // resource type: icon
@@ -350,7 +350,7 @@ describe("legal pages and page head", () => {
     expect([apple.width, apple.height]).toEqual([180, 180]);
   });
 
-  test("neither public/index.html nor any file in src/ references the old, never-shipped favicon paths", () => {
+  test("neither the index.html shell nor any file in src/ references the old, never-shipped favicon paths", () => {
     const ICONS = ["img/favicon.ico", "img/apple-touch-icon.png", "apple-touch-icon-72x72.png", "apple-touch-icon-114x114.png"];
     // Quoted values only, single or double quotes: prose in a comment may name the old paths.
     const iconRefs = (text) =>
@@ -370,7 +370,7 @@ describe("legal pages and page head", () => {
     );
     expect(sources.length).toBeGreaterThan(0);
 
-    const hits = [path.join(PUBLIC_DIR, "index.html"), ...sources].flatMap((file) =>
+    const hits = [HTML_SHELL, ...sources].flatMap((file) =>
       iconRefs(fs.readFileSync(file, "utf8")).map((ref) => `${path.basename(file)}: ${ref}`)
     );
     expect(hits).toEqual([]);

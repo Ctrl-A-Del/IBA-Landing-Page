@@ -5,7 +5,7 @@ Guidance for agents working in this repository.
 ## Project
 
 Landing page for **Ingenieurbüro-Auner GmbH** (trench milling / Fräsen for energy and utility network
-expansion). Create React App via `react-scripts` 5.0.1, React 17, Tailwind CSS v3, `lucide-react` for
+expansion). Vite 8 (build and dev server), Vitest 5 (tests), React 17, Tailwind CSS v3, `lucide-react` for
 icons. No router. Self-hosted latin-subset fonts.
 
 ## Commands
@@ -19,7 +19,8 @@ icons. No router. Self-hosted latin-subset fonts.
 ## Deploy
 
 `.github/workflows/deploy.yml` publishes to the live site at `ingenieurbuero-auner.com` on **`push` to
-`master`** only, so merging a PR deploys. Pull requests run `.github/workflows/check.yml` (tests and
+`master`** only, so merging a PR deploys. It has a build job (`npm ci`, `npm test`, `npm run build`, then
+`actions/upload-pages-artifact` on `dist/`) and a deploy job (`actions/deploy-pages`) to GitHub Pages. Pull requests run `.github/workflows/check.yml` (tests and
 build) and deploy nothing. Merging to `master` needs explicit human approval.
 
 ## Working notes

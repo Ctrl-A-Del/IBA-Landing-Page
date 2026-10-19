@@ -29,7 +29,7 @@ import data from "../../data/data.json";
 
 // Copy from `data.json` `Footer`; the legal pages are routes of the app (`src/App.jsx`).
 const LEGAL_LINKS = data.Footer.legalLinks.map(({ path, label }) => ({
-  href: `${process.env.PUBLIC_URL}${path}`,
+  href: path,
   label,
 }));
 

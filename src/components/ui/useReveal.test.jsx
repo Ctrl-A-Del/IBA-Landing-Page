@@ -11,7 +11,7 @@
  * the returned `ref` onto an element and writes the returned `isRevealed` boolean to the DOM. The
  * tests never reach into the hook's internals.
  *
- * `src/setupTests.js` (jest-dom) is loaded by CRA's test setup before these run.
+ * `src/setupTests.js` (jest-dom) is loaded before these run.
  */
 import React from "react";
 import { render, act } from "@testing-library/react";
@@ -29,7 +29,7 @@ const Probe = () => {
  * is legitimate rather than mocking our own code.
  */
 const stubReducedMotion = (matches) => {
-  window.matchMedia = jest.fn(() => ({
+  window.matchMedia = vi.fn(() => ({
     matches,
     media: "(prefers-reduced-motion: reduce)",
     onchange: null,
@@ -48,7 +48,7 @@ const stubReducedMotion = (matches) => {
  */
 const stubIntersectionObserver = () => {
   const instances = [];
-  const Stub = jest.fn(function IntersectionObserverStub(callback, options) {
+  const Stub = vi.fn(function IntersectionObserverStub(callback, options) {
     this.callback = callback;
     this.options = options;
     this.observed = [];
@@ -102,7 +102,7 @@ test("with reduced motion, content is visible immediately and nothing is animate
   // Does NOT catch: whether the CSS transition classes themselves are reduced-motion-safe — that is
   // a stylesheet concern, verified against the compiled CSS, not here.
   stubReducedMotion(true);
-  const IntersectionObserverStub = jest.fn();
+  const IntersectionObserverStub = vi.fn();
   window.IntersectionObserver = IntersectionObserverStub;
 
   const { getByTestId } = render(<Probe />);

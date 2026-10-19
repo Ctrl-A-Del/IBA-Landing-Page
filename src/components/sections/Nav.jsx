@@ -48,7 +48,7 @@ const linksFor = (prefix) =>
 // iOS safe area: the bar grows by the home-indicator inset and pads its content clear of it, so the
 // 4.5rem tap row is never squashed, and `<body>` reserves the same sum. Defensive for now:
 // `env(safe-area-inset-bottom)` is 0 unless the viewport meta sets `viewport-fit=cover`
-// (public/index.html, owned by ticket 01).
+// (index.html, owned by ticket 01).
 const CALL_BAR_HEIGHT =
   "h-[calc(4.5rem+env(safe-area-inset-bottom))] pb-[env(safe-area-inset-bottom)]";
 const CALL_BAR_RESERVE = "max-md:pb-[calc(4.5rem+env(safe-area-inset-bottom))]";
@@ -69,7 +69,7 @@ const useReserveCallBarSpace = () => {
 const Nav = ({ onLanding = true }) => {
   const scrolled = useScrolled();
   const isScrolled = scrolled || !onLanding;
-  const prefix = onLanding ? "" : `${process.env.PUBLIC_URL}/`;
+  const prefix = onLanding ? "" : "/";
   const LINKS = linksFor(prefix);
   useReserveCallBarSpace();
 
