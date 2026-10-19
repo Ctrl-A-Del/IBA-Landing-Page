@@ -1,11 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // CRA 5 detects this file and wires `tailwindcss` into its PostCSS pipeline
-  // automatically (react-scripts/config/webpack.config.js: useTailwind).
+  // `postcss.config.js` wires `tailwindcss` and `autoprefixer` into Vite's CSS pipeline.
   //
   // This glob is also why every utility class must appear *literally* in a source file: a class
   // assembled from a string at runtime is never seen by the scanner and never compiled.
-  content: ["./src/**/*.{js,jsx}", "./public/index.html"],
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     extend: {
       colors: {
