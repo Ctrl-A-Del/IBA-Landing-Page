@@ -3,7 +3,7 @@
  * extended with the image-pruning guards in ticket 12).
  *
  * SEAM: the whole page as `src/App.jsx` mounts it (`<App />`), observed only through the DOM a
- * visitor gets, plus the files CRA ships verbatim from `public/`. These are the acceptance boxes
+ * visitor gets, plus the files shipped verbatim from `public/`. These are the acceptance boxes
  * of ticket 11 that can be decided without layout: anchors, image references, the navy-on-orange
  * rule, the tel:/mailto: formats, the no-fabricated-content audit and the untouched legal pages.
  * Everything that needs layout, focus or motion (widths, tab order, lightbox, reduced motion, anchor
@@ -119,7 +119,7 @@ describe("image references", () => {
     expect(sources.length).toBeGreaterThan(0);
 
     sources.forEach((src) => {
-      // PUBLIC_URL is "" under Jest, so both "img/x.png" and "/img/x.png" resolve from public/.
+      // `public/` is served at the site root, so both "img/x.png" and "/img/x.png" resolve from public/.
       const file = path.join(PUBLIC_DIR, src.replace(/^\//, ""));
       expect({ src, shipped: fs.existsSync(file) }).toEqual({ src, shipped: true });
     });

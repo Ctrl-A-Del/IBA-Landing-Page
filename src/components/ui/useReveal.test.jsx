@@ -11,7 +11,7 @@
  * the returned `ref` onto an element and writes the returned `isRevealed` boolean to the DOM. The
  * tests never reach into the hook's internals.
  *
- * `src/setupTests.js` (jest-dom) is loaded by CRA's test setup before these run.
+ * `src/setupTests.js` (jest-dom) is loaded before these run.
  */
 import React from "react";
 import { render, act } from "@testing-library/react";
