@@ -18,3 +18,11 @@ jobs:
       - run: npm ci
       - run: npm test -- --watchAll=false
       - run: npm run build
+
+      - name: Verify Legal page documents
+        run: |
+          for route in impressum datenschutz; do
+            f="build/$route/index.html"
+            test -f "$f" || { echo "Missing $f"; exit 1; }
+            grep -q 'static/css/main\.' "$f" || { echo "$f does not reference the stylesheet bundle"; exit 1; }
+          done
