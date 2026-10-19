@@ -45,7 +45,7 @@ const LandingMain = () => (
  */
 const LEGAL_PAGES = {
   "/impressum": () => (
-    <LegalPage title="Impressum – Ingenieurbüro Auner">
+    <LegalPage title="Impressum – Ingenieurbüro Auner" heading="Impressum">
       <Impressum />
     </LegalPage>
   ),

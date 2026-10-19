@@ -91,7 +91,7 @@ No `screens` override (stock breakpoints), no `darkMode` key (defaults to `media
 - `body { @apply font-body text-neutral-600 antialiased; }`
 - `h1..h6 { @apply font-heading break-words; }`
 
-No CSS custom properties, no `@layer components`, no custom classes. Styling is 100% Tailwind utility classes in JSX — no CSS modules, no CSS-in-JS, and **no inline `style=` anywhere in `src/`**.
+No CSS custom properties, no `@layer components`, no custom classes. Styling is 100% Tailwind utility classes in JSX — no CSS modules, no CSS-in-JS, and **no inline `style=` anywhere in `src/`**. The one sanctioned exception: the `.legal-prose` descendant rules in `src/index.css`, which style the verbatim Legal text of the Legal pages (Impressum, Datenschutzerklärung) that cannot carry utility classes.
 
 `src/components/ui/Section.jsx` variants: `light` → `bg-white`, `muted` → `bg-surface`, `dark` → `bg-brand`, `darkAlt` → `bg-gradient-to-r from-brand to-brand-alt`.
 

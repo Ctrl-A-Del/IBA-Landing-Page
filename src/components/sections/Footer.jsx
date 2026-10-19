@@ -22,7 +22,7 @@ import data from "../../data/data.json";
  *
  * NO CONTACT DETAILS here: the footer repeats none of the phone/email shown in the Kontakt section
  * above, so it cannot drift from Kontakt; a test guards that it has no tel:/mailto: link.
- *  *
+ *
  * THE MOBILE CALL BAR does not cover this footer: ticket 03's `Nav` reserves the bar's height as
  * `<body>` bottom padding below `md`, so the footer's last line scrolls clear of it.
  */

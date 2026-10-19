@@ -27,6 +27,13 @@ const visibleText = (root) => {
   });
   return normalise(copy.textContent);
 };
+// The Impressum fixture is h2-only; LegalPage adds a visually hidden h1 for it (spec story 12).
+// That added h1 is not Legal text, so the comparison leaves it out explicitly.
+const withoutAddedH1 = (root) => {
+  const copy = root.cloneNode(true);
+  copy.querySelectorAll("h1.sr-only").forEach((h) => h.remove());
+  return copy;
+};
 const facts = (root) => ({
   text: visibleText(root),
   links: [...root.querySelectorAll("a")].map((a) => [a.getAttribute("href"), a.getAttribute("rel")]),
@@ -54,12 +61,24 @@ describe.each(["/impressum", "/impressum/"])("the Impressum at %s", (pathname) =
   test("shows the Legal text word for word: text, link targets and heading levels", () => {
     const { container } = renderAt(pathname);
     const main = container.querySelector("main");
-    expect(facts(main)).toEqual(facts(fixture("impressum.html")));
+    expect(facts(withoutAddedH1(main))).toEqual(facts(fixture("impressum.html")));
   });
 
   test("carries the corrected address line", () => {
     const { container } = renderAt(pathname);
     expect(container.querySelector("main").textContent).toContain("41366 Schwalmtal");
+  });
+});
+
+describe.each(["/impressum/", "/datenschutz/"])("the headings at %s", (pathname) => {
+  test("has exactly one h1, and the lower levels equal the fixture's", () => {
+    const { container } = renderAt(pathname);
+    const main = container.querySelector("main");
+    expect(main.querySelectorAll("h1")).toHaveLength(1);
+    const lower = (root) =>
+      [...root.querySelectorAll("h2, h3, h4, h5, h6")].map((h) => [h.tagName, normalise(h.textContent)]);
+    const file = pathname.includes("impressum") ? "impressum.html" : "datenschutz.html";
+    expect(lower(main)).toEqual(lower(fixture(file)));
   });
 });
 
@@ -134,6 +153,16 @@ describe("the Impressum chrome and head", () => {
     renderAt("/impressum/");
     expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
   });
+});
+
+test("the landing title is restored when navigating from a Legal page back to the landing page", () => {
+  document.title = "Ingenieurbüro Auner";
+  const legal = renderAt("/impressum/");
+  expect(document.title).toBe("Impressum – Ingenieurbüro Auner");
+  legal.unmount();
+  const landing = renderAt("/");
+  expect(landing.container.querySelector("main section#start")).not.toBeNull();
+  expect(document.title).toBe("Ingenieurbüro Auner");
 });
 
 describe.each(["/", "/gibt-es-nicht", "/impressum-nicht"])("the landing page at %s", (pathname) => {
