@@ -8,6 +8,7 @@ import Kontakt from "./components/sections/Kontakt";
 import Footer from "./components/sections/Footer";
 import LegalPage from "./components/legal/LegalPage";
 import Impressum from "./components/legal/Impressum";
+import Datenschutz from "./components/legal/Datenschutz";
 
 /**
  * The page — composition and order fixed by DESIGN_PLAN.md §4 (design v2, approved and migrated
@@ -46,6 +47,11 @@ const LEGAL_PAGES = {
   "/impressum": () => (
     <LegalPage title="Impressum – Ingenieurbüro Auner">
       <Impressum />
+    </LegalPage>
+  ),
+  "/datenschutz": () => (
+    <LegalPage title="Datenschutzerklärung – Ingenieurbüro Auner">
+      <Datenschutz />
     </LegalPage>
   ),
 };

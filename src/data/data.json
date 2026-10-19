@@ -93,8 +93,8 @@
   "Footer": {
     "company": "Ingenieurbüro-Auner GmbH",
     "legalLinks": [
-      { "file": "impressum.html", "label": "Impressum" },
-      { "file": "datenschutz.html", "label": "Datenschutzerklärung" }
+      { "path": "/impressum/", "label": "Impressum" },
+      { "path": "/datenschutz/", "label": "Datenschutzerklärung" }
     ]
   }
 }

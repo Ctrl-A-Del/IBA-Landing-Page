@@ -63,6 +63,39 @@ describe.each(["/impressum", "/impressum/"])("the Impressum at %s", (pathname) =
   });
 });
 
+describe.each(["/datenschutz", "/datenschutz/"])("the Datenschutzerklärung at %s", (pathname) => {
+  test("shows the Legal text word for word: text, link targets and heading levels", () => {
+    const { container } = renderAt(pathname);
+    const main = container.querySelector("main");
+    expect(facts(main)).toEqual(facts(fixture("datenschutz.html")));
+  });
+
+  test("has the nav and footer chrome, a solid nav and the Datenschutz tab title, opened at the top", () => {
+    document.title = "Ingenieurbüro Auner";
+    const { container, unmount } = renderAt(pathname);
+    expect(container.querySelector("nav")).toHaveAttribute("data-state", "solid");
+    expect(container.querySelector("footer")).not.toBeNull();
+    expect(document.title).toBe("Datenschutzerklärung – Ingenieurbüro Auner");
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
+    unmount();
+    expect(document.title).toBe("Ingenieurbüro Auner");
+  });
+});
+
+describe.each(["/", "/impressum/", "/datenschutz/"])("the footer legal links at %s", (pathname) => {
+  test("lead to /impressum/ and /datenschutz/", () => {
+    const { container } = renderAt(pathname);
+    const links = [...container.querySelectorAll("footer a")].map((a) => [
+      a.textContent,
+      a.getAttribute("href"),
+    ]);
+    expect(links).toEqual([
+      ["Impressum", "/impressum/"],
+      ["Datenschutzerklärung", "/datenschutz/"],
+    ]);
+  });
+});
+
 describe("the Impressum chrome and head", () => {
   const CALL_NAME = "Anrufen: 0176 618 77 599";
 

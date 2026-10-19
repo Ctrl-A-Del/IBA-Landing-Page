@@ -14,7 +14,6 @@
  */
 import fs from "fs";
 import path from "path";
-import crypto from "crypto";
 import React from "react";
 import { render, within } from "@testing-library/react";
 import App from "./App";
@@ -321,19 +320,11 @@ describe("no fabricated content (C2, C7, §2.7)", () => {
 });
 
 describe("legal pages and page head", () => {
-  // SHA-256 of master's files (e5ffdd6), line endings normalised to LF so a CRLF checkout matches.
-  // The Impressum pin was replaced by the fixture comparison in `LegalPages.test.jsx` (legal-pages
-  // ticket 01); the Datenschutz pin goes the same way in ticket 02.
-  const MASTER = {
-    "datenschutz.html": "28e0e37b78cebd7c9feedb1b8a5f1fb6aa4cdedad399e2e8efb4d3db65231d62",
-  };
-
-  test.each(Object.keys(MASTER))("%s is unchanged from master and linked from the footer", (file) => {
-    const text = fs.readFileSync(path.join(PUBLIC_DIR, file), "utf8").replace(/\r\n/g, "\n");
-    expect(crypto.createHash("sha256").update(text, "utf8").digest("hex")).toBe(MASTER[file]);
+  // The Legal text itself is guarded by the fixture comparisons in `LegalPages.test.jsx`.
+  test("the footer links to the Impressum and the Datenschutzerklärung pages", () => {
     const { footer } = renderPage();
     const hrefs = [...footer.querySelectorAll("a")].map((a) => a.getAttribute("href"));
-    expect(hrefs).toContain(`/${file}`);
+    expect(hrefs).toEqual(["/impressum/", "/datenschutz/"]);
   });
 
   // SOURCE GUARD ONLY: this checks what goes into the build (the HTML template and every source
