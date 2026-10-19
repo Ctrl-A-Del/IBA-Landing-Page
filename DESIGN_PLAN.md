@@ -343,7 +343,7 @@ If implementation turns up a genuine conflict with a decision in §3, raise it w
 - [ ] Footer with the logo plate
 
 ### Housekeeping (D4)
-- [x] Fix the four broken favicon references in `public/index.html`
+- [x] Fix the four broken favicon references in `public/index.html` (replaced by `favicon.ico` + `apple-touch-icon.png` built from the Phoenix mark, `design-assets/source/README.md`)
 - [x] Fill the meta description
 - [x] Add Open Graph + Twitter card tags
 - [x] Prune dead images **only after** the design lands (ticket 12). Pruned set is now `emblem.png`, `fraese.png`, `jan.png`, `klaus.png`, `marcus.png`; the Logo plate moved to `design-assets/source/` (`.scratch/emblem-asset/spec.md`)

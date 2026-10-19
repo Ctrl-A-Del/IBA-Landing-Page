@@ -11,3 +11,7 @@ Datenschutzerklärung. Each has its own address on the site and shares the theme
 
 **Legal text** — The wording of a Legal page, as supplied by the company and its legal generators. It
 is never edited as part of design work; only the company changes it.
+**Phoenix mark** — The phoenix cut from the Emblem as a circle, without the gear ring and with raised
+contrast. It exists only to build the Favicon.
+
+**Favicon** — The browser-tab and home-screen icon set, built from the Phoenix mark.
