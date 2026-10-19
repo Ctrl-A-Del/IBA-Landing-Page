@@ -30,7 +30,7 @@ import data from "../../data/data.json";
 
 // Copy from `data.json` `Footer`; the legal pages are static files in `public/`.
 const LEGAL_LINKS = data.Footer.legalLinks.map(({ file, label }) => ({
-  href: `${process.env.PUBLIC_URL}/${file}`,
+  href: `/${file}`,
   label,
 }));
 

@@ -5,7 +5,7 @@
  *
  * SEAM: the rendered `<Footer />` component, observed through the DOM a visitor (or a screen reader)
  * gets: the footer landmark, its links, the emblem image and the text. Link targets are additionally
- * resolved against `public/`, the directory CRA serves verbatim, so "the link resolves" means "the
+ * resolved against `public/`, the directory shipped to the site root verbatim, so "the link resolves" means "the
  * file the href names is shipped". No Tailwind class string is asserted: the navy backdrop and the
  * clearance above the mobile call bar cannot be observed in jsdom and are verified in the browser
  * pass recorded in the ticket.
@@ -73,12 +73,12 @@ test.each([
   ["2031-05-01T12:00:00Z", "2031"],
   ["2040-07-01T12:00:00Z", "2040"],
 ])("the copyright line shows the year the system clock reads (%s)", (now, year) => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
   try {
-    jest.setSystemTime(new Date(now));
+    vi.setSystemTime(new Date(now));
     const { footer } = renderFooter();
     expect(footer).toHaveTextContent(`© ${year} Ingenieurbüro-Auner GmbH`);
   } finally {
-    jest.useRealTimers();
+    vi.useRealTimers();
   }
 });
