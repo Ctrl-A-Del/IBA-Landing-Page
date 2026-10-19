@@ -82,3 +82,53 @@
   }
 }
 
+/*
+ * Legal pages (spec .scratch/legal-pages): a small set of descendant rules for the Legal text,
+ * under one wrapper class, using the existing tokens. No typography plugin.
+ */
+.legal-prose h1 {
+  @apply mb-8 text-display-lg text-ink-900;
+}
+
+.legal-prose h2 {
+  @apply mb-6 text-display-md text-ink-900;
+}
+
+.legal-prose h3 {
+  @apply mb-3 mt-10 font-heading text-body-lg font-bold text-ink-900;
+}
+
+.legal-prose h4,
+.legal-prose h5,
+.legal-prose h6 {
+  @apply mb-2 mt-8 font-heading text-body font-bold text-ink-900;
+}
+
+.legal-prose p,
+.legal-prose ul,
+.legal-prose ol {
+  @apply mb-5 text-body text-ink-600;
+}
+
+.legal-prose ul {
+  @apply list-disc pl-6;
+}
+
+.legal-prose ol {
+  @apply list-decimal pl-6;
+}
+
+.legal-prose strong {
+  @apply font-semibold text-ink-700;
+}
+
+/* Bold inside a heading (the Datenschutz text wraps its headings in <strong>) keeps the heading's own size and colour. */
+.legal-prose h1 strong,
+.legal-prose h2 strong {
+  font-weight: inherit;
+  color: inherit;
+}
+
+.legal-prose a {
+  @apply text-ink-900 underline underline-offset-4 hover:text-signal-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink-900;
+}

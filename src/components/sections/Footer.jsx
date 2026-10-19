@@ -22,15 +22,14 @@ import data from "../../data/data.json";
  *
  * NO CONTACT DETAILS here: the footer repeats none of the phone/email shown in the Kontakt section
  * above, so it cannot drift from Kontakt; a test guards that it has no tel:/mailto: link.
- * The legal pages in `public/` are linked, not touched.
  *
  * THE MOBILE CALL BAR does not cover this footer: ticket 03's `Nav` reserves the bar's height as
  * `<body>` bottom padding below `md`, so the footer's last line scrolls clear of it.
  */
 
-// Copy from `data.json` `Footer`; the legal pages are static files in `public/`.
-const LEGAL_LINKS = data.Footer.legalLinks.map(({ file, label }) => ({
-  href: `/${file}`,
+// Copy from `data.json` `Footer`; the legal pages are routes of the app (`src/App.jsx`).
+const LEGAL_LINKS = data.Footer.legalLinks.map(({ path, label }) => ({
+  href: path,
   label,
 }));
 

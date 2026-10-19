@@ -31,10 +31,15 @@ import { FOCUS_ON_DARK } from "./focus";
  *
  * THE EMBLEM is `../ui/Emblem`, shared with the footer (11.1/R6) so the brand mark has one source of truth
  * (the `emblem.png` asset); this file only sizes it.
+ *
+ * `onLanding` (default `true`): on the landing page the section links are same-page `#anchors` and
+ * the nav is transparent over the hero until scrolled. On a Legal page it is `false`: the links lead
+ * to the landing page's sections (`/#anchor`) and the nav is always solid, since there is no hero.
  */
 
 const { label: NAV_LABEL, homeLabel: HOME_LABEL, links } = data.Nav;
-const LINKS = links.map(({ anchor, label }) => ({ href: `#${anchor}`, label }));
+const linksFor = (prefix) =>
+  links.map(({ anchor, label }) => ({ href: `${prefix}#${anchor}`, label }));
 
 // The bar's height and the space `<body>` reserves for it are the same literal, written twice in
 // this one file because Tailwind only compiles class names that appear verbatim (DESIGN_PLAN §2.5).
@@ -56,8 +61,16 @@ const useReserveCallBarSpace = () => {
   }, []);
 };
 
-const Nav = () => {
-  const isScrolled = useScrolled();
+/**
+ * `onLanding` (default) links the sections as same-page `#anchors`. On a Legal page it is `false`:
+ * the links then lead to the landing page's sections (`/#anchor`), and the bar is always solid,
+ * since there is no hero for it to be transparent over.
+ */
+const Nav = ({ onLanding = true }) => {
+  const scrolled = useScrolled();
+  const isScrolled = scrolled || !onLanding;
+  const prefix = onLanding ? "" : "/";
+  const LINKS = linksFor(prefix);
   useReserveCallBarSpace();
 
   return (
@@ -71,7 +84,7 @@ const Nav = () => {
       >
         <div className="mx-auto flex h-full w-full max-w-container items-center gap-2 px-5 sm:gap-6 sm:px-6 lg:px-8">
           <a
-            href="#start"
+            href={`${prefix}#start`}
             aria-label={HOME_LABEL}
             className={`shrink-0 rounded-full ${FOCUS_ON_DARK}`}
           >

@@ -4,19 +4,15 @@
  * name as text, and a copyright line.
  *
  * SEAM: the rendered `<Footer />` component, observed through the DOM a visitor (or a screen reader)
- * gets: the footer landmark, its links, the emblem image and the text. Link targets are additionally
- * resolved against `public/`, the directory shipped to the site root verbatim, so "the link resolves" means "the
- * file the href names is shipped". No Tailwind class string is asserted: the navy backdrop and the
+ * gets: the footer landmark, its links, the emblem image and the text. The Legal pages are routes of
+ * the app (`src/App.jsx`, tested in `src/LegalPages.test.jsx`), so only the hrefs are asserted here.
+ * No Tailwind class string is asserted: the navy backdrop and the
  * clearance above the mobile call bar cannot be observed in jsdom and are verified in the browser
  * pass recorded in the ticket.
  */
-import fs from "fs";
-import path from "path";
 import React from "react";
 import { render, within } from "@testing-library/react";
 import Footer from "./Footer";
-
-const PUBLIC_DIR = path.resolve(__dirname, "../../../public");
 
 let originalGetComputedStyle;
 
@@ -42,16 +38,15 @@ test("renders the page's footer landmark", () => {
   expect(footer.tagName).toBe("FOOTER");
 });
 
-test.each([
-  ["Impressum", "impressum.html"],
-  ["Datenschutzerklärung", "datenschutz.html"],
-])("links to the %s page, and the linked file is shipped in public/", (label, file) => {
+test("lists exactly the Impressum and Datenschutzerklärung links, at the Legal pages' addresses", () => {
   const { footer } = renderFooter();
-  const link = within(footer).getByRole("link", { name: label });
-  const href = link.getAttribute("href");
-
-  expect(href).toBe(`/${file}`);
-  expect(fs.existsSync(path.join(PUBLIC_DIR, href))).toBe(true);
+  const links = within(footer)
+    .getAllByRole("link")
+    .map((a) => [a.textContent, a.getAttribute("href")]);
+  expect(links).toEqual([
+    ["Impressum", "/impressum/"],
+    ["Datenschutzerklärung", "/datenschutz/"],
+  ]);
 });
 
 test("the emblem is decorative: the company name sits beside it as text, not as alt", () => {

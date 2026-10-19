@@ -6,6 +6,9 @@ import WarumWir from "./components/sections/WarumWir";
 import Team from "./components/sections/Team";
 import Kontakt from "./components/sections/Kontakt";
 import Footer from "./components/sections/Footer";
+import LegalPage from "./components/legal/LegalPage";
+import Impressum from "./components/legal/Impressum";
+import Datenschutz from "./components/legal/Datenschutz";
 
 /**
  * The page — composition and order fixed by DESIGN_PLAN.md §4 (design v2, approved and migrated
@@ -25,19 +28,45 @@ import Footer from "./components/sections/Footer";
  * The `id`s are the anchors listed in DESIGN_PLAN.md §4.1; the nav links to them. All copy comes
  * from `src/data/data.json`.
  */
-const App = () => (
-  <>
-    <Nav />
-    <main>
-      <Hero />
-      <Verfahren />
-      <Einsatzbereiche />
-      <WarumWir />
-      <Team />
-      <Kontakt />
-    </main>
-    <Footer />
-  </>
+const LandingMain = () => (
+  <main>
+    <Hero />
+    <Verfahren />
+    <Einsatzbereiche />
+    <WarumWir />
+    <Team />
+    <Kontakt />
+  </main>
 );
+
+/**
+ * Legal pages, picked from the path (no router library). The trailing slash is optional; any other
+ * path renders the landing page. Links between pages are plain anchors (full page loads).
+ */
+const LEGAL_PAGES = {
+  "/impressum": () => (
+    <LegalPage title="Impressum – Ingenieurbüro Auner" heading="Impressum">
+      <Impressum />
+    </LegalPage>
+  ),
+  "/datenschutz": () => (
+    <LegalPage title="Datenschutzerklärung – Ingenieurbüro Auner">
+      <Datenschutz />
+    </LegalPage>
+  ),
+};
+
+const legalPageFor = (pathname) => LEGAL_PAGES[pathname.replace(/\/+$/, "")];
+
+const App = () => {
+  const Legal = legalPageFor(window.location.pathname);
+  return (
+    <>
+      <Nav onLanding={!Legal} />
+      {Legal ? <Legal /> : <LandingMain />}
+      <Footer />
+    </>
+  );
+};
 
 export default App;

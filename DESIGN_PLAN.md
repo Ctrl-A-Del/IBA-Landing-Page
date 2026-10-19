@@ -63,7 +63,7 @@ Facts below were verified against the working tree. Do not re-derive them; do re
 ### 1.2 Deploy & branch rules
 
 - Hosting: **GitHub Pages** with custom domain `ingenieurbuero-auner.com`, set in repo Settings (Pages source: "GitHub Actions"); `public/CNAME` is inert under that source.
-- `.github/workflows/deploy.yml`: triggers on **`push` to `master`** only. It has a build job (`npm ci`, `npm test`, `npm run build`, then `actions/upload-pages-artifact` on `dist/`) and a deploy job (`actions/deploy-pages`).
+- `.github/workflows/deploy.yml`: triggers on **`push` to `master`** only. It has a build job (`npm ci`, `npm test`, `npm run build` (Vite build plus `scripts/copy-route-documents.js`), then `actions/upload-pages-artifact` on `dist/`) and a deploy job (`actions/deploy-pages`).
 - `.github/workflows/check.yml` runs tests and the build on pull requests and deploys nothing.
 - **Therefore: merging to `master` (a push) publishes to the live site.** Opening a PR or pushing a feature branch does not.
 - `dist/` is generated and is listed in `.gitignore` (`/dist`) — it is not tracked. No `gh-pages` / `predeploy` / `deploy` npm script exists.
@@ -91,7 +91,7 @@ No `screens` override (stock breakpoints), no `darkMode` key (defaults to `media
 - `body { @apply font-body text-neutral-600 antialiased; }`
 - `h1..h6 { @apply font-heading break-words; }`
 
-No CSS custom properties, no `@layer components`, no custom classes. Styling is 100% Tailwind utility classes in JSX — no CSS modules, no CSS-in-JS, and **no inline `style=` anywhere in `src/`**.
+No CSS custom properties, no `@layer components`, no custom classes. Styling is 100% Tailwind utility classes in JSX — no CSS modules, no CSS-in-JS, and **no inline `style=` anywhere in `src/`**. The one sanctioned exception: the `.legal-prose` descendant rules in `src/index.css`, which style the verbatim Legal text of the Legal pages (Impressum, Datenschutzerklärung) that cannot carry utility classes.
 
 `src/components/ui/Section.jsx` variants: `light` → `bg-white`, `muted` → `bg-surface`, `dark` → `bg-brand`, `darkAlt` → `bg-gradient-to-r from-brand to-brand-alt`.
 
@@ -107,7 +107,7 @@ No CSS custom properties, no `@layer components`, no custom classes. Styling is 
 | `services` | `services.jsx` (38 lines) | `variant="darkAlt"`, 3 columns, each a gradient-filled circle (`from-accent-from to-accent-to`) with a lucide icon. 1/3 cols |
 | `team` | `Team.jsx` (33 lines) | `variant="dark"`, 3 portraits, `aspect-[3/4] object-cover object-top`, `rounded-[20px]`. 1/2/3 cols |
 | `contact` | `contact.jsx` (40 lines) | `variant="dark"`, `tel:` and `mailto:` links with `Phone` / `Mail` icons. **No form, no `useState`** |
-| — | `Footer.jsx` (26 lines) | Flat link list to `/datenschutz.html` and `/impressum.html` |
+| — | `Footer.jsx` (26 lines) | Flat link list to `/impressum/` and `/datenschutz/` (the Legal pages) |
 
 No router. No `<nav>` element anywhere — the sections have `id`s and `scroll-mt-24`, but **nothing links to them**.
 
@@ -179,13 +179,13 @@ The machine is presented via a **CAD render** with **annotations baked in**, and
 
 - **Ingenieurbüro-Auner GmbH**, Tulpenweg 12, 41366 Schwalmtal (NRW). Registergericht Mönchengladbach, HRB 23617, vertreten durch Marcus Auner.
 - Field: trench milling for energy/utility network expansion. Tagline: `"Wir schaufeln nicht – wir fräsen"`.
-- `public/impressum.html` and `public/datenschutz.html` are static HTML. `impressum.html` shows a likely typo: `41366 Tulpenweg`. `datenschutz.html` documents GitHub Pages / GitHub Inc. as processor.
+- The two Legal pages (Impressum, Datenschutzerklärung) are React components at `/impressum/` and `/datenschutz/`; the old `public/*.html` files are removed. Their Legal text is untouchable; verbatim copies are in `src/__fixtures__/`. The address typo (`41366 Tulpenweg`) was corrected by the owner to `41366 Schwalmtal`. The Datenschutzerklärung documents GitHub Pages / GitHub Inc. as processor.
 - `README.md` is the **unmodified** "React JS Landing Page Template" readme (Issaaf Kattan; inspired by Free-CSS "Interact") — it still instructs `yarn` and mentions EmailJS, which is no longer used anywhere.
 
 ### 1.9 Known defects to fix in this branch
 
-- `public/index.html` references **four favicons that do not exist**: `img/favicon.ico`, `img/apple-touch-icon.png`, `img/apple-touch-icon-72x72.png`, `img/apple-touch-icon-114x114.png`.
-- `public/index.html` meta description is **empty**; no Open Graph / Twitter card tags → shared links render as a bare URL.
+- `index.html` references **four favicons that do not exist**: `img/favicon.ico`, `img/apple-touch-icon.png`, `img/apple-touch-icon-72x72.png`, `img/apple-touch-icon-114x114.png`.
+- `index.html` meta description is **empty**; no Open Graph / Twitter card tags → shared links render as a bare URL.
 - `<meta name="theme-color" content="#0a1f2e" />` is already correct; `<html lang="de">` and `<title>Ingenieurbüro Auner</title>` are fine.
 - Contrast pair measured: white on `#f08a24` ≈ **2.5:1** (fails WCAG AA) · `#0a1f2e` on `#f08a24` ≈ **6.7:1** (passes AA). This is why the CTA is orange with navy text and never the reverse.
 
@@ -198,11 +198,11 @@ The machine is presented via a **CAD render** with **annotations baked in**, and
 3. **Tailwind is wired through `postcss.config.js`** (`tailwindcss` + `autoprefixer`); keep it in place.
 4. **Do not re-add Google Fonts / any font CDN `<link>`.** Fonts are self-hosted, latin subset only.
 5. **New Tailwind classes only compile if they appear in the `content` globs** (`./index.html`, `./src/**/*.{js,jsx}`). Don't build class names dynamically from strings.
-6. **Do not touch** `public/impressum.html` or `public/datenschutz.html`.
+6. **The Legal pages are in scope for layout and theme, but the Legal text is untouchable.** Never reword, reformat or "fix" it; only the company changes it. `src/__fixtures__/impressum.html` and `datenschutz.html` are the verbatim reference, and a test guards the text.
 7. **No fabricated content:** no invented references, testimonials, project counts, performance figures or certifications. The machine is a concept (§1.7).
 8. **Never put white text on the orange CTA** (§1.9).
 9. **`npm` only** — there is no `yarn.lock`; keep `package-lock.json` in sync; CI runs `npm ci`.
-10. Use `npm start` / `npm run build` / `npm test` — nothing else.
+10. Use `npm start` / `npm run build` / `npm test` — nothing else. `npm run build` is the Vite build followed by `scripts/copy-route-documents.js`, which creates the clean-path Legal page documents (see `docs/adr/0002-clean-paths-by-copying-the-built-document.md`).
 
 ---
 
@@ -214,7 +214,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 
 | # | Decision | Rationale |
 | --- | --- | --- |
-| **A1** | **Full visual overhaul of the landing page** — new layout system, typography scale, colour treatment and imagery style. Landing page only: `public/impressum.html` and `public/datenschutz.html` are untouched. | `R1 Q1a` |
+| **A1** | **Full visual overhaul of the landing page** — new layout system, typography scale, colour treatment and imagery style. The Legal pages join the same theme and are in scope; the Legal text is untouched. | `R1 Q1a`, amended by the legal-pages work |
 | **A2** | **Primary KPI = a phone call or email.** Secondary = credibility/modernity (so the site is not dismissed as a hobby page). Every section is measured against whether it moves a visitor toward calling. | `R1 Q2a+c` |
 | **A3** | **Primary audience = Bauunternehmen / Generalunternehmer** who subcontract trench milling. No co-primary audience; utility operators are not a design lane. | `R1 Q3a` |
 
@@ -240,7 +240,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | **C2** | **The machine is a concept / development project.** All copy stays in an honest register (*Entwicklung*, *geplant*, *soll*). No performance promises, no completed-project claims, no invented references. | `R3 Q2a`. See §1.7 — a page that says "we are building this" is more credible to a Bauunternehmer than one implying a machine is already on his Baustelle |
 | **C3** | **Agreed page structure** (replaces the current order) — details in §4. | `R3 Q3a` |
 | **C4** | The four modules baked into `fraese.png` are **reproduced as real HTML text** (numerals 01–04, name, one line each) alongside the render. No clean/un-annotated render is available. | `R3 Q6a`. At mobile widths the whole 1342 px raster scales to ~¼, putting its baked-in text at ~4 px — unreadable, and invisible to search engines and screen readers |
-| **C5** | **No contact form.** Phone-first. The email uses a `mailto:` with a **pre-filled subject** plus a **copy-to-clipboard affordance**. | `R2 Q3c`. A form needs a third-party processor, which would force an edit to `datenschutz.html` — a file excluded from scope by `A1` |
+| **C5** | **No contact form.** Phone-first. The email uses a `mailto:` with a **pre-filled subject** plus a **copy-to-clipboard affordance**. | `R2 Q3c`. A form needs a third-party processor, which would force an edit to the Datenschutzerklärung Legal text, which is untouchable (`A1`) |
 | **C6** | **Persistent mobile call bar:** a fixed bottom "Anrufen" bar with the number, shown **below the `md` breakpoint only**. | `R3 Q7a`. With the call as the sole KPI (`A2`), hiding the number behind a scroll is the most expensive thing the page can do. No WhatsApp button — it would advertise a channel the company does not publish |
 | **C7** | **No testimonials / references section**, because it would require fabricated content. | Derived from `C2` |
 | **C8** | **The agent writes the new German copy directly in the prototype**, with every changed string flagged so it can be diffed against `data.json` and edited in place. `data.json` stays untouched until approval. | `R3 Q8a` |
@@ -359,7 +359,7 @@ If implementation turns up a genuine conflict with a decision in §3, raise it w
 
 ## 7. Explicitly rejected / not doing
 
-- ❌ A contact form (C5) — would require a third-party processor and a `datenschutz.html` edit.
+- ❌ A contact form (C5) — would require a third-party processor and an edit to the Datenschutzerklärung Legal text.
 - ❌ Testimonials, references or logo walls (C7) — no real content exists; fabricating it would break `C2`.
 - ❌ WhatsApp CTA (C6) — advertises a channel that isn't published.
 - ❌ Moving Team onto a light background (B7 overruled the agent's recommendation).
