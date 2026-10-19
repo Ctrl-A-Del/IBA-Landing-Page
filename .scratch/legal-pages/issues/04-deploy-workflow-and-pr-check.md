@@ -4,7 +4,7 @@
 
 **Blocked by:** 03
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] Deploy workflow contains no third-party action and runs `npm run build`
 - [ ] Deploy still triggers only on `push` to `master`

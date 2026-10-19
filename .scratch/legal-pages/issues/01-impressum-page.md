@@ -6,7 +6,7 @@ First step: create `design/legal-pages` from `master` and make sure the owner's 
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] Branch `design/legal-pages` exists with the address fix committed
 - [ ] Mounted-app test at the Impressum path: Legal text equals the fixture (whitespace normalised only)

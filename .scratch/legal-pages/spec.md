@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: resolved
 Type: enhancement
 
 # Legal pages in the site theme

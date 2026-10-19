@@ -4,7 +4,7 @@
 
 **Blocked by:** 01, 02, 03, 04, 05
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [x] `/impressum/` and `/datenschutz/` answer with HTTP 200 in the production build and the fonts load
 - [x] No sideways scroll on both pages at about 375, 768 and 1280 px; desktop line length is readable

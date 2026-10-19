@@ -4,7 +4,7 @@
 
 **Blocked by:** 01
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] Mounted-app test at the Datenschutz path: Legal text, link targets and heading levels equal the fixture
 - [ ] Document title is set for this page

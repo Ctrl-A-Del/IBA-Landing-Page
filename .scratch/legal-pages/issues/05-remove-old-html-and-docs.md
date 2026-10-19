@@ -4,7 +4,7 @@
 
 **Blocked by:** 01, 02, 03
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] `public/impressum.html` and `public/datenschutz.html` no longer exist; no remaining references to them in src, docs or tests
 - [ ] `DESIGN_PLAN.md` amended as described

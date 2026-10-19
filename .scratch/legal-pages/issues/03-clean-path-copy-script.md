@@ -4,7 +4,7 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] Test runs the script against a temporary directory with a stand-in built document and asserts both route documents exist with identical content
 - [ ] Test asserts a missing source document makes the script fail
