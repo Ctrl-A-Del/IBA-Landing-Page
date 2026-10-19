@@ -24,5 +24,5 @@ jobs:
           for route in impressum datenschutz; do
             f="dist/$route/index.html"
             test -f "$f" || { echo "Missing $f"; exit 1; }
-            grep -q 'static/css/main\.' "$f" || { echo "$f does not reference the stylesheet bundle"; exit 1; }
+            grep -Eq 'href="/assets/[^"]+\.css"' "$f" || { echo "$f does not reference the stylesheet bundle"; exit 1; }
           done
