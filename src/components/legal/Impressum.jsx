@@ -1,6 +1,6 @@
 /**
- * The Impressum Legal text, transcribed word for word from the original `public/impressum.html`
- * (verbatim copy: `src/__fixtures__/impressum.html`). Do not reword, reformat or "fix" it; the
+ * The Impressum Legal text, transcribed word for word from the verbatim fixture
+ * `src/__fixtures__/impressum.html` (the original static file has been removed). Do not reword, reformat or "fix" it; the
  * mounted-app test in `src/LegalPages.test.jsx` compares it with the fixture.
  */
 const Impressum = () => (

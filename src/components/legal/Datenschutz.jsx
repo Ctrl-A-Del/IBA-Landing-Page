@@ -1,6 +1,6 @@
 /**
- * The Datenschutzerklärung Legal text, transcribed word for word from the original
- * `public/datenschutz.html` (verbatim copy: `src/__fixtures__/datenschutz.html`). Do not reword,
+ * The Datenschutzerklärung Legal text, transcribed word for word from the verbatim
+ * fixture `src/__fixtures__/datenschutz.html` (the original static file has been removed). Do not reword,
  * de-duplicate, re-level or "fix" it; the mounted-app test in `src/LegalPages.test.jsx` compares it
  * with the fixture (text, link targets, heading levels and order).
  *

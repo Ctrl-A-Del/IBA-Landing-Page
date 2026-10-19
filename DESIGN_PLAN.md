@@ -63,9 +63,9 @@ There is **no** `postcss.config.js` anywhere in the repo.
 ### 1.2 Deploy & branch rules
 
 - Hosting: **GitHub Pages** with custom domain, `CNAME` = `ingenieurbuero-auner.com`.
-- `.github/workflows/deploy.yml`: triggers on **`push` to `master`** *and* **`pull_request` to `master`**.
-- It runs `tanwanimohit/deploy-react-to-ghpages@v1.0.1`, which does `npm i` → `npm ci` → `npx react-scripts build`, then pushes `build/` to the `gh-pages` branch.
-- **Therefore: opening a PR to `master` publishes to the live site.** Pushing a feature branch does not.
+- `.github/workflows/deploy.yml`: triggers on **`push` to `master`** only. It uses first-party actions and plain `git`: `npm ci` → `npm run build` (CRA build plus `scripts/copy-route-documents.js`), then it force-pushes `build/` to the `gh-pages` branch. (It originally also ran on `pull_request` via a third-party deploy action; that was replaced.)
+- `.github/workflows/check.yml` runs tests and the build on pull requests and deploys nothing.
+- **Therefore: merging or pushing to `master` publishes to the live site.** Pull requests and feature branches do not.
 - `build/` is generated and is listed in `.gitignore` (`/build`) — it exists on disk locally but is not tracked. No `gh-pages` / `predeploy` / `deploy` npm script exists.
 - Git state at time of writing: current branch `master`, clean tree, HEAD `e5ffdd6 Fix images`. The earlier `refactor/tailwind-overhaul` branch was merged via PR #1, and `REFACTOR_PLAN.md` was deliberately deleted in `d9d1afd remove migration plan`.
 
@@ -107,7 +107,7 @@ No CSS custom properties, no `@layer components`, no custom classes. Styling is 
 | `services` | `services.jsx` (38 lines) | `variant="darkAlt"`, 3 columns, each a gradient-filled circle (`from-accent-from to-accent-to`) with a lucide icon. 1/3 cols |
 | `team` | `Team.jsx` (33 lines) | `variant="dark"`, 3 portraits, `aspect-[3/4] object-cover object-top`, `rounded-[20px]`. 1/2/3 cols |
 | `contact` | `contact.jsx` (40 lines) | `variant="dark"`, `tel:` and `mailto:` links with `Phone` / `Mail` icons. **No form, no `useState`** |
-| — | `Footer.jsx` (26 lines) | Flat link list to `/datenschutz.html` and `/impressum.html` |
+| — | `Footer.jsx` (26 lines) | Flat link list to `/impressum/` and `/datenschutz/` (the Legal pages) |
 
 No router. No `<nav>` element anywhere — the sections have `id`s and `scroll-mt-24`, but **nothing links to them**.
 
@@ -179,7 +179,7 @@ The machine is presented via a **CAD render** with **annotations baked in**, and
 
 - **Ingenieurbüro-Auner GmbH**, Tulpenweg 12, 41366 Schwalmtal (NRW). Registergericht Mönchengladbach, HRB 23617, vertreten durch Marcus Auner.
 - Field: trench milling for energy/utility network expansion. Tagline: `"Wir schaufeln nicht – wir fräsen"`.
-- `public/impressum.html` and `public/datenschutz.html` are static HTML. `impressum.html` shows a likely typo: `41366 Tulpenweg`. `datenschutz.html` documents GitHub Pages / GitHub Inc. as processor.
+- The two Legal pages (Impressum, Datenschutzerklärung) are React components at `/impressum/` and `/datenschutz/`; the old `public/*.html` files are removed. Their Legal text is untouchable; verbatim copies are in `src/__fixtures__/`. The address typo (`41366 Tulpenweg`) was corrected by the owner to `41366 Schwalmtal`. The Datenschutzerklärung documents GitHub Pages / GitHub Inc. as processor.
 - `README.md` is the **unmodified** "React JS Landing Page Template" readme (Issaaf Kattan; inspired by Free-CSS "Interact") — it still instructs `yarn` and mentions EmailJS, which is no longer used anywhere.
 
 ### 1.9 Known defects to fix in this branch
@@ -198,11 +198,11 @@ The machine is presented via a **CAD render** with **annotations baked in**, and
 3. **Do not add `postcss.config.js`** — CRA sets PostCSS `config: false` and would ignore it; CRA auto-enables Tailwind because `tailwind.config.js` exists at the repo root.
 4. **Do not re-add Google Fonts / any font CDN `<link>`.** Fonts are self-hosted, latin subset only.
 5. **New Tailwind classes only compile if they appear in the `content` globs** (`./src/**/*.{js,jsx}`, `./public/index.html`). Don't build class names dynamically from strings.
-6. **Do not touch** `public/impressum.html` or `public/datenschutz.html`.
+6. **The Legal pages are in scope for layout and theme, but the Legal text is untouchable.** Never reword, reformat or "fix" it; only the company changes it. `src/__fixtures__/impressum.html` and `datenschutz.html` are the verbatim reference, and a test guards the text.
 7. **No fabricated content:** no invented references, testimonials, project counts, performance figures or certifications. The machine is a concept (§1.7).
 8. **Never put white text on the orange CTA** (§1.9).
 9. **`npm` only** — there is no `yarn.lock`; keep `package-lock.json` in sync; CI runs `npm ci`.
-10. Use `npm start` / `npm run build` / `npm test` — nothing else.
+10. Use `npm start` / `npm run build` / `npm test` — nothing else. `npm run build` is the CRA build followed by `scripts/copy-route-documents.js`, which creates the clean-path Legal page documents (see `docs/adr/0001-clean-paths-by-copying-the-built-document.md`).
 
 ---
 
@@ -214,7 +214,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 
 | # | Decision | Rationale |
 | --- | --- | --- |
-| **A1** | **Full visual overhaul of the landing page** — new layout system, typography scale, colour treatment and imagery style. Landing page only: `public/impressum.html` and `public/datenschutz.html` are untouched. | `R1 Q1a` |
+| **A1** | **Full visual overhaul of the landing page** — new layout system, typography scale, colour treatment and imagery style. The Legal pages join the same theme and are in scope; the Legal text is untouched. | `R1 Q1a`, amended by the legal-pages work |
 | **A2** | **Primary KPI = a phone call or email.** Secondary = credibility/modernity (so the site is not dismissed as a hobby page). Every section is measured against whether it moves a visitor toward calling. | `R1 Q2a+c` |
 | **A3** | **Primary audience = Bauunternehmen / Generalunternehmer** who subcontract trench milling. No co-primary audience; utility operators are not a design lane. | `R1 Q3a` |
 
@@ -240,7 +240,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | **C2** | **The machine is a concept / development project.** All copy stays in an honest register (*Entwicklung*, *geplant*, *soll*). No performance promises, no completed-project claims, no invented references. | `R3 Q2a`. See §1.7 — a page that says "we are building this" is more credible to a Bauunternehmer than one implying a machine is already on his Baustelle |
 | **C3** | **Agreed page structure** (replaces the current order) — details in §4. | `R3 Q3a` |
 | **C4** | The four modules baked into `fraese.png` are **reproduced as real HTML text** (numerals 01–04, name, one line each) alongside the render. No clean/un-annotated render is available. | `R3 Q6a`. At mobile widths the whole 1342 px raster scales to ~¼, putting its baked-in text at ~4 px — unreadable, and invisible to search engines and screen readers |
-| **C5** | **No contact form.** Phone-first. The email uses a `mailto:` with a **pre-filled subject** plus a **copy-to-clipboard affordance**. | `R2 Q3c`. A form needs a third-party processor, which would force an edit to `datenschutz.html` — a file excluded from scope by `A1` |
+| **C5** | **No contact form.** Phone-first. The email uses a `mailto:` with a **pre-filled subject** plus a **copy-to-clipboard affordance**. | `R2 Q3c`. A form needs a third-party processor, which would force an edit to the Datenschutzerklärung Legal text, which is untouchable (`A1`) |
 | **C6** | **Persistent mobile call bar:** a fixed bottom "Anrufen" bar with the number, shown **below the `md` breakpoint only**. | `R3 Q7a`. With the call as the sole KPI (`A2`), hiding the number behind a scroll is the most expensive thing the page can do. No WhatsApp button — it would advertise a channel the company does not publish |
 | **C7** | **No testimonials / references section**, because it would require fabricated content. | Derived from `C2` |
 | **C8** | **The agent writes the new German copy directly in the prototype**, with every changed string flagged so it can be diffed against `data.json` and edited in place. `data.json` stays untouched until approval. | `R3 Q8a` |
@@ -358,7 +358,7 @@ If implementation turns up a genuine conflict with a decision in §3, raise it w
 
 ## 7. Explicitly rejected / not doing
 
-- ❌ A contact form (C5) — would require a third-party processor and a `datenschutz.html` edit.
+- ❌ A contact form (C5) — would require a third-party processor and an edit to the Datenschutzerklärung Legal text.
 - ❌ Testimonials, references or logo walls (C7) — no real content exists; fabricating it would break `C2`.
 - ❌ WhatsApp CTA (C6) — advertises a channel that isn't published.
 - ❌ Moving Team onto a light background (B7 overruled the agent's recommendation).

@@ -33,8 +33,8 @@ import data from "../../data/data.json";
  * unreachable (§1.9). Email is deliberately secondary: a plain link plus a quiet copy button.
  *
  * EMAIL WITHOUT A FORM (C5): a `mailto:` with a pre-filled, URI-encoded subject (`./email`), and a
- * copy button. No form, no third-party processor — that would force an edit to `datenschutz.html`
- * (out of scope).
+ * copy button. No form, no third-party processor — that would force an edit to the Datenschutzerklärung
+ * Legal text, which only the company changes.
  *
  * COPY TO CLIPBOARD degrades in three steps:
  *   1. `navigator.clipboard.writeText` (secure contexts, modern browsers);
