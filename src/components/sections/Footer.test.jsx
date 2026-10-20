@@ -60,8 +60,10 @@ test("the emblem is decorative: the company name sits beside it as text, not as 
   expect(within(footer).getAllByText("Ingenieurbüro-Auner GmbH")).toHaveLength(1);
 });
 
-test("the content file no longer carries its own copy of the Legal page links", () => {
-  expect(data.Footer).not.toHaveProperty("legalLinks");
+// The company name moved to `Company.name` and the links to `LegalPages` (ADR 0003), so the content
+// file keeps no footer-only copy of either.
+test("the content file no longer carries its own copy of the company name or the Legal page links", () => {
+  expect(data).not.toHaveProperty("Footer");
 });
 
 test("does not repeat the contact details owned by the Kontakt section", () => {
