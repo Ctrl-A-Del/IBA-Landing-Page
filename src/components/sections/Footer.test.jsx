@@ -17,7 +17,7 @@ import Footer from "./Footer";
 let originalGetComputedStyle;
 
 beforeAll(() => {
-  // Same jsdom 16 pseudo-element workaround as Verfahren.test.jsx / Team.test.jsx: `getByRole(...,
+  // Same jsdom 16 pseudo-element workaround as Verfahren.test.jsx / Unternehmen.test.jsx: `getByRole(...,
   // { name })` asks for ::before/::after styles, which jsdom does not implement.
   originalGetComputedStyle = window.getComputedStyle;
   window.getComputedStyle = (elt) => originalGetComputedStyle(elt);

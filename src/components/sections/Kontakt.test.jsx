@@ -22,7 +22,7 @@ import { EMAIL } from "./email";
 let originalGetComputedStyle;
 
 beforeAll(() => {
-  // Same jsdom 16 pseudo-element workaround as Verfahren/Team/WarumWir tests.
+  // Same jsdom 16 pseudo-element workaround as Verfahren/Unternehmen/WarumWir tests.
   originalGetComputedStyle = window.getComputedStyle;
   window.getComputedStyle = (elt) => originalGetComputedStyle(elt);
 });
@@ -46,7 +46,7 @@ test("renders the #kontakt section, named by its heading", () => {
   expect(getByRole("region", { name: heading.textContent })).toBe(section);
 });
 
-test("no image in the section: Marcus Auner's face appears once on the page, in Team, not here", () => {
+test("no image in the section: Marcus Auner's face appears once on the page, in Unternehmen, not here", () => {
   const { section } = renderSection();
 
   expect(section.querySelectorAll("img")).toHaveLength(0);

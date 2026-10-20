@@ -99,7 +99,7 @@ const placesWith = async (content) => {
 };
 
 // Each Company detail (content file entry and field), its value today, a changed value, and the
-// places that show it. "Marcus Auner" is also Team's and Kontakt's contact person, a separate entry,
+// places that show it. "Marcus Auner" is also the Unternehmen section's and Kontakt's contact person, a separate entry,
 // so the representative is checked on the Impressum only. A detail shown in another form than it is
 // stored in gives that form, old and new, written out as well: the phone number is the `tel:` target.
 const FIELDS = [

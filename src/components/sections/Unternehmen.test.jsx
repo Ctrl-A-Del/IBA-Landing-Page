@@ -1,7 +1,7 @@
 /**
- * Tests for ticket 08 — Team: the three people in framed light cards on navy.
+ * Tests for the Unternehmen section (formerly Team): the three people in framed light cards on navy.
  *
- * SEAM: the rendered `<Team />` component, observed through the DOM a visitor (or a screen reader)
+ * SEAM: the rendered `<Unternehmen />` component, observed through the DOM a visitor (or a screen reader)
  * gets: the anchor, the heading, the list of people, each portrait's figure, image and caption.
  * No Tailwind class string is asserted. The navy backdrop, the 3:4 crop and the 1 → 3 column
  * layout cannot be observed in jsdom and are verified in the browser pass recorded in the ticket.
@@ -10,7 +10,7 @@
  */
 import React from "react";
 import { render, within } from "@testing-library/react";
-import Team from "./Team";
+import Unternehmen from "./Unternehmen";
 import PortraitCard from "../ui/PortraitCard";
 
 const PEOPLE = [
@@ -35,18 +35,27 @@ afterAll(() => {
 });
 
 const renderSection = () => {
-  const utils = render(<Team />);
-  const section = utils.container.querySelector("section#team");
+  const utils = render(<Unternehmen />);
+  const section = utils.container.querySelector("section#unternehmen");
   return { ...utils, section };
 };
 
-test("renders the #team section, named by a heading that is not the hero's trust line", () => {
+test("renders the #unternehmen section, named by a heading that is not the hero's trust line", () => {
   const { section, getByRole } = renderSection();
 
   expect(section).not.toBeNull();
-  const heading = within(section).getByRole("heading", { level: 2 });
-  expect(heading).toHaveTextContent(/\S/);
+  const heading = section.querySelector("h2");
+  expect(heading).toHaveTextContent("Wer hinter der Grabenfräse steht");
   expect(getByRole("region", { name: heading.textContent })).toBe(section);
+});
+
+test("the Team part has its own H3 before the intro line and the portrait list", () => {
+  const { section } = renderSection();
+
+  const h3s = [...section.querySelectorAll("h3")];
+  expect(h3s.map((h) => h.textContent)).toEqual(["Team"]);
+  const list = within(section).getByRole("list", { name: "Das Team" });
+  expect(h3s[0].compareDocumentPosition(list) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 });
 
 test("no line of the section repeats the hero's trust line verbatim", () => {
@@ -58,7 +67,7 @@ test("no line of the section repeats the hero's trust line verbatim", () => {
 test("lists all three people in order, each with their name, role and portrait", () => {
   const { section } = renderSection();
 
-  const list = within(section).getByRole("list", { name: /team/i });
+  const list = within(section).getByRole("list", { name: "Das Team" });
   const items = within(list).getAllByRole("listitem");
 
   expect(items).toHaveLength(3);

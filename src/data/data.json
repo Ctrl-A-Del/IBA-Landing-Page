@@ -12,7 +12,7 @@
     "links": [
       { "anchor": "verfahren", "label": "Verfahren" },
       { "anchor": "einsatzbereiche", "label": "Einsatzbereiche" },
-      { "anchor": "team", "label": "Team" },
+      { "anchor": "unternehmen", "label": "Unternehmen" },
       { "anchor": "kontakt", "label": "Kontakt" }
     ]
   },
@@ -26,7 +26,7 @@
     "eyebrow": "Verfahren",
     "heading": "Die Maschine",
     "intro": "Die Maschine ist in Entwicklung. Vier Module sollen Bodenabtrag und Materialtransport in einem kontinuierlichen Arbeitsgang bündeln.",
-    "renderAlt": "3D-Darstellung der Fräsmaschine mit ihren vier Modulen",
+    "renderAlt": "3D-Darstellung der Grabenfräse mit ihren vier Modulen",
     "enlargeLabel": "Größer ansehen",
     "closeLabel": "Schließen",
     "caption": "Fräsmodul, Aufnahme-, Förder- und Antriebsmodul",
@@ -68,16 +68,19 @@
       }
     ]
   },
-  "Team": {
-    "eyebrow": "Team",
-    "heading": "Die Menschen hinter der Maschine",
-    "intro": "Geschäftsführung, Einkauf und Technik entwickeln die Grabenfräse gemeinsam.",
-    "listLabel": "Das Team",
-    "people": [
-      { "img": "img/marcus.png", "name": "Marcus Auner", "role": "Geschäftsführung" },
-      { "img": "img/klaus.png", "name": "Klaus Auner", "role": "Einkauf" },
-      { "img": "img/jan.png", "name": "Jan Hönninger", "role": "Technischer Leiter" }
-    ]
+  "Unternehmen": {
+    "eyebrow": "Das Unternehmen",
+    "heading": "Wer hinter der Grabenfräse steht",
+    "team": {
+      "heading": "Team",
+      "intro": "Geschäftsführung, Einkauf und Technik entwickeln die Grabenfräse gemeinsam.",
+      "listLabel": "Das Team",
+      "people": [
+        { "img": "img/marcus.png", "name": "Marcus Auner", "role": "Geschäftsführung" },
+        { "img": "img/klaus.png", "name": "Klaus Auner", "role": "Einkauf" },
+        { "img": "img/jan.png", "name": "Jan Hönninger", "role": "Technischer Leiter" }
+      ]
+    }
   },
   "Kontakt": {
     "eyebrow": "Kontakt",

@@ -4,7 +4,7 @@ import PortraitCard from "../ui/PortraitCard";
 import data from "../../data/data.json";
 
 /**
- * Ticket 08 — Team (DESIGN_PLAN.md §4 row 6, decision B7).
+ * Unternehmen — the former Team section (DESIGN_PLAN.md §4 row 6, decision B7).
  *
  * The three real people stay on the navy background (B7 overrides the move to a light surface).
  * Their white studio backdrops read as intentional because every portrait sits in the SAME framed
@@ -26,29 +26,30 @@ import data from "../../data/data.json";
  * and their role; repeating the name as alt would make screen readers announce it twice. The photo
  * conveys nothing beyond "this is <name>", which the caption says.
  *
- * COPY: `data.json` `Team` (eyebrow, H2, intro, list name, and each person's image path, name
- * and role). The old heading `Maschinenbau aus NRW` is now the hero's trust line (§4.1 "Key
+ * HEADINGS: eyebrow "Das Unternehmen" → H2 (names the section) → H3 "Team" → intro and portraits.
+ *
+ * COPY: `data.json` `Unternehmen` (eyebrow, H2, and under `team` the H3, intro, list name, and each
+ * person's image path, name and role). The old heading `Maschinenbau aus NRW` is now the hero's trust line (§4.1 "Key
  * moves") and is deliberately not repeated here. The intro stays in the honest development
  * register of C2 ("entwickeln", no completed-project claims).
  */
 const {
   eyebrow: EYEBROW,
   heading: HEADING,
-  intro: INTRO,
-  listLabel: LIST_LABEL,
-  people: PEOPLE,
-} = data.Team;
+  team: { heading: TEAM_HEADING, intro: INTRO, listLabel: LIST_LABEL, people: PEOPLE },
+} = data.Unternehmen;
 
-const HEADING_ID = "team-heading";
+const HEADING_ID = "unternehmen-heading";
 
-const Team = () => (
-  <Section id="team" tone="navy" aria-labelledby={HEADING_ID}>
+const Unternehmen = () => (
+  <Section id="unternehmen" tone="navy" aria-labelledby={HEADING_ID}>
     <Reveal className="max-w-2xl">
       <p className="text-eyebrow text-mist-400">{EYEBROW}</p>
       <h2 id={HEADING_ID} className="mt-3 text-display-lg text-mist-100">
         {HEADING}
       </h2>
-      <p className="mt-5 text-body-lg">{INTRO}</p>
+      <h3 className="mt-10 text-display-md text-mist-100">{TEAM_HEADING}</h3>
+      <p className="mt-4 text-body-lg">{INTRO}</p>
     </Reveal>
 
     <Reveal
@@ -72,4 +73,4 @@ const Team = () => (
   </Section>
 );
 
-export default Team;
+export default Unternehmen;

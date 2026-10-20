@@ -134,7 +134,7 @@ describe("the Impressum chrome and head", () => {
     const hrefs = [...container.querySelectorAll("nav a")]
       .map((a) => a.getAttribute("href"))
       .filter((href) => href.includes("#"));
-    expect(hrefs).toEqual(["/#start", "/#verfahren", "/#einsatzbereiche", "/#team", "/#kontakt"]);
+    expect(hrefs).toEqual(["/#start", "/#verfahren", "/#einsatzbereiche", "/#unternehmen", "/#kontakt"]);
   });
 
   test("the nav is solid although the page has no hero and is not scrolled", () => {
@@ -218,7 +218,7 @@ describe.each(["/", "/gibt-es-nicht", "/impressum-nicht"])("the landing page at 
       "verfahren",
       "einsatzbereiche",
       "warum",
-      "team",
+      "unternehmen",
       "kontakt",
     ]);
     expect(container.querySelector("nav a[href='#verfahren']")).not.toBeNull();

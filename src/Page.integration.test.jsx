@@ -101,13 +101,13 @@ describe("internal anchors", () => {
     const navTargets = [...container.querySelectorAll("nav a[href^='#']")].map((a) =>
       a.getAttribute("href")
     );
-    expect(navTargets).toEqual(["#start", "#verfahren", "#einsatzbereiche", "#team", "#kontakt"]);
+    expect(navTargets).toEqual(["#start", "#verfahren", "#einsatzbereiche", "#unternehmen", "#kontakt"]);
   });
 
   test("the six §4.1 anchors exist exactly once each, in page order", () => {
     const { main } = renderPage();
     const ids = [...main.querySelectorAll("section[id]")].map((s) => s.id);
-    expect(ids).toEqual(["start", "verfahren", "einsatzbereiche", "warum", "team", "kontakt"]);
+    expect(ids).toEqual(["start", "verfahren", "einsatzbereiche", "warum", "unternehmen", "kontakt"]);
   });
 });
 
@@ -199,13 +199,13 @@ describe("shipped images (ticket 12 pruning, D4)", () => {
 });
 
 describe("one face, one brand mark (B6, C15, C18)", () => {
-  test("Marcus Auner's portrait appears exactly once on the page, in Team", () => {
+  test("Marcus Auner's portrait appears exactly once on the page, in Unternehmen", () => {
     const { container } = renderPage();
     const portraits = [...container.querySelectorAll("img")].filter((img) =>
       /(^|\/)img\/marcus\.png$/.test(img.getAttribute("src"))
     );
     expect(portraits).toHaveLength(1);
-    expect(portraits[0].closest("section").id).toBe("team");
+    expect(portraits[0].closest("section").id).toBe("unternehmen");
   });
 
   test("the brand mark is the Emblem asset in nav and footer; the Logo plate is never referenced", () => {
@@ -234,7 +234,7 @@ describe("one face, one brand mark (B6, C15, C18)", () => {
 
 describe("signal colour", () => {
   // WHY CLASSES: jsdom loads no Tailwind CSS and computes no colours, so the class contract is the
-  // only seam it offers. As in Kontakt.test and Team.test, the expected classes come from a
+  // only seam it offers. As in Kontakt.test and Unternehmen.test, the expected classes come from a
   // reference render of the locked primitive, not a hand-written list. The computed-colour check
   // (every text/SVG node on an orange background is navy) is done in the real browser; see the ticket.
   test("every orange fill is the locked CTA primitive (navy text), and nothing white sits on or inside it", () => {
