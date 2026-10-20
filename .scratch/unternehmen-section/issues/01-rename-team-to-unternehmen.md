@@ -4,7 +4,7 @@
 
 **Blocked by:** None (can start immediately).
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] Section module, its test and its content entry are renamed to `Unternehmen`; `Section` tone stays navy, `PortraitCard` usage unchanged
 - [ ] Section is named by its H2 "Wer hinter der Grabenfräse steht" (not the hero's trust line); the old H2 "Die Menschen hinter der Maschine" is gone

@@ -4,7 +4,7 @@
 
 **Blocked by:** 01 (Rename Team to "Das Unternehmen"), 02 (Über uns part with divider).
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] `GLOSSARY.md` has **Grabenfräse**: the machine the company develops; the one name the page uses ("die Maschine" is fine once named); not *Grabenmaschine*, not *Fräsmaschine*
 - [ ] DESIGN_PLAN.md has a new decision row: Team becomes "Das Unternehmen" with parts Team and Über uns, navy, anchor `#unternehmen`, nav label "Unternehmen", rule between parts, Über uns copy phrased as intent (C2)

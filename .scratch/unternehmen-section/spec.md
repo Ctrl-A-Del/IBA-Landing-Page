@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: resolved
 Type: enhancement
 
 # "Das Unternehmen": Team and Über uns in one section

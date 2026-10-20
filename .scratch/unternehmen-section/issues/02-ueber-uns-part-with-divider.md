@@ -4,7 +4,7 @@
 
 **Blocked by:** 01 (Rename Team to "Das Unternehmen").
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [ ] Content file has `ueberUns` with `heading` ("Über uns") and `paragraphs` (two strings); the first is stored without the company name and the component renders `Company.name` in front of it; no placeholder syntax
 - [ ] Rule is 1 px, low-contrast `mist` step on navy, with extra top spacing, and hidden from assistive technology (no `separator` role in the accessibility tree)

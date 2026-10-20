@@ -228,7 +228,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | **B4** | **Keep Raleway (100–900) + Open Sans (300–800)**, self-hosted. The new look comes purely from scale, weight contrast, tracking and line-height. **No new font files, no new licence.** | `R2 Q5a`. The variable Raleway already goes to 900 — that range is simply not being used today |
 | **B5** | **Motion = CSS-only**: Tailwind transitions, hover/focus states, and a light scroll-reveal via a small `IntersectionObserver` hook — **all gated behind `prefers-reduced-motion`**. No animation library. | `R2 Q6a` |
 | **B6** | **Logo handling:** the nav and footer show the **Emblem**, a dedicated 256x256 PNG (`public/img/emblem.png`) cut once from the Logo plate and transparent outside the circle. No vector is available, so the disc keeps the plate's slate wall inside the circle. The Logo plate (`logo.jpg`) lives in `design-assets/source/` as the Emblem's source (crop recorded in its README) and does not ship. **History:** originally the plate was kept as a brand element outside the nav, with a CSS crop of the disc in the nav (`R3 Q5a`); amended in R6 so the plate no longer appears on the page and the footer uses a larger Emblem plus the company name as text (C18); amended again by the Emblem-asset change, replacing the runtime CSS crop with the pre-cut PNG. | `R3 Q5a`; amended `R6 Q2a`. On the footer the plate read as a pasted-in grey photo |
-| **B7** | **Team section stays on the dark background**; each portrait gets a **consistent framed light card**. | `R3 Q4b` — this overrides the agent's recommendation to move Team onto the light `surface` background |
+| **B7** | **The Team part of "Das Unternehmen" (C20) stays on the dark background**; each portrait gets a **consistent framed light card**. | `R3 Q4b` — this overrides the agent's recommendation to move Team onto the light `surface` background |
 | **B8** | **Type & heading hierarchy: sentence case, not uppercase.** The H1 drops the current `uppercase` in favour of sentence case with tight tracking and fluid sizing; H2s step down from it. **CTA buttons are solid orange rectangles with a small radius (2–4 px), not pills.** | `R4 Q1a`. Uppercase at ~5rem makes a 32-character German headline hard to read; the tagline already carries enough force without shouting |
 | **B9** | **Nav behaviour: transparent over the hero, turning solid navy on scroll**, with a subtle bottom border, the anchors and the orange phone CTA. | `R4 Q2b` |
 
@@ -247,7 +247,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | **C9** | **The machine render stays full-width at every breakpoint**, even though its baked-in annotations become illegible on mobile — the HTML module list (`C4`) carries the meaning. | `R4 Q3a` |
 | **C10** | **A lightbox "view larger" affordance is added for the machine render** — a labelled button plus a click on the image opens it full-screen, gallery-style. Behaviour is specified by `C13`/`C14`. | `R4 Q3` — user addition |
 | **C11** | **Marcus Auner is the named contact person for calls.** The Kontakt section names him rather than presenting an anonymous number. | `R4 Q5` |
-| **C12** | **Background rhythm** (amended in R6): navy (nav + hero) → light (Verfahren) → navy (Einsatzbereiche) → light (Warum wir) → navy (Team) → **light (Kontakt)** → **navy `#0a1f2e` (Footer), with no hairline**. `brand.alt` `#14171a` no longer has a v2 consumer; ticket 12 retires it together with Section's `alt` tone. | `R4 Q4a`; amended `R6 Q4` (E4, from the throwaway prototype on local branch `prototype/footer-tone`, verdict commit `e9ce850`). The old navy Kontakt → `brand.alt` footer step was only about 1.07:1, so a hairline was the only separator, which contradicts "structure without borders". White → navy is 15.6:1. Alternating also stops the light-backdropped render and the white studio portraits from reading as mistakes |
+| **C12** | **Background rhythm** (amended in R6): navy (nav + hero) → light (Verfahren) → navy (Einsatzbereiche) → light (Warum wir) → navy (Unternehmen) → **light (Kontakt)** → **navy `#0a1f2e` (Footer), with no hairline**. `brand.alt` `#14171a` no longer has a v2 consumer; ticket 12 retires it together with Section's `alt` tone. | `R4 Q4a`; amended `R6 Q4` (E4, from the throwaway prototype on local branch `prototype/footer-tone`, verdict commit `e9ce850`). The old navy Kontakt → `brand.alt` footer step was only about 1.07:1, so a hairline was the only separator, which contradicts "structure without borders". White → navy is 15.6:1. Alternating also stops the light-backdropped render and the white studio portraits from reading as mistakes |
 | **C13** | **Lightbox mechanism: the native `<dialog>` element opened with `showModal()`**, styled with Tailwind. No library, no hand-rolled focus trap, no manual scroll lock. | `R5 Q1a`. Attached via a ref; the browser supplies the focus trap, Esc-to-close and `::backdrop` for free. Hand-rolling a focus trap is the most common way an overlay like this ends up unusable by keyboard |
 | **C14** | **Lightbox affordances:** the render shown as large as the viewport allows on a dark navy backdrop; closes on **Esc**, an explicit **close button** and a **backdrop click**; **focus returns to the trigger** on close; **no pan/zoom UI** (the source is a 1342 px raster — magnifying past 1:1 only shows interpolation). The trigger is a **labelled button reading "Größer ansehen" with a `Maximize2` icon**; the render itself is also clickable for pointer users, but the button is the accessible affordance. A caption reads **"Fräsmodul, Aufnahme-, Förder- und Antriebsmodul"**. | `R5 Q2a`. The caption is the only text a screen-reader user gets when the image opens full-screen |
 | **C15** | **Marcus Auner is the person you call, named in Kontakt without a portrait** (amended in R6). His label sits directly beside the number on two lines: "Marcus Auner" in display type, "Geschäftsführung" beneath in smaller type, no middle dot (the Team caption pattern). His face appears once on the page, in Team. | `R5 Q3a`; amended `R6 Q1a` + `R6 Q9`. With Team directly above, the reused portrait put the same photo twice about a section apart. On white (C12) the framed card would also lose its frame. The one-line label wrapped badly on phones (F6) |
@@ -255,6 +255,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | **C17** | **Kontakt layout without the portrait:** two columns from `md` up, with the eyebrow, H2 and intro on the left and the contact block on the right (name and role, orange call, divider, email and copy). Below `md` it stacks heading first. | `R6 Q8a`. Fills the white section's width, and on phones the "Kontakt" anchor lands on the heading with the call near the top (resolves E5/F5) |
 | **C18** | **Footer content:** brand block on the left (Emblem, "Ingenieurbüro-Auner GmbH" as text, "© {current year} Ingenieurbüro-Auner GmbH" with the year computed at render), legal links on the right from `sm` up; stacked and centred below. **No address, no trust line, no phone, no email.** | `R6 Q2a` + `R6 Q3` + `R6 Q10`. The user declined the address line. Contact details stay in Kontakt only |
 | **C19** | **Team cards share one height per row** where they sit side by side, through a documented fill option on the portrait-card primitive (the default stays unchanged). | `R6 Q6` (E6/F7) |
+| **C20** | **Team becomes "Das Unternehmen", one navy section with two parts, Team and Über uns.** Anchor `#unternehmen`, nav label "Unternehmen" (still four nav links). Eyebrow "Das Unternehmen", H2 "Wer hinter der Grabenfräse steht", H3s "Team" (intro line and the three portraits, unchanged) and "Über uns" (two paragraphs), separated by a decorative 1 px rule hidden from assistive technology. The Über uns copy is phrased as intent because no prototype exists yet (C2); it names the company from `Company.name` (ADR 0003). **"Grabenfräse" is the one name for the machine** (glossary); the Verfahren alt text follows it. The old H2 "Die Menschen hinter der Maschine" and the anchor `#team` are retired. | Company owner approved the copy in the 2026-10-20 session (`.scratch/unternehmen-section/spec.md`). Keeps the background rhythm of C12 and adds no section between Team and Kontakt |
 
 ### D. Technical & workflow
 
@@ -274,12 +275,12 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 
 | # | Section | Anchor | Background | Content |
 | --- | --- | --- | --- | --- |
-| 1 | Sticky nav | — | navy | Emblem, anchors **Verfahren · Einsatzbereiche · Team · Kontakt**, phone CTA (orange) — number on `lg+`, "Anrufen" below (C16); transparent over the hero, solid navy on scroll (B9) |
+| 1 | Sticky nav | — | navy | Emblem, anchors **Verfahren · Einsatzbereiche · Unternehmen · Kontakt**, phone CTA (orange) — number on `lg+`, "Anrufen" below (C16); transparent over the hero, solid navy on scroll (B9) |
 | 2 | Hero | `#start` | navy | `Wir schaufeln nicht – wir fräsen` as the H1, one subline naming the field, phone CTA. **Typographic — deliberately *not* the machine render.** Trust line `Maschinenbau aus NRW` |
 | 3 | Verfahren / Die Maschine | `#verfahren` | light | The render, large and full-width at every breakpoint (C9), with the lightbox trigger (C10, C13, C14), plus the four modules as real HTML text (C4) |
 | 4 | Einsatzbereiche | `#einsatzbereiche` | navy | The four areas: Stromtrassen · Wasserstoff & Fernwärme · Wasser & Abwasser · Weitere Infrastruktur |
 | 5 | Warum wir | `#warum` | light | The three Services points, reworded from hedged to plain (within C2) |
-| 6 | Team | `#team` | navy | The three real people, framed light cards (B7) |
+| 6 | Das Unternehmen | `#unternehmen` | navy | Two parts: **Team** (the three real people, framed light cards, B7) and **Über uns** (two paragraphs on what the company develops and for whom), divided by a 1 px rule (C20) |
 | 7 | Kontakt | `#kontakt` | light | **Marcus Auner named beside the number, no portrait** (C11, C15); two columns from `md` (C17); phone-first; email with pre-filled `mailto:` + copy-to-clipboard (C5) |
 | 8 | Footer | — | navy, no hairline (C12) | Emblem + company name + © line, links to Impressum / Datenschutz (B6, C18) |
 
@@ -290,7 +291,7 @@ What "industrial-technical" (`B2`) means in practice, so a fresh agent does not 
 - **Surface**: navy `#0a1f2e` dominant, including the footer (C12, amended in R6). `brand.alt` `#14171a` is no longer used by v2. No decorative gradients — the `accent` gradient is retired from CTAs (`B3`).
 - **CTA**: solid orange `#f08a24` with **navy `#0a1f2e` text**, radius 2–4 px, **never a pill** (`B8`). Hover/focus = a darkened shade of the same orange. **Never white text on orange** (§1.9).
 - **Type**: Raleway 700–900 for display, fluid sizing (~2.5rem → 5rem for the H1), **sentence case, not uppercase** (`B8`), tight tracking at display sizes. Open Sans 300–800 for body — `text-neutral-600` on light surfaces, a light neutral on navy.
-- **Edges**: hard — rectangles and 1 px rules rather than rounded cards and soft shadows. The one deliberate exception is the framed Team cards (`B7`).
+- **Edges**: hard — rectangles and 1 px rules rather than rounded cards and soft shadows. The one deliberate exception is the framed portrait cards (`B7`).
 - **Space**: generous section padding. The page should read calm and precise, not dense.
 - **Motion**: transitions on hover/focus plus a light scroll reveal via `IntersectionObserver`, everything behind `prefers-reduced-motion` (`B5`).
 - **Icons**: `lucide-react` 1.54 at a consistent stroke width. No emoji, no decorative gradient circles.
@@ -298,11 +299,11 @@ What "industrial-technical" (`B2`) means in practice, so a fresh agent does not 
 **Key moves vs today**
 
 - The machine render stops being a wordless full-bleed image (`features.jsx`) and becomes a section that actually explains the machine.
-- `Maschinenbau aus NRW` — currently the odd heading on the *Team* section — becomes the hero's trust line.
+- `Maschinenbau aus NRW` — currently the odd heading on the *Team* section (now part of Das Unternehmen) — becomes the hero's trust line.
 - The four About cards stop floating as white tiles on navy.
 - The page gains navigation, which it currently does not have at all.
 
-**Anchors used:** `#start`, `#verfahren`, `#einsatzbereiche`, `#warum`, `#team`, `#kontakt`.
+**Anchors used:** `#start`, `#verfahren`, `#einsatzbereiche`, `#warum`, `#unternehmen`, `#kontakt`.
 
 ---
 
@@ -339,7 +340,7 @@ If implementation turns up a genuine conflict with a decision in §3, raise it w
 - [ ] Lightbox component — native `<dialog>` + `showModal()`, "Größer ansehen" trigger, caption, focus return (C10, C13, C14)
 - [ ] Einsatzbereiche
 - [ ] Warum wir (rewrite the three hedged Services points, C2/C8)
-- [ ] Team, framed light cards (B7)
+- [ ] Das Unternehmen (Team + Über uns), framed light cards (B7)
 - [ ] Kontakt — Marcus Auner named (C11), phone-first, pre-filled `mailto:`, copy-to-clipboard (C5)
 - [ ] Footer with the logo plate
 
