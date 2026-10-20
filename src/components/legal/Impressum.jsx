@@ -1,13 +1,13 @@
 import data from "../../data/data.json";
 
 /**
- * The Impressum Legal text, transcribed word for word from the verbatim fixture
- * `src/__fixtures__/impressum.html` (the original static file has been removed). Do not reword, reformat or "fix" it; the
- * mounted-app test in `src/LegalPages.test.jsx` compares it with the fixture.
+ * The Impressum Legal text. Its wording is verbatim from the fixture `src/__fixtures__/impressum.html`
+ * (the original static file has been removed): do not reword, reformat or "fix" it; the mounted-app
+ * test in `src/LegalPages.test.jsx` compares it with the fixture.
  *
  * The Company details inside it (name, street, postal code and city, representative, register court
- * and number) are filled in from `data.json` `Company` (ADR 0003); `src/CompanyDetails.test.jsx`
- * proves a change there reaches this page.
+ * and number) are not part of that wording: they come from `data.json` `Company` (ADR 0003), and
+ * `src/CompanyDetails.test.jsx` proves a change there reaches this page.
  */
 const Impressum = () => {
   const { name, street, postalCode, city, representative, registerCourt, registerNumber } =

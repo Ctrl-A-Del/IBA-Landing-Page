@@ -1,11 +1,13 @@
 'use strict';
 // Post-build step: GitHub Pages serves a real file per clean path, so copy the built
 // landing page document to a directory index per Legal page. The Legal pages are `LegalPages` in
-// the content file (ADR 0002). Afterwards each copy is checked for the Vite stylesheet bundle, so a
-// Legal page that would render unstyled fails the build.
+// the content file (ADR 0002), and each is served at the address `src/legalPageAddress.mjs` gives
+// it, the same one the footer links to. Afterwards each copy is checked for the Vite stylesheet
+// bundle, so a Legal page that would render unstyled fails the build.
 const fs = require('fs');
 const path = require('path');
 const { LegalPages } = require('../src/data/data.json');
+const { legalPageAddress } = require('../src/legalPageAddress.mjs');
 
 const STYLESHEET = /href="\/assets\/[^"]+\.css"/;
 
@@ -15,12 +17,9 @@ function copyRouteDocuments(buildDir) {
     throw new Error(`Built document not found: ${source}`);
   }
   for (const { slug } of LegalPages) {
-    const target = path.join(buildDir, slug, 'index.html');
+    const target = path.join(buildDir, legalPageAddress(slug), 'index.html');
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.copyFileSync(source, target);
-    if (!fs.existsSync(target)) {
-      throw new Error(`Legal page document not found: ${target}`);
-    }
     if (!STYLESHEET.test(fs.readFileSync(target, 'utf8'))) {
       throw new Error(`${target} does not reference the stylesheet bundle (/assets/*.css)`);
     }

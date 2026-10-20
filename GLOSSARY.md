@@ -14,7 +14,8 @@ is never edited as part of design work; only the company changes it. The Company
 in it are not part of the wording: they are filled in from the one place the Company details are kept.
 
 **Company details** — The facts that identify the company: its name, postal address, phone number,
-email address, website, representative and register entry. Each is kept in exactly one place and
+email address, website, representative and register entry. Each is kept in exactly one place (phone and email in
+`Contact`, the rest in `Company`) and
 shown from there wherever it appears, on the landing page and in the Legal text alike.
 
 **Phoenix mark** — The phoenix cut from the Emblem as a circle, without the gear ring and with raised
