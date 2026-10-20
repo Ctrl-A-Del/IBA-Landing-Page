@@ -60,11 +60,22 @@ const statusAfterCopy = async (element, { clipboard, execCommand }) => {
   }
 };
 
-export const captureCopy = async (element) => {
+/**
+ * The `blocks` and `attrs` of a rendered page, plus the `src` of every image and the document title
+ * while it is mounted. For pages without Kontakt (the Legal pages), which have no `status`.
+ */
+export const captureStatic = (element) => {
   const { container, unmount } = render(element);
   const blocks = blocksOf(container);
   const attrs = attrsOf(container);
+  const sources = [...container.querySelectorAll("img")].map((img) => img.getAttribute("src"));
+  const title = document.title;
   unmount();
+  return { blocks, attrs, sources, title };
+};
+
+export const captureCopy = async (element) => {
+  const { blocks, attrs } = captureStatic(element);
 
   const status = {
     copied: await statusAfterCopy(element, {
