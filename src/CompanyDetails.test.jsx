@@ -1,6 +1,7 @@
 /**
- * The single-source test (ADR 0003, spec story 20): every Company detail is kept once, in the content
- * file, and every place that shows it reads it from there.
+ * The single-source test (ADR 0003, spec story 20): every Company detail (the `Company` entry, and
+ * the phone and email in `Contact`) is kept once, in the content file, and every place that shows it
+ * reads it from there.
  *
  * SEAM: the mounted app (`<App />`) at a path, with the content file substituted through the module
  * mock (prior art: `src/App.copy.test.jsx`), observed through the DOM and the document title. For each
@@ -41,7 +42,7 @@ const placesWith = async (content) => {
   vi.resetModules();
   vi.doMock("./data/data.json", () => ({ default: content }));
   const React = await import("react");
-  const { render } = await import("@testing-library/react/pure");
+  const { render, fireEvent } = await import("@testing-library/react/pure");
   const { default: App } = await import("./App");
   const at = (pathname, pick) => {
     window.history.pushState({}, "", pathname);
@@ -50,31 +51,62 @@ const placesWith = async (content) => {
     unmount();
     return text;
   };
+  // Kontakt: its text, its link targets, and what its copy button puts on the clipboard. The
+  // clipboard write never settles, so the button sets no state after the page is unmounted.
+  const kontakt = (c) => {
+    const section = c.querySelector("#kontakt");
+    const copied = [];
+    const originalClipboard = navigator.clipboard;
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: (text) => (copied.push(text), new Promise(() => {})) },
+    });
+    try {
+      fireEvent.click(section.querySelector("button"));
+    } finally {
+      Object.defineProperty(navigator, "clipboard", { configurable: true, value: originalClipboard });
+    }
+    const hrefs = [...section.querySelectorAll("a")].map((a) => decodeURIComponent(a.href));
+    return [section.textContent, ...hrefs, ...copied].join("\n");
+  };
   return {
+    kontakt: at("/", kontakt),
     footer: at("/", (c) => c.querySelector("footer").textContent),
     impressum: at("/impressum/", (c) => `${document.title}\n${c.textContent}`),
+    // The Legal text only: the nav above it shows the phone number too.
+    datenschutz: at("/datenschutz/", (c) => c.querySelector("main").textContent),
   };
 };
 
-// Each Company field, its value today, a changed value, and the places that show it.
+// Each Company detail (content file entry and field), its value today, a changed value, and the
+// places that show it. "Marcus Auner" is also Team's and Kontakt's contact person, a separate entry,
+// so the representative is checked on the Impressum only.
 const FIELDS = [
-  ["name", "Ingenieurbüro-Auner GmbH", "Beispielwerk Fräsen AG", ["footer", "impressum"]],
-  ["street", "Tulpenweg 12", "Ahornallee 7", ["impressum"]],
-  ["postalCode", "41366", "50667", ["impressum"]],
-  ["city", "Schwalmtal", "Viersen", ["impressum"]],
-  ["representative", "Marcus Auner", "Erika Mustermann", ["impressum"]],
-  ["registerCourt", "Mönchengladbach", "Krefeld", ["impressum"]],
-  ["registerNumber", "HRB 23617", "HRB 98765", ["impressum"]],
+  ["Company", "name", "Ingenieurbüro-Auner GmbH", "Beispielwerk Fräsen AG", ["footer", "impressum", "datenschutz"]],
+  ["Company", "street", "Tulpenweg 12", "Ahornallee 7", ["impressum", "datenschutz"]],
+  ["Company", "postalCode", "41366", "50667", ["impressum", "datenschutz"]],
+  ["Company", "city", "Schwalmtal", "Viersen", ["impressum", "datenschutz"]],
+  ["Company", "website", "ingenieurbuero-auner.com", "beispielwerk-fraesen.de", ["datenschutz"]],
+  ["Company", "representative", "Marcus Auner", "Erika Mustermann", ["impressum"]],
+  ["Company", "registerCourt", "Mönchengladbach", "Krefeld", ["impressum"]],
+  ["Company", "registerNumber", "HRB 23617", "HRB 98765", ["impressum"]],
+  ["Contact", "phoneDisplay", "0176 618 77 599", "0211 555 01 23", ["kontakt", "datenschutz"]],
+  ["Contact", "email", "info@ingenieurbuero-auner.com", "post@beispielwerk-fraesen.de", ["kontakt", "datenschutz"]],
 ];
 
-describe.each(FIELDS)("changing Company.%s", (field, oldValue, newValue, shownIn) => {
-  test(`shows the new value in the ${shownIn.join(" and ")}, and the old value nowhere there`, async () => {
+// The old value as a value of its own: the old website is also the domain of the (unchanged) email
+// address, so a match right after "@", ".", "-" or a word character is part of something else.
+const standalone = (value) =>
+  new RegExp(`(?<![\\w@.-])${value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`);
+
+describe.each(FIELDS)("changing %s.%s", (entry, field, oldValue, newValue, shownIn) => {
+  test(`shows the new value in ${shownIn.join(", ")}, and the old value nowhere there`, async () => {
     const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
-    expect(data.Company[field]).toBe(oldValue);
-    const places = await placesWith({ ...data, Company: { ...data.Company, [field]: newValue } });
+    expect(data[entry][field]).toBe(oldValue);
+    const places = await placesWith({ ...data, [entry]: { ...data[entry], [field]: newValue } });
     for (const place of shownIn) {
       expect(places[place]).toContain(newValue);
-      expect(places[place]).not.toContain(oldValue);
+      expect(places[place]).not.toMatch(standalone(oldValue));
     }
   });
 });
