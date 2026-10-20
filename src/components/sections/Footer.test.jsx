@@ -13,6 +13,7 @@
 import React from "react";
 import { render, within } from "@testing-library/react";
 import Footer from "./Footer";
+import data from "../../data/data.json";
 
 let originalGetComputedStyle;
 
@@ -57,6 +58,10 @@ test("the emblem is decorative: the company name sits beside it as text, not as 
   expect(emblem).toHaveAttribute("alt", "");
   // Named once, as text — not a second time via alt (that would announce it twice).
   expect(within(footer).getAllByText("Ingenieurbüro-Auner GmbH")).toHaveLength(1);
+});
+
+test("the content file no longer carries its own copy of the Legal page links", () => {
+  expect(data.Footer).not.toHaveProperty("legalLinks");
 });
 
 test("does not repeat the contact details owned by the Kontakt section", () => {
