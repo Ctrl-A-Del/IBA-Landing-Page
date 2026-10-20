@@ -35,8 +35,9 @@ import data from "../../data/data.json";
  * is needed. The second is phrased as intent: no prototype exists yet (C2).
  *
  * COPY: `data.json` `Unternehmen` (eyebrow, H2, under `team` the H3, intro, list name, and each
- * person's image path, name and role; under `ueberUns` the H3 and the two paragraphs). The old heading `Maschinenbau aus NRW` is now the hero's trust line (§4.1 "Key
- * moves") and is deliberately not repeated here. The intro stays in the honest development
+ * person's image path, name and role; under `ueberUns` the H3 and the two paragraphs). The old
+ * heading `Maschinenbau aus NRW` is now the hero's trust line (§4.1 "Key moves") and is deliberately
+ * not repeated here. The intro stays in the honest development
  * register of C2 ("entwickeln", no completed-project claims).
  */
 const {
@@ -81,7 +82,7 @@ const Unternehmen = () => (
 
     <div aria-hidden="true" className="mt-16 h-px bg-mist-500/40 sm:mt-20" />
 
-    <Reveal className="mt-16 max-w-2xl sm:mt-20">
+    <Reveal className="mt-10 max-w-2xl sm:mt-12">
       <h3 className="text-display-md text-mist-100">{UEBER_UNS_HEADING}</h3>
       {UEBER_UNS_PARAGRAPHS.map((text, i) => (
         <p key={text} className="mt-4 text-body-lg">
