@@ -1,3 +1,5 @@
+import data from "../../data/data.json";
+
 /**
  * The Datenschutzerklärung Legal text, transcribed word for word from the verbatim
  * fixture `src/__fixtures__/datenschutz.html` (the original static file has been removed). Do not reword,
@@ -7,6 +9,11 @@
  * The original wraps every numbered heading in `<p><h2>`. A browser closes the `<p>` before the
  * `<h2>`, so the visitor got an empty paragraph followed by the heading; here that is written as the
  * heading alone (JSX would otherwise nest an `<h2>` in a `<p>`, which is invalid HTML).
+ *
+ * The Company details in "Name und Anschrift des Verantwortlichen" (name, street, postal code and
+ * city, website from `data.json` `Company`; phone and email from `Contact`) are filled in from the
+ * content file in the form the landing page shows them (ADR 0003); `src/CompanyDetails.test.jsx`
+ * proves a change there reaches this page.
  */
 const Datenschutz = () => (
   <>
@@ -45,12 +52,12 @@ const Datenschutz = () => (
     <p>Einwilligung ist jede von der betroffenen Person freiwillig für den bestimmten Fall in informierter Weise und unmissverständlich abgegebene Willensbekundung in Form einer Erklärung oder einer sonstigen eindeutigen bestätigenden Handlung, mit der die betroffene Person zu verstehen gibt, dass sie mit der Verarbeitung der sie betreffenden personenbezogenen Daten einverstanden ist.</p>
     <h2><strong>2. Name und Anschrift des Verantwortlichen</strong></h2>
     <p>Verantwortlicher im Sinne der Datenschutz-Grundverordnung, sonstiger in den Mitgliedstaaten der Europäischen Union und im Europäischen Wirtschaftsraum geltenden Datenschutzgesetze, der britischen Datenschutzgesetze, der Schweizer Datenschutzgesetze (DSG, DSV), der kalifornischen Datenschutzgesetze (CCPA/CPRA), des chinesischen Datenschutzrechts (PIPL), sowie internationaler Gesetze und anderer Bestimmungen mit datenschutzrechtlichem Charakter ist die:</p>
-    <p>Ingenieurbüro-Auner GmbH</p>
-    <p>Tulpenweg 12</p>
-    <p>41366 Schwalmtal</p>
-    <p>Tel.: 017661877599</p>
-    <p>E-Mail: info@Ingenieurbuero-auner.com</p>
-    <p>Website: Ingenieurbuero-auner.com</p>
+    <p>{data.Company.name}</p>
+    <p>{data.Company.street}</p>
+    <p>{data.Company.postalCode} {data.Company.city}</p>
+    <p>Tel.: {data.Contact.phoneDisplay}</p>
+    <p>E-Mail: {data.Contact.email}</p>
+    <p>Website: {data.Company.website}</p>
     <h2><strong>3. Erfassung von allgemeinen Daten und Informationen</strong></h2>
     <p>Unsere Webseiten erfassen mit jedem Aufruf der Webseiten durch eine betroffene Person oder ein automatisiertes System eine Reihe von allgemeinen Daten und Informationen. Diese allgemeinen Daten und Informationen werden in den Logfiles des jeweiligen Servers gespeichert. Erfasst werden können unter anderem die (1) verwendeten Browsertypen und Versionen, (2) das vom zugreifenden System verwendete Betriebssystem, (3) die Webseite, von welcher ein zugreifendes System auf unsere Webseiten gelangt (sogenannte Referrer), (4) die Unterwebseiten, welche über ein zugreifendes System auf unseren Webseiten angesteuert werden, (5) das Datum und die Uhrzeit eines Zugriffs auf die Webseite, (6) eine Internet-Protokoll-Adresse (IP-Adresse), (7) der Internet-Service-Provider des zugreifenden Systems und (8) sonstige ähnliche Daten und Informationen, die der Gefahrenabwehr im Falle von Angriffen auf unsere informationstechnologischen Systeme dienen.</p>
     <p>Bei der Nutzung dieser allgemeinen Daten und Informationen ziehen wir keine Rückschlüsse auf die betroffene Person. Diese Informationen werden vielmehr benötigt, um (1) die Inhalte unserer Webseiten korrekt auszuliefern, (2) die Inhalte unserer Webseiten sowie die Werbung für diese zu optimieren, (3) die dauerhafte Funktionsfähigkeit unserer informationstechnologischen Systeme und der Technik unserer Webseiten zu gewährleisten sowie (4) um Strafverfolgungsbehörden im Falle eines Cyberangriffes die zur Strafverfolgung notwendigen Informationen bereitzustellen. Diese anonym erhobenen Daten und Informationen werden durch uns daher einerseits statistisch und ferner mit dem Ziel ausgewertet, den Datenschutz und die Datensicherheit in unserem Unternehmen zu erhöhen, um letztlich ein optimales Schutzniveau für die von uns verarbeiteten personenbezogenen Daten sicherzustellen. Die Daten der Server-Logfiles werden getrennt von allen durch eine betroffene Person angegebenen personenbezogenen Daten gespeichert.</p>
