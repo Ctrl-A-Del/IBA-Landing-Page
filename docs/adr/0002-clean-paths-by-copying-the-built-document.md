@@ -1,4 +1,4 @@
-# 0001: Clean paths for the Legal pages by copying the built landing page document
+# 0002: Clean paths for the Legal pages by copying the built landing page document
 
 Status: accepted
 
@@ -13,7 +13,8 @@ Pages, which serves static files only and has no server-side rewrite. The Legal 
 After the Vite build, `scripts/copy-route-documents.js` copies the built landing page document
 (`dist/index.html`) to `dist/impressum/index.html` and `dist/datenschutz/index.html`. GitHub Pages then
 serves a real file at each clean address, the same bundle boots, and the app picks the Legal page from the
-path (no router library). The script exits non-zero if the source document is missing. `npm run build` is
+path (no router library). The list of Legal page addresses is `LegalPages` in `src/data/data.json`
+(ADR 0003); the app and the script both read it. The script exits non-zero if the source document is missing. `npm run build` is
 the Vite build followed by this script, so CI, PR checks and deploy use one command. Vite builds with the
 default base `/`, so asset URLs are absolute and the copies need no rewriting.
 

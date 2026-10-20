@@ -10,6 +10,7 @@ import path from "path";
 import React from "react";
 import { render } from "@testing-library/react";
 import App from "./App";
+import data from "./data/data.json";
 
 const fixture = (file) => {
   const holder = document.createElement("div");
@@ -163,6 +164,49 @@ test("the landing title is restored when navigating from a Legal page back to th
   const landing = renderAt("/");
   expect(landing.container.querySelector("main section#start")).not.toBeNull();
   expect(document.title).toBe("Ingenieurbüro Auner");
+});
+
+// The content file's `LegalPages` list drives the path lookup, the tab titles and the footer links
+// (ADR 0002, 0003). Every listed page is checked, so a slug added without a Legal page component
+// fails here: its address would render the landing page instead.
+const LISTED = data.LegalPages.flatMap((page) => [
+  [`/${page.slug}`, page],
+  [`/${page.slug}/`, page],
+]);
+
+describe.each(LISTED)("the listed Legal page at %s", (pathname, page) => {
+  test("renders a Legal page, not the landing page, with the listed tab title", () => {
+    document.title = "Ingenieurbüro Auner";
+    const { container } = renderAt(pathname);
+    const main = container.querySelector("main");
+    expect(main.querySelector("section#start")).toBeNull();
+    expect(main.querySelector(".legal-prose").textContent.trim()).not.toBe("");
+    expect(document.title).toBe(page.title);
+  });
+
+  test("adds a visually hidden h1 only when the list gives it a heading", () => {
+    const { container } = renderAt(pathname);
+    const added = [...container.querySelectorAll("main h1.sr-only")].map((h) => h.textContent);
+    expect(added).toEqual(page.heading ? [page.heading] : []);
+  });
+});
+
+test("the list names the Impressum's hidden heading and none for the Datenschutzerklärung", () => {
+  expect(data.LegalPages.map(({ slug, heading }) => [slug, heading])).toEqual([
+    ["impressum", "Impressum"],
+    ["datenschutz", undefined],
+  ]);
+});
+
+describe.each(["/", "/impressum/"])("the footer at %s", (pathname) => {
+  test("links every listed Legal page, at /<slug>/ with its link label, and nothing else", () => {
+    const { container } = renderAt(pathname);
+    const links = [...container.querySelectorAll("footer a")].map((a) => [
+      a.textContent,
+      a.getAttribute("href"),
+    ]);
+    expect(links).toEqual(data.LegalPages.map(({ slug, linkLabel }) => [linkLabel, `/${slug}/`]));
+  });
 });
 
 describe.each(["/", "/gibt-es-nicht", "/impressum-nicht"])("the landing page at %s", (pathname) => {

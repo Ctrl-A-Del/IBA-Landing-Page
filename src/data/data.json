@@ -90,11 +90,27 @@
       "selected": "Adresse unten markiert – mit Strg+C (Mac: ⌘+C) kopieren oder auf dem Handy gedrückt halten und „Kopieren“ wählen."
     }
   },
-  "Footer": {
-    "company": "Ingenieurbüro-Auner GmbH",
-    "legalLinks": [
-      { "path": "/impressum/", "label": "Impressum" },
-      { "path": "/datenschutz/", "label": "Datenschutzerklärung" }
-    ]
-  }
+  "Company": {
+    "name": "Ingenieurbüro-Auner GmbH",
+    "street": "Tulpenweg 12",
+    "postalCode": "41366",
+    "city": "Schwalmtal",
+    "website": "ingenieurbuero-auner.com",
+    "representative": "Marcus Auner",
+    "registerCourt": "Mönchengladbach",
+    "registerNumber": "HRB 23617"
+  },
+  "LegalPages": [
+    {
+      "slug": "impressum",
+      "title": "Impressum – Ingenieurbüro Auner",
+      "linkLabel": "Impressum",
+      "heading": "Impressum"
+    },
+    {
+      "slug": "datenschutz",
+      "title": "Datenschutzerklärung – Ingenieurbüro Auner",
+      "linkLabel": "Datenschutzerklärung"
+    }
+  ]
 }

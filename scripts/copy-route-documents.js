@@ -1,23 +1,32 @@
 'use strict';
 // Post-build step: GitHub Pages serves a real file per clean path, so copy the built
-// landing page document to a directory index per Legal page.
+// landing page document to a directory index per Legal page. The Legal pages are `LegalPages` in
+// the content file (ADR 0002), and each is served at the address `src/legalPageAddress.mjs` gives
+// it, the same one the footer links to. Afterwards each copy is checked for the Vite stylesheet
+// bundle, so a Legal page that would render unstyled fails the build.
 const fs = require('fs');
 const path = require('path');
+const { LegalPages } = require('../src/data/data.json');
+const { legalPageAddress } = require('../src/legalPageAddress.mjs');
 
-const ROUTES = ['impressum', 'datenschutz'];
+const STYLESHEET = /href="\/assets\/[^"]+\.css"/;
 
 function copyRouteDocuments(buildDir) {
   const source = path.join(buildDir, 'index.html');
   if (!fs.existsSync(source)) {
     throw new Error(`Built document not found: ${source}`);
   }
-  for (const route of ROUTES) {
-    fs.mkdirSync(path.join(buildDir, route), { recursive: true });
-    fs.copyFileSync(source, path.join(buildDir, route, 'index.html'));
+  for (const { slug } of LegalPages) {
+    const target = path.join(buildDir, legalPageAddress(slug), 'index.html');
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.copyFileSync(source, target);
+    if (!STYLESHEET.test(fs.readFileSync(target, 'utf8'))) {
+      throw new Error(`${target} does not reference the stylesheet bundle (/assets/*.css)`);
+    }
   }
 }
 
-module.exports = { copyRouteDocuments, ROUTES };
+module.exports = { copyRouteDocuments };
 
 if (require.main === module) {
   try {
