@@ -28,8 +28,14 @@ import data from "../../data/data.json";
  *
  * HEADINGS: eyebrow "Das Unternehmen" → H2 (names the section) → H3 "Team" → intro and portraits.
  *
- * COPY: `data.json` `Unternehmen` (eyebrow, H2, and under `team` the H3, intro, list name, and each
- * person's image path, name and role). The old heading `Maschinenbau aus NRW` is now the hero's trust line (§4.1 "Key
+ * ÜBER UNS: below the portraits, after a decorative 1 px rule (hard-edge language, B2; hidden from
+ * assistive technology, so it is not announced as a separator). Two paragraphs in the same
+ * `max-w-2xl` column as the opening. The first is stored WITHOUT the company name; the component
+ * puts `Company.name` in front of it (ADR 0003), so the name exists once and no placeholder syntax
+ * is needed. The second is phrased as intent: no prototype exists yet (C2).
+ *
+ * COPY: `data.json` `Unternehmen` (eyebrow, H2, under `team` the H3, intro, list name, and each
+ * person's image path, name and role; under `ueberUns` the H3 and the two paragraphs). The old heading `Maschinenbau aus NRW` is now the hero's trust line (§4.1 "Key
  * moves") and is deliberately not repeated here. The intro stays in the honest development
  * register of C2 ("entwickeln", no completed-project claims).
  */
@@ -37,7 +43,9 @@ const {
   eyebrow: EYEBROW,
   heading: HEADING,
   team: { heading: TEAM_HEADING, intro: INTRO, listLabel: LIST_LABEL, people: PEOPLE },
+  ueberUns: { heading: UEBER_UNS_HEADING, paragraphs: UEBER_UNS_PARAGRAPHS },
 } = data.Unternehmen;
+const COMPANY_NAME = data.Company.name;
 
 const HEADING_ID = "unternehmen-heading";
 
@@ -68,6 +76,17 @@ const Unternehmen = () => (
             className="mx-auto max-w-xs md:max-w-none"
           />
         </li>
+      ))}
+    </Reveal>
+
+    <div aria-hidden="true" className="mt-16 h-px bg-mist-500/40 sm:mt-20" />
+
+    <Reveal className="mt-16 max-w-2xl sm:mt-20">
+      <h3 className="text-display-md text-mist-100">{UEBER_UNS_HEADING}</h3>
+      {UEBER_UNS_PARAGRAPHS.map((text, i) => (
+        <p key={text} className="mt-4 text-body-lg">
+          {i === 0 ? `${COMPANY_NAME} ${text}` : text}
+        </p>
       ))}
     </Reveal>
   </Section>

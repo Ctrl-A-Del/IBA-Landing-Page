@@ -12,6 +12,7 @@ import React from "react";
 import { render, within } from "@testing-library/react";
 import Unternehmen from "./Unternehmen";
 import PortraitCard from "../ui/PortraitCard";
+import data from "../../data/data.json";
 
 const PEOPLE = [
   { img: "img/marcus.png", name: "Marcus Auner", role: "Geschäftsführung" },
@@ -53,7 +54,7 @@ test("the Team part has its own H3 before the intro line and the portrait list",
   const { section } = renderSection();
 
   const h3s = [...section.querySelectorAll("h3")];
-  expect(h3s.map((h) => h.textContent)).toEqual(["Team"]);
+  expect(h3s[0]).toHaveTextContent("Team");
   const list = within(section).getByRole("list", { name: "Das Team" });
   expect(h3s[0].compareDocumentPosition(list) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 });
@@ -125,4 +126,28 @@ test("every card opts into the fill option, so the three cards share one height 
   const frames = section.querySelectorAll("li > figure");
   expect(frames).toHaveLength(3);
   frames.forEach((frame) => expect(frame).toHaveAttribute("data-fill", "true"));
+});
+
+test("Über uns follows the portraits: an H3 and two paragraphs, the first opening with the company name", () => {
+  const { section } = renderSection();
+
+  const [teamHeading, ueberUns] = [...section.querySelectorAll("h3")];
+  expect(ueberUns).toHaveTextContent("Über uns");
+  const list = within(section).getByRole("list", { name: "Das Team" });
+  const after = (a, b) => a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING;
+  expect(after(teamHeading, list)).toBeTruthy();
+  expect(after(list, ueberUns)).toBeTruthy();
+
+  const paragraphs = [...section.querySelectorAll("p")].filter((p) => after(ueberUns, p));
+  expect(paragraphs).toHaveLength(2);
+  expect(paragraphs[0].textContent.startsWith(data.Company.name)).toBe(true);
+  expect(paragraphs[0]).toHaveTextContent(data.Unternehmen.ueberUns.paragraphs[0]);
+  expect(paragraphs[1].textContent).toBe(data.Unternehmen.ueberUns.paragraphs[1]);
+});
+
+test("the dividing rule is not exposed to assistive technology", () => {
+  const { section } = renderSection();
+
+  expect(within(section).queryByRole("separator")).toBeNull();
+  expect(section.querySelector("hr")).toBeNull();
 });
