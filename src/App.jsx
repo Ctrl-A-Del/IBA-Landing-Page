@@ -10,6 +10,7 @@ import LegalPage from "./components/legal/LegalPage";
 import Impressum from "./components/legal/Impressum";
 import Datenschutz from "./components/legal/Datenschutz";
 import data from "./data/data.json";
+import { slugOfPath } from "./legalPageAddress.mjs";
 
 /**
  * The page — composition and order fixed by DESIGN_PLAN.md §4 (design v2, approved and migrated
@@ -42,8 +43,9 @@ const LandingMain = () => (
 
 /**
  * Legal pages, picked from the path (no router library) by matching it against the slugs in
- * `data.json` `LegalPages` (ADR 0002, 0003). The trailing slash is optional; any other path renders
- * the landing page. Links between pages are plain anchors (full page loads).
+ * `data.json` `LegalPages` (ADR 0002, 0003). The trailing slash is optional (the slash convention
+ * lives in `./legalPageAddress.mjs`); any other path renders the landing page. Links between pages
+ * are plain anchors (full page loads).
  *
  * The list gives each page's tab title and optional hidden heading; only the slug-to-component
  * mapping lives here, since components cannot live in JSON. A listed slug without a component here
@@ -55,7 +57,7 @@ const LEGAL_TEXTS = {
 };
 
 const legalPageFor = (pathname) => {
-  const slug = pathname.replace(/^\/+|\/+$/g, "");
+  const slug = slugOfPath(pathname);
   const page = data.LegalPages.find((p) => p.slug === slug);
   const Text = page && LEGAL_TEXTS[page.slug];
   return Text ? { ...page, Text } : null;

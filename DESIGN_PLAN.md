@@ -119,7 +119,7 @@ Section headings that are **hardcoded in JSX and absent from `data.json`**:
 
 ### 1.5 Content (`src/data/data.json`) — verbatim
 
-Top-level keys: `Header`, `About`, `Services`, `Team`, `Contact`. Nothing else. No testimonials, no portfolio, no references data.
+Top-level keys: `Header`, `About`, `Services`, `Team`, `Contact`, `Company`, `LegalPages`. Nothing else. No testimonials, no portfolio, no references data.
 
 **Header**
 - `title`: `"Wir schaufeln nicht – wir fräsen"` (U+2013 EN DASH, not a hyphen)
@@ -179,7 +179,7 @@ The machine is presented via a **CAD render** with **annotations baked in**, and
 
 - **Ingenieurbüro-Auner GmbH**, Tulpenweg 12, 41366 Schwalmtal (NRW). Registergericht Mönchengladbach, HRB 23617, vertreten durch Marcus Auner.
 - Field: trench milling for energy/utility network expansion. Tagline: `"Wir schaufeln nicht – wir fräsen"`.
-- The two Legal pages (Impressum, Datenschutzerklärung) are React components at `/impressum/` and `/datenschutz/`; the old `public/*.html` files are removed. Their Legal text is untouchable; verbatim copies are in `src/__fixtures__/`. The address typo (`41366 Tulpenweg`) was corrected by the owner to `41366 Schwalmtal`. The Datenschutzerklärung documents GitHub Pages / GitHub Inc. as processor.
+- The two Legal pages (Impressum, Datenschutzerklärung) are React components at `/impressum/` and `/datenschutz/`; the old `public/*.html` files are removed. Their Legal text is untouchable; verbatim copies of its wording are in `src/__fixtures__/`, and the Company details inside it are filled in from `data.json` (ADR 0003). The address typo (`41366 Tulpenweg`) was corrected by the owner to `41366 Schwalmtal`. The Datenschutzerklärung documents GitHub Pages / GitHub Inc. as processor.
 - `README.md` is the **unmodified** "React JS Landing Page Template" readme (Issaaf Kattan; inspired by Free-CSS "Interact") — it still instructs `yarn` and mentions EmailJS, which is no longer used anywhere.
 
 ### 1.9 Known defects to fix in this branch
@@ -198,7 +198,7 @@ The machine is presented via a **CAD render** with **annotations baked in**, and
 3. **Tailwind is wired through `postcss.config.js`** (`tailwindcss` + `autoprefixer`); keep it in place.
 4. **Do not re-add Google Fonts / any font CDN `<link>`.** Fonts are self-hosted, latin subset only.
 5. **New Tailwind classes only compile if they appear in the `content` globs** (`./index.html`, `./src/**/*.{js,jsx}`). Don't build class names dynamically from strings.
-6. **The Legal pages are in scope for layout and theme, but the Legal text is untouchable.** Never reword, reformat or "fix" it; only the company changes it. `src/__fixtures__/impressum.html` and `datenschutz.html` are the verbatim reference, and a test guards the text.
+6. **The Legal pages are in scope for layout and theme, but the Legal text is untouchable.** Never reword, reformat or "fix" it; only the company changes it. `src/__fixtures__/impressum.html` and `datenschutz.html` are the verbatim reference for the wording, and a test guards it. The Company details inside it are not wording: they are filled in from `data.json`, one form per fact (ADR 0003).
 7. **No fabricated content:** no invented references, testimonials, project counts, performance figures or certifications. The machine is a concept (§1.7).
 8. **Never put white text on the orange CTA** (§1.9).
 9. **`npm` only** — there is no `yarn.lock`; keep `package-lock.json` in sync; CI runs `npm ci`.

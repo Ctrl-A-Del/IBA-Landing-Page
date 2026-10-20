@@ -2,6 +2,7 @@ import Emblem from "../ui/Emblem";
 import { GUTTER, TONES } from "../ui/Section";
 import { FOCUS_ON_DARK } from "./focus";
 import data from "../../data/data.json";
+import { legalPageAddress } from "../../legalPageAddress.mjs";
 
 /**
  * Ticket 10 — Footer (DESIGN_PLAN.md §4 row 8, decisions B6, C12, C18, amended 11.1/R6).
@@ -30,11 +31,11 @@ import data from "../../data/data.json";
 // The company name comes from `data.json` `Company` (ADR 0003); the Legal page links come from
 // `data.json` `LegalPages`, the same list the app resolves its paths against (`src/App.jsx`).
 const LEGAL_LINKS = data.LegalPages.map(({ slug, linkLabel }) => ({
-  href: `/${slug}/`,
+  href: legalPageAddress(slug),
   label: linkLabel,
 }));
 
-const COMPANY = data.Company.name;
+const COMPANY_NAME = data.Company.name;
 
 const Footer = () => (
   <footer className={`${TONES.navy} py-12 sm:py-16`}>
@@ -42,9 +43,9 @@ const Footer = () => (
       <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:gap-4 sm:text-left">
         <Emblem className="h-14 w-14 shrink-0 sm:h-16 sm:w-16" />
         <div>
-          <p className="font-heading text-body font-bold text-mist-100">{COMPANY}</p>
+          <p className="font-heading text-body font-bold text-mist-100">{COMPANY_NAME}</p>
           <p className="mt-1 text-body-sm text-mist-400">
-            © {new Date().getFullYear()} {COMPANY}
+            © {new Date().getFullYear()} {COMPANY_NAME}
           </p>
         </div>
       </div>
