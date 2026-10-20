@@ -4,13 +4,19 @@
 
 **Blocked by:** 01 (Widen the content-file tests to cover the Legal pages)
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] Every `LegalPages` slug, with and without the trailing slash, renders its Legal page with the listed document title
-- [ ] The Impressum keeps its single, visually hidden h1; the Datenschutzerklärung still has no added heading
-- [ ] Every footer link to a Legal page points at a listed slug (`/<slug>/`) with its `linkLabel`
-- [ ] A test fails when a listed slug has no Legal page component
-- [ ] Any other path still renders the landing page
-- [ ] `Footer.legalLinks` is gone from the content file; the content-file tests (approved and used) pass
-- [ ] The Legal page fixture comparison passes unchanged
-- [ ] `npm test` and `npm run build` pass
+- [x] Every `LegalPages` slug, with and without the trailing slash, renders its Legal page with the listed document title
+- [x] The Impressum keeps its single, visually hidden h1; the Datenschutzerklärung still has no added heading
+- [x] Every footer link to a Legal page points at a listed slug (`/<slug>/`) with its `linkLabel`
+- [x] A test fails when a listed slug has no Legal page component
+- [x] Any other path still renders the landing page
+- [x] `Footer.legalLinks` is gone from the content file; the content-file tests (approved and used) pass
+- [x] The Legal page fixture comparison passes unchanged
+- [x] `npm test` and `npm run build` pass
+
+## Comments
+
+- `src/App.jsx` maps slug to component in `LEGAL_TEXTS`; a listed slug with no component falls back to the landing page, which the list-driven tests in `src/LegalPages.test.jsx` catch (checked by removing `datenschutz` from the map: 7 tests fail).
+- `src/App.copy.test.jsx`: a marked slug names no page, so the Legal pages are rendered from a copy marked everywhere except the `LegalPages` slugs. The slugs must still be found marked, which the fully marked landing pass shows through the footer hrefs. The used check is not weakened.
+- `Footer.company` is left in place for ticket 03 (`Company.name`).

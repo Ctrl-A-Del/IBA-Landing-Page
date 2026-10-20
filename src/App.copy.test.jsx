@@ -51,23 +51,34 @@ const CLOSE = "⟧";
 const mark = (s) => `${OPEN}${s}${CLOSE}`;
 
 /**
+ * Loads App and the capture helpers against a substituted data.json. A fresh module registry gets
+ * its own React, so the renderer and the capture helper come from the same registry as the App.
+ */
+const loadAppWith = async (content) => {
+  vi.resetModules();
+  vi.doMock("./data/data.json", () => ({ default: content }));
+  const IsolatedReact = await import("react");
+  const { default: IsolatedApp } = await import("./App");
+  const helpers = await import("./__fixtures__/captureCopy");
+  return { page: IsolatedReact.createElement(IsolatedApp), ...helpers };
+};
+
+/**
  * Renders App against a data.json whose every string is wrapped in ⟦…⟧: the landing page (`copy`,
  * for the hardcoded check) and every Legal page. `haystack` is everything the site shows, landing
  * page and Legal pages alike, document titles included (for the used check).
+ *
+ * A marked slug (`⟦impressum⟧`) names no Legal page, so the Legal pages are rendered from a second
+ * copy that is marked everywhere except the `LegalPages` slugs. The slugs still have to be found
+ * marked: the landing pass, fully marked, shows them in the footer's Legal page links.
  */
 const renderWithMarkedData = async () => {
   const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
   const marked = mapLeaves(data, mark);
-  // A fresh module registry gets its own React, so the renderer and the capture helper are loaded
-  // from the same registry as the App under test.
-  vi.resetModules();
-  vi.doMock("./data/data.json", () => ({ default: marked }));
-  const IsolatedReact = await import("react");
-  const { default: IsolatedApp } = await import("./App");
-  const page = IsolatedReact.createElement(IsolatedApp);
-  const { captureCopy: isolatedCaptureCopy, captureStatic } = await import(
-    "./__fixtures__/captureCopy"
-  );
+  const routable = {
+    ...marked,
+    LegalPages: marked.LegalPages.map((page, i) => ({ ...page, slug: data.LegalPages[i].slug })),
+  };
   // jsdom's document has no <title> unless one is added, and then ignores `document.title = ...`.
   if (!document.querySelector("title")) document.head.appendChild(document.createElement("title"));
   const originalScrollTo = window.scrollTo;
@@ -75,11 +86,15 @@ const renderWithMarkedData = async () => {
   let copy;
   let pages;
   try {
-    copy = await isolatedCaptureCopy(page);
-    pages = [{ path: "/" }, ...LEGAL_PAGES].map(({ path: pathname }) => {
+    window.history.pushState({}, "", "/");
+    const landing = await loadAppWith(marked);
+    copy = await landing.captureCopy(landing.page);
+    pages = [landing.captureStatic(landing.page)];
+    const legal = await loadAppWith(routable);
+    for (const { path: pathname } of LEGAL_PAGES) {
       window.history.pushState({}, "", pathname);
-      return captureStatic(page);
-    });
+      pages.push(legal.captureStatic(legal.page));
+    }
   } finally {
     window.history.pushState({}, "", "/");
     window.scrollTo = originalScrollTo;

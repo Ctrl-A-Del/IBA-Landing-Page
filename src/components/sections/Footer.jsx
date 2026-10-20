@@ -27,10 +27,11 @@ import data from "../../data/data.json";
  * `<body>` bottom padding below `md`, so the footer's last line scrolls clear of it.
  */
 
-// Copy from `data.json` `Footer`; the legal pages are routes of the app (`src/App.jsx`).
-const LEGAL_LINKS = data.Footer.legalLinks.map(({ path, label }) => ({
-  href: path,
-  label,
+// Copy from `data.json` `Footer`; the Legal page links come from `data.json` `LegalPages`, the same
+// list the app resolves its paths against (`src/App.jsx`).
+const LEGAL_LINKS = data.LegalPages.map(({ slug, linkLabel }) => ({
+  href: `/${slug}/`,
+  label: linkLabel,
 }));
 
 const COMPANY = data.Footer.company;

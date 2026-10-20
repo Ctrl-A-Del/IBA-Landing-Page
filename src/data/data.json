@@ -91,10 +91,19 @@
     }
   },
   "Footer": {
-    "company": "Ingenieurbüro-Auner GmbH",
-    "legalLinks": [
-      { "path": "/impressum/", "label": "Impressum" },
-      { "path": "/datenschutz/", "label": "Datenschutzerklärung" }
-    ]
-  }
+    "company": "Ingenieurbüro-Auner GmbH"
+  },
+  "LegalPages": [
+    {
+      "slug": "impressum",
+      "title": "Impressum – Ingenieurbüro Auner",
+      "linkLabel": "Impressum",
+      "heading": "Impressum"
+    },
+    {
+      "slug": "datenschutz",
+      "title": "Datenschutzerklärung – Ingenieurbüro Auner",
+      "linkLabel": "Datenschutzerklärung"
+    }
+  ]
 }
