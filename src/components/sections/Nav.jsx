@@ -154,8 +154,7 @@ const Nav = ({ onLanding = true }) => {
           <div className="ml-auto hidden shrink-0 md:block">
             <CTA href={PHONE_HREF} aria-label={CALL_ARIA_LABEL}>
               <Phone aria-hidden="true" className="h-4 w-4" strokeWidth={2.25} />
-              <span className="lg:hidden">{CALL_VERB}</span>
-              <span className="hidden lg:inline">{PHONE_DISPLAY}</span>
+              <span>{PHONE_DISPLAY}</span>
             </CTA>
           </div>
 

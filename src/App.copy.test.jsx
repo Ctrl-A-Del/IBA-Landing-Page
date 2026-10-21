@@ -14,7 +14,9 @@
  * (`.scratch/partner-recruiting/spec.md`; the sector labels in the spec were dropped by the layout
  * verdict of ticket 01 and are not in the golden). It was edited by hand a third time for the nav (ticket 04): the "Partner" link label between
  * "Unternehmen" and "Kontakt" and the hamburger button's accessible name "Menü" (an `aria-label`, no
- * visible text), both approved with the nav verdicts of tickets 06 and 07. Nothing else in it has been changed.
+ * visible text), both approved with the nav verdicts of tickets 06 and 07. It was edited a fourth time, at the company owner's request on
+ * 2026-10-21, when the header call button began to show the number at tablet width too: the nav button no longer
+ * carries a separate "Anrufen" label. Nothing else in it has been changed.
  *
  * The content file also feeds the Legal pages (ADR 0003), so the "approved" check also accepts the
  * Legal page fixtures and the Legal page titles written out below, and the "used" check searches the

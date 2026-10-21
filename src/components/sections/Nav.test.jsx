@@ -3,7 +3,7 @@
  *
  * SEAM: the rendered `<Nav />` component, observed through the DOM a visitor (or a screen reader)
  * gets: link targets, accessible names, visible text and the nav's `data-state`. Nothing here
- * asserts a Tailwind class string — breakpoint visibility (`lg:` number vs "Anrufen", `md:hidden`
+ * asserts a Tailwind class string — breakpoint visibility (`md:hidden`
  * bar) cannot be observed in jsdom and is verified in the browser pass recorded in the ticket.
  */
 import React from "react";
@@ -40,10 +40,10 @@ test("the nav's phone CTA dials the international number and names the local one
   expect(telLinks).toHaveLength(1);
   const [cta] = telLinks;
   expect(cta.getAttribute("href")).toBe("tel:+4917661877599");
-  // Both breakpoint labels are in the DOM; CSS shows one of them (C16). The accessible name
-  // carries the verb and the local number at every width.
+  // The header button shows the number at every width it is shown (C16); the verb lives in the
+  // accessible name and in the call bar below `md`.
   expect(cta).toHaveTextContent("0176 618 77 599");
-  expect(cta).toHaveTextContent("Anrufen");
+  expect(cta).not.toHaveTextContent("Anrufen");
   expect(cta.getAttribute("aria-label")).toBe("Anrufen: 0176 618 77 599");
 });
 
