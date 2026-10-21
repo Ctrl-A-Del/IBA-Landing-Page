@@ -82,7 +82,7 @@ describe("page composition", () => {
 });
 
 describe("internal anchors", () => {
-  test("every in-page link resolves to a section inside <main>, and the nav links the page top plus the four §4 nav sections", () => {
+  test("every in-page link resolves to a section inside <main>, and the nav links the page top plus the five §4 nav sections", () => {
     const { container, main, pageQueryAll } = renderPage();
     const hashLinks = pageQueryAll('a[href^="#"]');
     expect(hashLinks.length).toBeGreaterThan(0);
@@ -101,7 +101,7 @@ describe("internal anchors", () => {
     const navTargets = [...container.querySelectorAll("nav a[href^='#']")].map((a) =>
       a.getAttribute("href")
     );
-    expect(navTargets).toEqual(["#start", "#verfahren", "#einsatzbereiche", "#unternehmen", "#kontakt"]);
+    expect(navTargets).toEqual(["#start", "#verfahren", "#einsatzbereiche", "#unternehmen", "#partner", "#kontakt"]);
   });
 
   test("the seven §4.1 anchors exist exactly once each, in page order", () => {

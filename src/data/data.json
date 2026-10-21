@@ -9,10 +9,12 @@
   "Nav": {
     "label": "Hauptnavigation",
     "homeLabel": "Ingenieurbüro Auner – zum Seitenanfang",
+    "menuLabel": "Menü",
     "links": [
       { "anchor": "verfahren", "label": "Verfahren" },
       { "anchor": "einsatzbereiche", "label": "Einsatzbereiche" },
       { "anchor": "unternehmen", "label": "Unternehmen" },
+      { "anchor": "partner", "label": "Partner" },
       { "anchor": "kontakt", "label": "Kontakt" }
     ]
   },
