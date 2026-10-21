@@ -23,5 +23,11 @@ contrast. It exists only to build the Favicon.
 
 **Favicon** — The browser-tab and home-screen icon set, built from the Phoenix mark.
 
+**Partnerrolle** — A way an outside party takes part in developing and validating the Grabenfräse. There
+are two: *Anwender & Pilotpartner* (from Bau & Infrastruktur, validates site requirements and operating
+conditions with the company) and *Entwicklungspartner* (from Industrie & Entwicklung, develops and
+validates mechanical engineering, components and prototype with the company). It is not a job: the
+page looks for partners, never staff, so it avoids "Stelle", "Karriere" and "Bewerbung".
+
 **Grabenfräse** — The machine the company develops, and the one name the page uses for it ("die
 Maschine" is fine once it is named). Not *Grabenmaschine*, not *Fräsmaschine*.

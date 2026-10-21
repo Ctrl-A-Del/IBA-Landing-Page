@@ -1,5 +1,5 @@
-import { useLayoutEffect } from "react";
-import { Phone } from "lucide-react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Menu, Phone, X } from "lucide-react";
 import CTA from "../ui/CTA";
 import Emblem from "../ui/Emblem";
 import data from "../../data/data.json";
@@ -32,12 +32,22 @@ import { FOCUS_ON_DARK } from "./focus";
  * THE EMBLEM is `../ui/Emblem`, shared with the footer (11.1/R6) so the brand mark has one source of truth
  * (the `emblem.png` asset); this file only sizes it.
  *
+ * THE HAMBURGER (decisions C21, B9): below `lg` (1024 px) the five links collapse behind a
+ * hamburger button; from `lg` up they sit inline. It is ONE `<ul>` that CSS turns into either the
+ * inline row or a full-width navy dropdown panel under the bar (variant a, text right-aligned to sit
+ * under the button), so the links exist once in the DOM. Closed below `lg` the panel is
+ * `visibility: hidden`, which keeps its links out of the tab order. Esc closes it and returns focus
+ * to the button; picking a link closes it. While open the bar is solid navy even over the hero; this
+ * is a class only, `data-state` still follows the scroll position (B9). The orange call button stays
+ * outside the menu.
+ *
  * `onLanding` (default `true`): on the landing page the section links are same-page `#anchors` and
  * the nav is transparent over the hero until scrolled. On a Legal page it is `false`: the links lead
  * to the landing page's sections (`/#anchor`) and the nav is always solid, since there is no hero.
  */
 
-const { label: NAV_LABEL, homeLabel: HOME_LABEL, links } = data.Nav;
+const { label: NAV_LABEL, homeLabel: HOME_LABEL, menuLabel: MENU_LABEL, links } = data.Nav;
+const MENU_ID = "nav-menu";
 const linksFor = (prefix) =>
   links.map(({ anchor, label }) => ({ href: `${prefix}#${anchor}`, label }));
 
@@ -73,13 +83,37 @@ const Nav = ({ onLanding = true }) => {
   const LINKS = linksFor(prefix);
   useReserveCallBarSpace();
 
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButton = useRef(null);
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      setMenuOpen(false);
+      menuButton.current?.focus();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
+
   return (
     <>
+      {/* Dims the page behind the open panel. A sibling below the nav (z-30 < z-40), not a child:
+          inside the nav it would paint over the bar's own background and dim the bar too. */}
+      {menuOpen && (
+        <div
+          aria-hidden="true"
+          data-testid="nav-backdrop"
+          onClick={() => setMenuOpen(false)}
+          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+        />
+      )}
+
       <nav
         aria-label={NAV_LABEL}
         data-state={isScrolled ? "solid" : "transparent"}
         className={`fixed inset-x-0 top-0 z-40 h-nav border-b transition-colors duration-300 motion-reduce:transition-none ${
-          isScrolled ? "border-mist-500/40 bg-brand" : "border-transparent bg-transparent"
+          isScrolled || menuOpen ? "border-mist-500/40 bg-brand" : "border-transparent bg-transparent"
         }`}
       >
         <div className="mx-auto flex h-full w-full max-w-container items-center gap-2 px-5 sm:gap-6 sm:px-6 lg:px-8">
@@ -92,20 +126,24 @@ const Nav = ({ onLanding = true }) => {
           </a>
 
           {/*
-            Phones: the four links sit in one row at a compact 13px/medium so they fit beside the
-            emblem at 375 px. 13px is an arbitrary value because no type token fits: `body-sm`
-            (14px) overflows the row at 375 and 360 px, and `eyebrow` (13px) carries letter-spacing.
-            `overflow-x-auto` is the safety net for narrower screens, and it is
-            why the row is `justify-start` below `sm`: with `justify-end`, overflowing content spills
-            off the LEFT edge, where a scroll box cannot reach it. The `p-1` keeps the focus outline
-            inside the scroll box, which would otherwise clip it.
+            One list, two layouts. From `lg`: a static inline row, right-aligned, filling the space
+            before the call button. Below `lg` (every `max-lg:` class): a fixed full-width panel under
+            the bar (`top-nav`) with right-aligned text, faded and `invisible` while closed.
           */}
-          <ul className="flex min-w-0 flex-1 items-center justify-start gap-x-2 overflow-x-auto p-1 sm:justify-end sm:gap-x-6 lg:gap-x-8">
+          <ul
+            id={MENU_ID}
+            className={`max-lg:fixed max-lg:inset-x-0 max-lg:top-nav max-lg:border-b max-lg:border-mist-500/40 max-lg:bg-brand max-lg:px-5 max-lg:py-2 max-lg:text-right max-lg:transition max-lg:duration-200 motion-reduce:transition-none sm:max-lg:px-6 lg:flex lg:min-w-0 lg:flex-1 lg:items-center lg:justify-end lg:gap-x-8 lg:p-1 ${
+              menuOpen
+                ? "max-lg:visible max-lg:translate-y-0 max-lg:opacity-100"
+                : "max-lg:invisible max-lg:-translate-y-2 max-lg:opacity-0"
+            }`}
+          >
             {LINKS.map(({ href, label }) => (
-              <li key={href} className="shrink-0">
+              <li key={href} className="max-lg:border-b max-lg:border-mist-500/20 max-lg:last:border-b-0 lg:shrink-0">
                 <a
                   href={href}
-                  className={`block whitespace-nowrap rounded-edge py-2 font-body text-[0.8125rem] font-medium text-mist-200 no-underline transition-colors duration-150 hover:text-white sm:text-body sm:font-semibold ${FOCUS_ON_DARK}`}
+                  onClick={() => setMenuOpen(false)}
+                  className={`block whitespace-nowrap rounded-edge py-4 font-body text-body font-semibold text-mist-200 no-underline transition-colors duration-150 hover:text-white lg:py-2 ${FOCUS_ON_DARK}`}
                 >
                   {label}
                 </a>
@@ -113,13 +151,28 @@ const Nav = ({ onLanding = true }) => {
             ))}
           </ul>
 
-          <div className="hidden shrink-0 md:block">
+          <div className="ml-auto hidden shrink-0 md:block">
             <CTA href={PHONE_HREF} aria-label={CALL_ARIA_LABEL}>
               <Phone aria-hidden="true" className="h-4 w-4" strokeWidth={2.25} />
-              <span className="lg:hidden">{CALL_VERB}</span>
-              <span className="hidden lg:inline">{PHONE_DISPLAY}</span>
+              <span>{PHONE_DISPLAY}</span>
             </CTA>
           </div>
+
+          <button
+            ref={menuButton}
+            type="button"
+            aria-label={MENU_LABEL}
+            aria-expanded={menuOpen}
+            aria-controls={MENU_ID}
+            onClick={() => setMenuOpen(!menuOpen)}
+            className={`ml-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-edge text-mist-200 hover:text-white md:ml-0 lg:hidden ${FOCUS_ON_DARK}`}
+          >
+            {menuOpen ? (
+              <X aria-hidden="true" className="h-6 w-6" strokeWidth={2.25} />
+            ) : (
+              <Menu aria-hidden="true" className="h-6 w-6" strokeWidth={2.25} />
+            )}
+          </button>
         </div>
       </nav>
 

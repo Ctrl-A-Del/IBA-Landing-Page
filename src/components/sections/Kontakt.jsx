@@ -6,27 +6,25 @@ import Reveal from "../ui/Reveal";
 import CTA from "../ui/CTA";
 import { CALL_ARIA_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
 import { EMAIL, MAIL_HREF } from "./email";
-import { FOCUS_ON_LIGHT } from "./focus";
+import { FOCUS_ON_DARK } from "./focus";
 import data from "../../data/data.json";
 
 /**
- * Ticket 09 — Kontakt (DESIGN_PLAN.md §4 row 7, decisions C5, C11, C15–C17, amended 11.1/R6).
+ * Ticket 09 — Kontakt (DESIGN_PLAN.md §4 row 8, decisions C5, C11, C12, C15–C17, C21).
  *
  * The call is the page's one real goal, so it gets a named person beside it: Marcus Auner. There is
  * no portrait here any more (C15 amended) — his face already appears once, directly above, in Unternehmen
  * — so the section carries only his name and role, in the same two-line pattern Unternehmen's caption uses.
  *
- * LIGHT SURFACE, TWO COLUMNS (C12, C17 amended/added in R6): the section now sits on the light tone
- * instead of navy, which also closes the background rhythm with the footer's step back to navy. From
- * `md` up it is two columns — eyebrow/H2/intro on the left, the contact block (name, role, call,
- * email, copy) on the right — so the white section does not look empty beside the short intro copy.
+ * NAVY SURFACE, TWO COLUMNS (C12 re-amended by C21, C17): the section is on the navy tone again and
+ * runs straight into the navy footer with no divider between them. From `md` up it is two columns —
+ * eyebrow/H2/intro on the left, the contact block (name, role, call, email, copy) on the right.
  * Below `md` the columns stack in DOM order, heading first, so the "Kontakt" nav anchor lands on the
  * heading and the call sits near the top of the screen.
  *
- * ON-LIGHT COLOURS: text and rules use the `ink` ramp (the light-surface tokens in
- * `tailwind.config.js`), and links/buttons use `FOCUS_ON_LIGHT`, whose `ink-900` outline clears
- * 18:1 on white where a white outline would vanish. The orange call CTA needs no change: its own
- * two-tone indicator already carries a navy ring that works on white.
+ * ON-NAVY COLOURS: text and rules use the `mist` ramp (the navy-surface tokens in
+ * `tailwind.config.js`), and links/buttons use `FOCUS_ON_DARK`, whose white outline clears 16.8:1
+ * on navy. The orange call CTA is unchanged.
  *
  * PHONE FIRST: the call is the only orange `CTA` in the section and the first action in reading
  * and tab order. The `CTA` primitive locks navy-on-orange, so white text on orange is
@@ -130,11 +128,11 @@ const Kontakt = () => {
   };
 
   return (
-    <Section id="kontakt" tone="light" aria-labelledby={HEADING_ID}>
+    <Section id="kontakt" tone="navy" aria-labelledby={HEADING_ID}>
       <div className="grid gap-10 md:grid-cols-2 md:gap-16">
         <Reveal className="max-w-2xl">
-          <p className="text-eyebrow text-ink-500">{EYEBROW}</p>
-          <h2 id={HEADING_ID} className="mt-3 text-display-lg text-ink-900">
+          <p className="text-eyebrow text-mist-400">{EYEBROW}</p>
+          <h2 id={HEADING_ID} className="mt-3 text-display-lg text-mist-100">
             {HEADING}
           </h2>
           <p className="mt-5 text-body-lg">{INTRO}</p>
@@ -142,19 +140,19 @@ const Kontakt = () => {
 
         <Reveal className="max-w-md">
           {/* Name and role on two lines, the same pattern as Unternehmen's caption (C15 amended). */}
-          <p className="font-heading text-display-md font-bold text-ink-900">{PERSON.name}</p>
-          <p className="mt-1 text-body-sm text-ink-500">{PERSON.role}</p>
+          <p className="font-heading text-display-md font-bold text-mist-100">{PERSON.name}</p>
+          <p className="mt-1 text-body-sm text-mist-400">{PERSON.role}</p>
 
           <CTA href={PHONE_HREF} aria-label={CALL_ARIA_LABEL} className="mt-6 w-full px-8 py-4 sm:w-auto">
             <Phone aria-hidden="true" className="h-5 w-5" strokeWidth={2.25} />
             <span>{PHONE_DISPLAY}</span>
           </CTA>
 
-          <div className="mt-10 border-t border-ink-900/15 pt-6">
+          <div className="mt-10 border-t border-mist-500/30 pt-6">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
               <a
                 href={MAIL_HREF}
-                className={`inline-flex min-w-0 items-center gap-3 rounded-edge py-1 text-body text-ink-900 underline decoration-ink-400 underline-offset-4 transition-colors duration-150 hover:text-ink-700 hover:decoration-ink-700 ${FOCUS_ON_LIGHT}`}
+                className={`inline-flex min-w-0 items-center gap-3 rounded-edge py-1 text-body text-mist-100 underline decoration-mist-500 underline-offset-4 transition-colors duration-150 hover:text-white hover:decoration-mist-200 ${FOCUS_ON_DARK}`}
               >
                 <Mail aria-hidden="true" className="h-5 w-5 shrink-0" strokeWidth={2.25} />
                 <span className="break-all">{EMAIL}</span>
@@ -162,7 +160,7 @@ const Kontakt = () => {
               <button
                 type="button"
                 onClick={handleCopy}
-                className={`inline-flex items-center gap-2 rounded-edge border border-ink-400 px-3 py-2 text-body-sm font-semibold text-ink-700 transition-colors duration-150 hover:border-ink-700 hover:text-ink-900 ${FOCUS_ON_LIGHT}`}
+                className={`inline-flex items-center gap-2 rounded-edge border border-mist-500 px-3 py-2 text-body-sm font-semibold text-mist-200 transition-colors duration-150 hover:border-mist-300 hover:text-mist-100 ${FOCUS_ON_DARK}`}
               >
                 <Copy aria-hidden="true" className="h-4 w-4" strokeWidth={2.25} />
                 <span>{COPY_LABEL}</span>
@@ -175,12 +173,12 @@ const Kontakt = () => {
               <span
                 ref={fallbackRef}
                 tabIndex={-1}
-                className={`inline-block select-all break-all rounded-edge border border-ink-400 px-3 py-2 text-body-sm text-ink-900 ${FOCUS_ON_LIGHT}`}
+                className={`inline-block select-all break-all rounded-edge border border-mist-500 px-3 py-2 text-body-sm text-mist-100 ${FOCUS_ON_DARK}`}
               >
                 {EMAIL}
               </span>
             </p>
-            <p role="status" aria-atomic="true" className="mt-3 min-h-[1.5em] text-body-sm text-ink-600">
+            <p role="status" aria-atomic="true" className="mt-3 min-h-[1.5em] text-body-sm text-mist-300">
               {STATUS[status]}
             </p>
           </div>

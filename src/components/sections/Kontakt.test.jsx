@@ -1,6 +1,6 @@
 /**
  * Tests for ticket 09 — Kontakt: Marcus Auner named beside the call, email without a form.
- * Rewritten in 11.1 (R6): the portrait is gone, the section sits on the light tone, and the name
+ * Rewritten in 11.1 (R6): the portrait is gone, the section sat on the light tone (navy again since C21), and the name
  * and role split into two lines.
  *
  * SEAMS
@@ -8,8 +8,8 @@
  *      anchor, heading, link targets, accessible names, the live region. Same seam as 03–08.
  *   2. The browser clipboard (`navigator.clipboard`, `document.execCommand`) — the one external
  *      boundary, so it is the one thing stubbed. Nothing internal is mocked.
- * No Tailwind class string is asserted. The light backdrop, the two-column layout, visible focus
- * against white and the clearance above the fixed mobile call bar cannot be observed in jsdom; see
+ * No Tailwind class string is asserted. The navy backdrop's colours, the two-column layout, visible focus
+ * against navy and the clearance above the fixed mobile call bar cannot be observed in jsdom; see
  * the ticket. "Same CTA as the rest of the page" is checked by comparison with the shared primitive
  * rendered on its own, not by restating its classes.
  */
@@ -17,6 +17,8 @@ import React from "react";
 import { act, fireEvent, render, within } from "@testing-library/react";
 import Kontakt from "./Kontakt";
 import CTA from "../ui/CTA";
+import { TONES } from "../ui/Section";
+import Footer from "./Footer";
 import { EMAIL } from "./email";
 
 let originalGetComputedStyle;
@@ -44,6 +46,22 @@ test("renders the #kontakt section, named by its heading", () => {
   const heading = within(section).getByRole("heading", { level: 2 });
   expect(heading).toHaveTextContent(/\S/);
   expect(getByRole("region", { name: heading.textContent })).toBe(section);
+});
+
+test("Kontakt is on the navy tone and runs straight into the footer with no rule between them (C12)", () => {
+  const { section } = renderSection();
+  const { container: footer } = render(<Footer />);
+  const footerEl = footer.querySelector("footer");
+
+  // Same surface as the footer, taken from the Section primitive's navy tone.
+  TONES.navy.split(" ").forEach((cls) => {
+    expect(section).toHaveClass(cls);
+    expect(footerEl).toHaveClass(cls);
+  });
+  // Navy on navy needs no divider: neither side carries a border or divider utility.
+  [section, footerEl].forEach((el) => {
+    expect([...el.classList].some((c) => /^(border|divide|ring|shadow)/.test(c))).toBe(false);
+  });
 });
 
 test("no image in the section: Marcus Auner's face appears once on the page, in Unternehmen, not here", () => {

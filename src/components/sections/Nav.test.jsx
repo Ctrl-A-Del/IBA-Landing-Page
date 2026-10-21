@@ -3,11 +3,11 @@
  *
  * SEAM: the rendered `<Nav />` component, observed through the DOM a visitor (or a screen reader)
  * gets: link targets, accessible names, visible text and the nav's `data-state`. Nothing here
- * asserts a Tailwind class string — breakpoint visibility (`lg:` number vs "Anrufen", `md:hidden`
+ * asserts a Tailwind class string — breakpoint visibility (`md:hidden`
  * bar) cannot be observed in jsdom and is verified in the browser pass recorded in the ticket.
  */
 import React from "react";
-import { render, fireEvent, act } from "@testing-library/react";
+import { render, fireEvent, act, within } from "@testing-library/react";
 import Nav from "./Nav";
 
 const setScrollY = (y) => {
@@ -16,7 +16,7 @@ const setScrollY = (y) => {
 
 beforeEach(() => setScrollY(0));
 
-test("links to the four sections in the agreed order", () => {
+test("links to the five sections in the agreed order", () => {
   const { getByRole } = render(<Nav />);
   const nav = getByRole("navigation");
   const sectionLinks = Array.from(nav.querySelectorAll('a[href^="#"]'))
@@ -27,6 +27,7 @@ test("links to the four sections in the agreed order", () => {
     ["Verfahren", "#verfahren"],
     ["Einsatzbereiche", "#einsatzbereiche"],
     ["Unternehmen", "#unternehmen"],
+    ["Partner", "#partner"],
     ["Kontakt", "#kontakt"],
   ]);
 });
@@ -39,10 +40,10 @@ test("the nav's phone CTA dials the international number and names the local one
   expect(telLinks).toHaveLength(1);
   const [cta] = telLinks;
   expect(cta.getAttribute("href")).toBe("tel:+4917661877599");
-  // Both breakpoint labels are in the DOM; CSS shows one of them (C16). The accessible name
-  // carries the verb and the local number at every width.
+  // The header button shows the number at every width it is shown (C16); the verb lives in the
+  // accessible name and in the call bar below `md`.
   expect(cta).toHaveTextContent("0176 618 77 599");
-  expect(cta).toHaveTextContent("Anrufen");
+  expect(cta).not.toHaveTextContent("Anrufen");
   expect(cta.getAttribute("aria-label")).toBe("Anrufen: 0176 618 77 599");
 });
 
@@ -93,4 +94,80 @@ test("offers no WhatsApp or other unpublished contact channel", () => {
 
   hrefs.forEach((href) => expect(href).toMatch(/^(#|tel:\+4917661877599$)/));
   expect(container.textContent).not.toMatch(/whatsapp/i);
+});
+
+describe("the hamburger menu", () => {
+  const setup = () => {
+    const utils = render(<Nav />);
+    const nav = utils.getByRole("navigation");
+    const button = within(nav).getByRole("button", { name: "Menü" });
+    return { ...utils, nav, button };
+  };
+
+  test("is a real button, collapsed at first, that controls the list of the five links", () => {
+    const { nav, button } = setup();
+    expect(button).toHaveAttribute("type", "button");
+    expect(button).toHaveAttribute("aria-expanded", "false");
+    const panel = nav.querySelector(`[id="${button.getAttribute("aria-controls")}"]`);
+    expect(panel).not.toBeNull();
+    // One list serves both layouts (a row from lg, the dropdown below), so the links exist once.
+    expect(within(panel).getAllByRole("link").map((a) => a.textContent)).toEqual([
+      "Verfahren",
+      "Einsatzbereiche",
+      "Unternehmen",
+      "Partner",
+      "Kontakt",
+    ]);
+  });
+
+  test("opens and closes on the button; the scroll state (B9) is not touched by it", () => {
+    const { nav, button } = setup();
+    fireEvent.click(button);
+    expect(button).toHaveAttribute("aria-expanded", "true");
+    expect(nav).toHaveAttribute("data-state", "transparent");
+    fireEvent.click(button);
+    expect(button).toHaveAttribute("aria-expanded", "false");
+  });
+
+  test("the dim backdrop sits outside the nav landmark (so it cannot dim the bar) and closes the menu", () => {
+    const { container, nav, button } = setup();
+    expect(container.querySelector('[data-testid="nav-backdrop"]')).toBeNull();
+    fireEvent.click(button);
+    const backdrop = container.querySelector('[data-testid="nav-backdrop"]');
+    expect(backdrop).not.toBeNull();
+    expect(nav.contains(backdrop)).toBe(false);
+    fireEvent.click(backdrop);
+    expect(button).toHaveAttribute("aria-expanded", "false");
+  });
+
+  test("Esc closes it and returns focus to the button", () => {
+    const { nav, button } = setup();
+    fireEvent.click(button);
+    within(nav).getByRole("link", { name: "Kontakt" }).focus();
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(button).toHaveAttribute("aria-expanded", "false");
+    expect(button).toHaveFocus();
+  });
+
+  test("Esc leaves focus alone while the menu is closed", () => {
+    const { nav, button } = setup();
+    const link = within(nav).getByRole("link", { name: "Verfahren" });
+    link.focus();
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(link).toHaveFocus();
+    expect(button).not.toHaveFocus();
+  });
+
+  test("picking a link closes it", () => {
+    const { nav, button } = setup();
+    fireEvent.click(button);
+    fireEvent.click(within(nav).getByRole("link", { name: "Partner" }));
+    expect(button).toHaveAttribute("aria-expanded", "false");
+  });
+
+  test("on a Legal page the same list leads to the landing page", () => {
+    const { getByRole } = render(<Nav onLanding={false} />);
+    const links = within(getByRole("navigation")).getAllByRole("link").map((a) => a.getAttribute("href"));
+    expect(links).toContain("/#partner");
+  });
 });

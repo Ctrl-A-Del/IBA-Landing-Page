@@ -1,9 +1,9 @@
 /**
  * Section — the page's background + rhythm primitive (ticket 02, DESIGN_PLAN.md §4 and §4.1).
  *
- * Two tones, matching the background rhythm fixed by decision C12 (§4, amended in R6):
- *   navy   -> hero, Einsatzbereiche, Unternehmen (the footer reuses these classes on its <footer>)
- *   light  -> Verfahren, Warum wir, Kontakt
+ * Two tones, matching the background rhythm fixed by decision C12 (§4, amended in R6 and C21):
+ *   navy   -> hero, Einsatzbereiche, Unternehmen, Kontakt (the footer reuses these classes on its <footer>)
+ *   light  -> Verfahren, Warum wir
  * (The former `alt` tone and its `brand.alt` colour were removed in ticket 12: no v2 consumer.)
  *
  * The tone carries its own text colour from the neutral ramp, so a section ticket never writes

@@ -5,12 +5,12 @@ import data from "../../data/data.json";
 import { legalPageAddress } from "../../legalPageAddress.mjs";
 
 /**
- * Ticket 10 — Footer (DESIGN_PLAN.md §4 row 8, decisions B6, C12, C18, amended 11.1/R6).
+ * Ticket 10 — Footer (DESIGN_PLAN.md §4 row 9, decisions B6, C12, C18, amended 11.1/R6).
  *
  * Renders the page's <footer> landmark, outside <main> (page contract in `src/App.jsx`):
  * the brand block (emblem + company name + copyright line, C18) and the two legal links, on the
  * brand navy that closes the background rhythm (C12 amended — navy, not `brand.alt`, and no
- * hairline, since white-to-navy is already a 15.6:1 step).
+ * hairline: it joins the navy Kontakt above it, so there is no step to mark).
  *
  * WHY NOT `<Section tone="navy">`: the primitive renders a <section> with the content-section
  * rhythm (`py-20 … lg:py-36`). The footer must be a <footer> landmark and is not a content section,

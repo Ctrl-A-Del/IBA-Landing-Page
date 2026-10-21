@@ -4,6 +4,7 @@ import Verfahren from "./components/sections/Verfahren";
 import Einsatzbereiche from "./components/sections/Einsatzbereiche";
 import WarumWir from "./components/sections/WarumWir";
 import Unternehmen from "./components/sections/Unternehmen";
+import Partner from "./components/sections/Partner";
 import Kontakt from "./components/sections/Kontakt";
 import Footer from "./components/sections/Footer";
 import LegalPage from "./components/legal/LegalPage";
@@ -24,8 +25,9 @@ import { slugOfPath } from "./legalPageAddress.mjs";
  *   4     Einsatzbereiche   <section id="einsatzbereiche">
  *   5     Warum wir         <section id="warum">
  *   6     Unternehmen       <section id="unternehmen">
- *   7     Kontakt           <section id="kontakt">
- *   8     Footer            a <footer> landmark, outside <main>, last on the page
+ *   7     Partner           <section id="partner"> (light; "Partner gesucht", two Partnerrollen)
+ *   8     Kontakt           <section id="kontakt"> (navy, joins the navy footer with no divider)
+ *   9     Footer            a <footer> landmark, outside <main>, last on the page
  *
  * The `id`s are the anchors listed in DESIGN_PLAN.md §4.1; the nav links to them. All copy comes
  * from `src/data/data.json`.
@@ -37,6 +39,7 @@ const LandingMain = () => (
     <Einsatzbereiche />
     <WarumWir />
     <Unternehmen />
+    <Partner />
     <Kontakt />
   </main>
 );
