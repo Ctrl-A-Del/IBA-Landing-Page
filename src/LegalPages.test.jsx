@@ -219,6 +219,7 @@ describe.each(["/", "/gibt-es-nicht", "/impressum-nicht"])("the landing page at 
       "einsatzbereiche",
       "warum",
       "unternehmen",
+      "partner",
       "kontakt",
     ]);
     expect(container.querySelector("nav a[href='#verfahren']")).not.toBeNull();

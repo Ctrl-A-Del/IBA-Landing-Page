@@ -104,10 +104,10 @@ describe("internal anchors", () => {
     expect(navTargets).toEqual(["#start", "#verfahren", "#einsatzbereiche", "#unternehmen", "#kontakt"]);
   });
 
-  test("the six §4.1 anchors exist exactly once each, in page order", () => {
+  test("the seven §4.1 anchors exist exactly once each, in page order", () => {
     const { main } = renderPage();
     const ids = [...main.querySelectorAll("section[id]")].map((s) => s.id);
-    expect(ids).toEqual(["start", "verfahren", "einsatzbereiche", "warum", "unternehmen", "kontakt"]);
+    expect(ids).toEqual(["start", "verfahren", "einsatzbereiche", "warum", "unternehmen", "partner", "kontakt"]);
   });
 });
 
@@ -273,7 +273,10 @@ describe("contact details", () => {
 
   test("the mailto: goes to the data.json address with a sensible, correctly encoded subject", () => {
     const { pageQueryAll } = renderPage();
-    const mails = pageQueryAll('a[href^="mailto:"]');
+    // Kontakt's link, plus the two Partner section links (checked in Partner.test.jsx).
+    const allMails = pageQueryAll('a[href^="mailto:"]');
+    expect(allMails).toHaveLength(3);
+    const mails = allMails.filter((a) => a.closest("#kontakt"));
     expect(mails).toHaveLength(1);
     const href = mails[0].getAttribute("href");
     const [address, query] = href.replace(/^mailto:/, "").split("?");
@@ -317,7 +320,10 @@ describe("no fabricated content (C2, C7, §2.7)", () => {
       /projekte?\s+(abgeschlossen|realisiert|umgesetzt)/i, /realisiert/i, /im einsatz/i, /bewährt/i,
       /garantier/i, /marktführ/i, /führende/i, /jahre(n)? erfahrung/i,
       /%|prozent/i, /tagesleistung/i, /meter pro/i, /x-?mal/i, /\bbis zu\b/i,
-      /zufriedene/i, /partner/i,
+      /zufriedene/i,
+      // "partner" is no longer banned page-wide: the Partner section (C21) recruits Pilot- and
+      // Entwicklungspartner. What stays banned is claiming existing partners.
+      /bestehende partner/i, /partnerschaft/i, /unsere partner/i,
     ];
     const hits = BANNED.filter((re) => re.test(copy)).map(String);
     expect(hits).toEqual([]);

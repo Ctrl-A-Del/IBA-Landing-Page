@@ -91,6 +91,7 @@ const placesWith = async (content) => {
     nav: at("/", (c) => seen(...[...c.children].filter((e) => !e.matches("main, footer")))),
     hero: at("/", (c) => seen(c.querySelector("#start"))),
     unternehmen: at("/", (c) => seen(c.querySelector("#unternehmen"))),
+    partner: at("/", (c) => seen(c.querySelector("#partner"))),
     kontakt: at("/", kontakt),
     footer: at("/", (c) => seen(c.querySelector("footer"))),
     impressum: at("/impressum/", (c) => `${document.title}\n${seen(c)}`),
@@ -114,7 +115,7 @@ const FIELDS = [
   ["Company", "registerNumber", "HRB 23617", "HRB 98765", ["impressum"]],
   ["Contact", "phone", "+49 176 618 77 599", "+49 211 555 01 23", ["nav", "hero", "kontakt"], ["tel:+4917661877599", "tel:+492115550123"]],
   ["Contact", "phoneDisplay", "0176 618 77 599", "0211 555 01 23", ["nav", "hero", "kontakt", "datenschutz"]],
-  ["Contact", "email", "info@ingenieurbuero-auner.com", "post@beispielwerk-fraesen.de", ["kontakt", "datenschutz"]],
+  ["Contact", "email", "info@ingenieurbuero-auner.com", "post@beispielwerk-fraesen.de", ["partner", "kontakt", "datenschutz"]],
 ];
 
 // The old value as a value of its own: the old website is also the domain of the (unchanged) email

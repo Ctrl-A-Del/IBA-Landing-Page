@@ -89,6 +89,25 @@
       ]
     }
   },
+  "Partner": {
+    "eyebrow": "Partner gesucht",
+    "heading": "Gemeinsam arbeiten",
+    "intro": "Wir entwickeln die Grabenfräse gemeinsam mit Partnern aus Bau und Industrie.",
+    "roles": [
+      {
+        "title": "Anwender & Pilotpartner",
+        "description": "Baustellenanforderungen und Einsatzbedingungen gemeinsam mit Anwendern validieren.",
+        "actionLabel": "Als Pilotpartner melden",
+        "mailSubject": "Anfrage Pilotpartner"
+      },
+      {
+        "title": "Entwicklungspartner",
+        "description": "Maschinenbau, Komponenten und Prototyp gemeinsam entwickeln und validieren.",
+        "actionLabel": "Als Entwicklungspartner melden",
+        "mailSubject": "Anfrage Entwicklungspartner"
+      }
+    ]
+  },
   "Kontakt": {
     "eyebrow": "Kontakt",
     "heading": "Sprechen Sie direkt mit uns",

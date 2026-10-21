@@ -8,7 +8,11 @@
  *
  * The golden was edited by hand once, for the "Das Unternehmen" section (Über uns, then Team: layout verdict C, 2026-10-21) and the
  * single machine name "Grabenfräse": the company owner approved that copy in the 2026-10-20 session
- * (`.scratch/unternehmen-section/spec.md`). Nothing else in it has been changed.
+ * (`.scratch/unternehmen-section/spec.md`). It was edited by hand a second time for the "Partner gesucht"
+ * section (eyebrow, H2, intro, both Partnerrollen with description and action label, and the two
+ * encoded `mailto:` subjects): the company owner approved that copy in the 2026-10-21 session
+ * (`.scratch/partner-recruiting/spec.md`; the sector labels in the spec were dropped by the layout
+ * verdict of ticket 01 and are not in the golden). Nothing else in it has been changed.
  *
  * The content file also feeds the Legal pages (ADR 0003), so the "approved" check also accepts the
  * Legal page fixtures and the Legal page titles written out below, and the "used" check searches the
