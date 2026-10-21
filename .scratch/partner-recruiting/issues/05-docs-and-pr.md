@@ -7,9 +7,9 @@ Type: enhancement
 
 **Blocked by:** 03 (Partner section), 04 (Fifth nav link "Partner").
 
-- [ ] DESIGN_PLAN.md has new decision **C21**: section copy, anchor `#partner`, nav link, secondary lane, no orange, `mailto:` per role, plus the layout verdict from ticket 01
-- [ ] A3 (secondary audience clause: Entwicklungspartner), C12 (new order, Kontakt navy, footer join) and C20 (five nav links) are amended
-- [ ] §4 gets a new row 7 with later rows renumbered; the §4.1 anchor list adds `#partner`
-- [ ] `GLOSSARY.md` defines **Partnerrolle** with its two instances and rejects "Stelle", "Karriere", "Bewerbung"
-- [ ] `npm test` and `npm run build` green
+- [x] DESIGN_PLAN.md has new decision **C21**: section copy, anchor `#partner`, nav link, secondary lane, no orange, `mailto:` per role, plus the layout verdict from ticket 01
+- [x] A3 (secondary audience clause: Entwicklungspartner), C12 (new order, Kontakt navy, footer join) and C20 (five nav links) are amended
+- [x] §4 gets a new row 7 with later rows renumbered; the §4.1 anchor list adds `#partner`
+- [x] `GLOSSARY.md` defines **Partnerrolle** with its two instances and rejects "Stelle", "Karriere", "Bewerbung"
+- [x] `npm test` and `npm run build` green
 - [ ] PR opened from `content/partner-recruiting`, not merged (merging deploys)
