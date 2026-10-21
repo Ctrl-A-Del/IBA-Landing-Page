@@ -3,13 +3,13 @@ Type: enhancement
 
 # 03: "Partner gesucht" section with a pre-addressed email per Partnerrolle
 
-**What to build:** A visitor scrolling past "Das Unternehmen" meets a light "Partner gesucht" section (`#partner`) before Kontakt: eyebrow, H2 "Gemeinsam arbeiten", intro, and two Partnerrollen (Anwender & Pilotpartner, Entwicklungspartner), each with sector label, description and a quiet outlined action that opens an email to the company address with the role's URI-encoded subject. Layout is the one approved in ticket 01. No orange, no form, no named contact, and no "Stelle", "Karriere" or "Bewerbung" wording. All copy is as in the spec.
+**What to build:** A visitor scrolling past "Das Unternehmen" meets a light "Partner gesucht" section (`#partner`) before Kontakt: eyebrow, H2 "Gemeinsam arbeiten", intro, and two Partnerrollen (Anwender & Pilotpartner, Entwicklungspartner), each with description and a quiet outlined action that opens an email to the company address with the role's URI-encoded subject. Layout is the one approved in ticket 01. No orange, no form, no named contact, and no "Stelle", "Karriere" or "Bewerbung" wording. All copy is as in the spec.
 
-**Blocked by:** 01 (Prototype the layout of "Partner gesucht"), 02 (Kontakt returns to navy and joins the footer).
+**Blocked by:** 02 (Kontakt returns to navy and joins the footer).
 
-- [ ] New top-level `Partner` content entry (`eyebrow`, `heading`, `intro`, `roles` with `sector`, `title`, `description`, `actionLabel`, `mailSubject`); every string renders verbatim and is used
-- [ ] `Partner` section module on the `Section` primitive: light tone, anchor `partner`, named by its H2, wrapped in `Reveal`; layout per the approved prototype verdict
-- [ ] Two H3s under the H2, in order; each sector label is read together with its role
+- [ ] New top-level `Partner` content entry (`eyebrow`, `heading`, `intro`, `roles` with `title`, `description`, `actionLabel`, `mailSubject`); every string renders verbatim and is used
+- [ ] `Partner` section module on the `Section` primitive: light tone, anchor `partner`, named by its H2, wrapped in `Reveal`; layout is variant C of ticket 01 (two bordered boxes side by side, no sector label; reference `ticket/01-partner-prototype`, `src/prototype/PartnerPrototype.jsx`)
+- [ ] Two H3s under the H2, in order. Per the 01 verdict there is no sector label: the `sector` strings from the spec are not stored or rendered
 - [ ] Two `mailto:` links built like Kontakt's, address read from `Contact.email` (never stored in `Partner`); each link's accessible name identifies its role; focus is visible
 - [ ] Actions use the shared secondary button style, not the orange primary
 - [ ] App order: Hero, Verfahren, Einsatzbereiche, Warum wir, Unternehmen, Partner, Kontakt; slot table comment updated
