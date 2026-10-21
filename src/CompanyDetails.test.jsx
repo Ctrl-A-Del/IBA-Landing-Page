@@ -90,6 +90,7 @@ const placesWith = async (content) => {
     // The nav and the mobile call bar: everything on the landing page outside <main> and <footer>.
     nav: at("/", (c) => seen(...[...c.children].filter((e) => !e.matches("main, footer")))),
     hero: at("/", (c) => seen(c.querySelector("#start"))),
+    unternehmen: at("/", (c) => seen(c.querySelector("#unternehmen"))),
     kontakt: at("/", kontakt),
     footer: at("/", (c) => seen(c.querySelector("footer"))),
     impressum: at("/impressum/", (c) => `${document.title}\n${seen(c)}`),
@@ -99,11 +100,11 @@ const placesWith = async (content) => {
 };
 
 // Each Company detail (content file entry and field), its value today, a changed value, and the
-// places that show it. "Marcus Auner" is also Team's and Kontakt's contact person, a separate entry,
+// places that show it. "Marcus Auner" is also the Unternehmen section's and Kontakt's contact person, a separate entry,
 // so the representative is checked on the Impressum only. A detail shown in another form than it is
 // stored in gives that form, old and new, written out as well: the phone number is the `tel:` target.
 const FIELDS = [
-  ["Company", "name", "Ingenieurbüro-Auner GmbH", "Beispielwerk Fräsen AG", ["footer", "impressum", "datenschutz"]],
+  ["Company", "name", "Ingenieurbüro-Auner GmbH", "Beispielwerk Fräsen AG", ["unternehmen", "footer", "impressum", "datenschutz"]],
   ["Company", "street", "Tulpenweg 12", "Ahornallee 7", ["impressum", "datenschutz"]],
   ["Company", "postalCode", "41366", "50667", ["impressum", "datenschutz"]],
   ["Company", "city", "Schwalmtal", "Viersen", ["impressum", "datenschutz"]],

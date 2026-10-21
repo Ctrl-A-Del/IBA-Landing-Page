@@ -22,3 +22,6 @@ shown from there wherever it appears, on the landing page and in the Legal text 
 contrast. It exists only to build the Favicon.
 
 **Favicon** — The browser-tab and home-screen icon set, built from the Phoenix mark.
+
+**Grabenfräse** — The machine the company develops, and the one name the page uses for it ("die
+Maschine" is fine once it is named). Not *Grabenmaschine*, not *Fräsmaschine*.

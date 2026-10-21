@@ -3,7 +3,7 @@ import Hero from "./components/sections/Hero";
 import Verfahren from "./components/sections/Verfahren";
 import Einsatzbereiche from "./components/sections/Einsatzbereiche";
 import WarumWir from "./components/sections/WarumWir";
-import Team from "./components/sections/Team";
+import Unternehmen from "./components/sections/Unternehmen";
 import Kontakt from "./components/sections/Kontakt";
 import Footer from "./components/sections/Footer";
 import LegalPage from "./components/legal/LegalPage";
@@ -23,7 +23,7 @@ import { slugOfPath } from "./legalPageAddress.mjs";
  *   3     Verfahren         <section id="verfahren">
  *   4     Einsatzbereiche   <section id="einsatzbereiche">
  *   5     Warum wir         <section id="warum">
- *   6     Team              <section id="team">
+ *   6     Unternehmen       <section id="unternehmen">
  *   7     Kontakt           <section id="kontakt">
  *   8     Footer            a <footer> landmark, outside <main>, last on the page
  *
@@ -36,7 +36,7 @@ const LandingMain = () => (
     <Verfahren />
     <Einsatzbereiche />
     <WarumWir />
-    <Team />
+    <Unternehmen />
     <Kontakt />
   </main>
 );

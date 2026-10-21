@@ -9,7 +9,7 @@ import { CALL_ARIA_LABEL, PHONE_DISPLAY, PHONE_HREF } from "./phone";
  *
  * TYPOGRAPHIC ON PURPOSE: no image. The machine render is held back for the Verfahren section
  * (§4 row 3), so the first screen is the tagline, one subline naming the field, the call, and the
- * trust line `Maschinenbau aus NRW` (moved here from the old Team heading, §4.1 "Key moves").
+ * trust line `Maschinenbau aus NRW` (moved here from the old Team section heading, §4.1 "Key moves").
  *
  * CLEARING THE FIXED NAV: ticket 03's nav is `position: fixed`, `h-nav` (5rem) tall and transparent
  * over this section, so it overlays the top 5rem of it. `Section`'s top padding is `py-20` = 5rem at

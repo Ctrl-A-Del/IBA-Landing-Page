@@ -1,7 +1,7 @@
 /**
  * PortraitCard — the framed light card for portraits over navy (ticket 02).
  *
- * Used by Team (DESIGN_PLAN.md §3 B7); it is the one definition of "framed card" on the page.
+ * Used by Unternehmen (DESIGN_PLAN.md §3 B7); it is the one definition of "framed card" on the page.
  *
  * WHY THE CROP IS INSIDE THE PRIMITIVE
  * `aspect-[3/4]` + `object-cover object-top` are baked in here rather than left to the callers. The

@@ -2,7 +2,7 @@
  * Section — the page's background + rhythm primitive (ticket 02, DESIGN_PLAN.md §4 and §4.1).
  *
  * Two tones, matching the background rhythm fixed by decision C12 (§4, amended in R6):
- *   navy   -> hero, Einsatzbereiche, Team (the footer reuses these classes on its <footer>)
+ *   navy   -> hero, Einsatzbereiche, Unternehmen (the footer reuses these classes on its <footer>)
  *   light  -> Verfahren, Warum wir, Kontakt
  * (The former `alt` tone and its `brand.alt` colour were removed in ticket 12: no v2 consumer.)
  *
@@ -23,7 +23,7 @@
  *   exists to prevent. To change the nav height, change `spacing.nav`.
  *
  * INTERFACE
- *   <Section id="team" tone="navy">...</Section>
+ *   <Section id="unternehmen" tone="navy">...</Section>
  * `className` is for LAYOUT ONLY. It is appended last so it reads last, but Tailwind's cascade is
  * decided by the order of the generated utilities, not by the class attribute: a conflicting
  * background utility passed here is NOT guaranteed to win. Pass layout, not colour.

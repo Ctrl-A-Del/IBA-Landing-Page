@@ -26,7 +26,7 @@ test("links to the four sections in the agreed order", () => {
   expect(sectionLinks).toEqual([
     ["Verfahren", "#verfahren"],
     ["Einsatzbereiche", "#einsatzbereiche"],
-    ["Team", "#team"],
+    ["Unternehmen", "#unternehmen"],
     ["Kontakt", "#kontakt"],
   ]);
 });

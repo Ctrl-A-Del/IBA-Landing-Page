@@ -13,8 +13,8 @@ import data from "../../data/data.json";
  * Ticket 09 — Kontakt (DESIGN_PLAN.md §4 row 7, decisions C5, C11, C15–C17, amended 11.1/R6).
  *
  * The call is the page's one real goal, so it gets a named person beside it: Marcus Auner. There is
- * no portrait here any more (C15 amended) — his face already appears once, directly above, in Team
- * — so the section carries only his name and role, in the same two-line pattern Team's caption uses.
+ * no portrait here any more (C15 amended) — his face already appears once, directly above, in Unternehmen
+ * — so the section carries only his name and role, in the same two-line pattern Unternehmen's caption uses.
  *
  * LIGHT SURFACE, TWO COLUMNS (C12, C17 amended/added in R6): the section now sits on the light tone
  * instead of navy, which also closes the background rhythm with the footer's step back to navy. From
@@ -141,7 +141,7 @@ const Kontakt = () => {
         </Reveal>
 
         <Reveal className="max-w-md">
-          {/* Name and role on two lines, the same pattern as Team's caption (C15 amended). */}
+          {/* Name and role on two lines, the same pattern as Unternehmen's caption (C15 amended). */}
           <p className="font-heading text-display-md font-bold text-ink-900">{PERSON.name}</p>
           <p className="mt-1 text-body-sm text-ink-500">{PERSON.role}</p>
 
