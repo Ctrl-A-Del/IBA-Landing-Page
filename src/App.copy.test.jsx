@@ -6,7 +6,7 @@
  * (commit 84ce708) before anything was moved or deleted — an independent golden, not a value this
  * test derives from the code under test.
  *
- * The golden was edited by hand once, for the "Das Unternehmen" section (Team + Über uns) and the
+ * The golden was edited by hand once, for the "Das Unternehmen" section (Über uns, then Team: layout verdict C, 2026-10-21) and the
  * single machine name "Grabenfräse": the company owner approved that copy in the 2026-10-20 session
  * (`.scratch/unternehmen-section/spec.md`). Nothing else in it has been changed.
  *

@@ -54,9 +54,9 @@ test("the Team part has its own H3 before the intro line and the portrait list",
   const { section } = renderSection();
 
   const h3s = [...section.querySelectorAll("h3")];
-  expect(h3s[0]).toHaveTextContent("Team");
+  expect(h3s[1]).toHaveTextContent("Team");
   const list = within(section).getByRole("list", { name: "Das Team" });
-  expect(h3s[0].compareDocumentPosition(list) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(h3s[1].compareDocumentPosition(list) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 });
 
 test("no line of the section repeats the hero's trust line verbatim", () => {
@@ -128,17 +128,21 @@ test("every card opts into the fill option, so the three cards share one height 
   frames.forEach((frame) => expect(frame).toHaveAttribute("data-fill", "true"));
 });
 
-test("Über uns follows the portraits: an H3 and two paragraphs, the first opening with the company name", () => {
+test("Über uns comes first: an H3 and two paragraphs, the first opening with the company name, before the Team part (verdict C)", () => {
   const { section } = renderSection();
 
-  const [teamHeading, ueberUns] = [...section.querySelectorAll("h3")];
+  const [ueberUns, teamHeading] = [...section.querySelectorAll("h3")];
   expect(ueberUns).toHaveTextContent("Über uns");
+  expect(teamHeading).toHaveTextContent("Team");
   const list = within(section).getByRole("list", { name: "Das Team" });
   const after = (a, b) => a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING;
+  expect(after(section.querySelector("h2"), ueberUns)).toBeTruthy();
+  expect(after(ueberUns, teamHeading)).toBeTruthy();
   expect(after(teamHeading, list)).toBeTruthy();
-  expect(after(list, ueberUns)).toBeTruthy();
 
-  const paragraphs = [...section.querySelectorAll("p")].filter((p) => after(ueberUns, p));
+  const paragraphs = [...section.querySelectorAll("p")].filter(
+    (p) => after(ueberUns, p) && !after(teamHeading, p)
+  );
   expect(paragraphs).toHaveLength(2);
   expect(paragraphs[0].textContent.startsWith(data.Company.name)).toBe(true);
   expect(paragraphs[0]).toHaveTextContent(data.Unternehmen.ueberUns.paragraphs[0]);

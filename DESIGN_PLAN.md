@@ -255,7 +255,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | **C17** | **Kontakt layout without the portrait:** two columns from `md` up, with the eyebrow, H2 and intro on the left and the contact block on the right (name and role, orange call, divider, email and copy). Below `md` it stacks heading first. | `R6 Q8a`. Fills the white section's width, and on phones the "Kontakt" anchor lands on the heading with the call near the top (resolves E5/F5) |
 | **C18** | **Footer content:** brand block on the left (Emblem, "Ingenieurbüro-Auner GmbH" as text, "© {current year} Ingenieurbüro-Auner GmbH" with the year computed at render), legal links on the right from `sm` up; stacked and centred below. **No address, no trust line, no phone, no email.** | `R6 Q2a` + `R6 Q3` + `R6 Q10`. The user declined the address line. Contact details stay in Kontakt only |
 | **C19** | **Team-part cards share one height per row** where they sit side by side, through a documented fill option on the portrait-card primitive (the default stays unchanged). | `R6 Q6` (E6/F7) |
-| **C20** | **Team becomes "Das Unternehmen", one navy section with two parts, Team and Über uns.** Anchor `#unternehmen`, nav label "Unternehmen" (still four nav links). Eyebrow "Das Unternehmen", H2 "Wer hinter der Grabenfräse steht", H3s "Team" (intro line and the three portraits, unchanged) and "Über uns" (two paragraphs), separated by a decorative 1 px rule hidden from assistive technology. The Über uns copy is phrased as intent because no prototype exists yet (C2); it names the company from `Company.name` (ADR 0003). **"Grabenfräse" is the one name for the machine** (glossary); the Verfahren alt text follows it. The old H2 "Die Menschen hinter der Maschine" and the anchor `#team` are retired. | Company owner approved the copy in the 2026-10-20 session (`.scratch/unternehmen-section/spec.md`). Keeps the background rhythm of C12 and adds no section between Team and Kontakt |
+| **C20** | **Team becomes "Das Unternehmen", one navy section with two parts, Über uns first and Team below.** Anchor `#unternehmen`, nav label "Unternehmen" (still four nav links). Eyebrow "Das Unternehmen", H2 "Wer hinter der Grabenfräse steht", H3s "Über uns" (two paragraphs, two text columns from `lg`) and "Team" (intro line and the three portraits, unchanged), separated by a decorative 1 px rule hidden from assistive technology. **Layout verdict: variant C chosen from five prototype variants (A to E), 2026-10-21** (vertical swap: Über uns on top, divider, Team below; this reverses the first order, where Über uns came after the portraits). Below `lg` everything stacks. The Über uns copy is phrased as intent because no prototype exists yet (C2); it names the company from `Company.name` (ADR 0003). **"Grabenfräse" is the one name for the machine** (glossary); the Verfahren alt text follows it. The old H2 "Die Menschen hinter der Maschine" and the anchor `#team` are retired. | Company owner approved the copy in the 2026-10-20 session (`.scratch/unternehmen-section/spec.md`). Keeps the background rhythm of C12 and adds no section between Team and Kontakt |
 
 ### D. Technical & workflow
 
@@ -280,7 +280,7 @@ Numbering is `Rn Qm` = round *n*, question *m* of the grilling session that prod
 | 3 | Verfahren / Die Maschine | `#verfahren` | light | The render, large and full-width at every breakpoint (C9), with the lightbox trigger (C10, C13, C14), plus the four modules as real HTML text (C4) |
 | 4 | Einsatzbereiche | `#einsatzbereiche` | navy | The four areas: Stromtrassen · Wasserstoff & Fernwärme · Wasser & Abwasser · Weitere Infrastruktur |
 | 5 | Warum wir | `#warum` | light | The three Services points, reworded from hedged to plain (within C2) |
-| 6 | Das Unternehmen | `#unternehmen` | navy | Two parts: **Team** (the three real people, framed light cards, B7) and **Über uns** (two paragraphs on what the company develops and for whom), divided by a 1 px rule (C20) |
+| 6 | Das Unternehmen | `#unternehmen` | navy | Two parts: **Über uns** (two paragraphs on what the company develops and for whom, on top) and **Team** (the three real people, framed light cards, B7, below), divided by a 1 px rule (C20) |
 | 7 | Kontakt | `#kontakt` | light | **Marcus Auner named beside the number, no portrait** (C11, C15); two columns from `md` (C17); phone-first; email with pre-filled `mailto:` + copy-to-clipboard (C5) |
 | 8 | Footer | — | navy, no hairline (C12) | Emblem + company name + © line, links to Impressum / Datenschutz (B6, C18) |
 
@@ -340,7 +340,7 @@ If implementation turns up a genuine conflict with a decision in §3, raise it w
 - [ ] Lightbox component — native `<dialog>` + `showModal()`, "Größer ansehen" trigger, caption, focus return (C10, C13, C14)
 - [ ] Einsatzbereiche
 - [ ] Warum wir (rewrite the three hedged Services points, C2/C8)
-- [ ] Das Unternehmen (Team + Über uns), framed light cards (B7)
+- [ ] Das Unternehmen (Über uns + Team, layout C), framed light cards (B7)
 - [ ] Kontakt — Marcus Auner named (C11), phone-first, pre-filled `mailto:`, copy-to-clipboard (C5)
 - [ ] Footer with the logo plate
 
