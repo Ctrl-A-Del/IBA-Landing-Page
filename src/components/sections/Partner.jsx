@@ -1,7 +1,7 @@
 import Section from "../ui/Section";
 import Reveal from "../ui/Reveal";
 import { FOCUS_ON_LIGHT } from "./focus";
-import { EMAIL } from "./email";
+import { mailHref } from "./email";
 import data from "../../data/data.json";
 
 /**
@@ -17,8 +17,8 @@ import data from "../../data/data.json";
  *
  * HEADINGS: eyebrow "Partner gesucht" -> H2 (names the section) -> intro -> one H3 per role.
  *
- * ACTIONS: `mailto:` links built like Kontakt's (URI-encoded subject). The ADDRESS is read from
- * `Contact.email` through `./email` (ADR 0003) and never stored in `Partner`; only the role subject
+ * ACTIONS: `mailto:` links built with `mailHref` from `./email`, the same builder Kontakt's link uses. The ADDRESS
+ * is read from `Contact.email` there (ADR 0003) and never stored in `Partner`; only the role subject
  * belongs here. The visible label already names the role, so no `aria-label` is needed. The style is
  * the quiet secondary button (navy outline, hard edges, B2/B3/B8) with the light-tone focus outline.
  *
@@ -29,8 +29,6 @@ const { eyebrow: EYEBROW, heading: HEADING, intro: INTRO, roles: ROLES } = data.
 const HEADING_ID = "partner-heading";
 
 const ACTION = `inline-flex items-center justify-center rounded-edge border border-brand px-5 py-3 font-body text-body-sm font-semibold text-brand no-underline transition-colors duration-150 hover:bg-brand hover:text-white ${FOCUS_ON_LIGHT}`;
-
-const hrefFor = (mailSubject) => `mailto:${EMAIL}?subject=${encodeURIComponent(mailSubject)}`;
 
 const Partner = () => (
   <Section id="partner" tone="light" aria-labelledby={HEADING_ID}>
@@ -48,7 +46,7 @@ const Partner = () => (
           <article className="h-full border border-ink-900/20 p-6 sm:p-8">
             <h3 className="text-display-md text-ink-900">{title}</h3>
             <p className="mt-4 text-body-lg">{description}</p>
-            <a href={hrefFor(mailSubject)} className={`${ACTION} mt-6 w-full sm:w-auto`}>
+            <a href={mailHref(mailSubject)} className={`${ACTION} mt-6 w-full sm:w-auto`}>
               {actionLabel}
             </a>
           </article>

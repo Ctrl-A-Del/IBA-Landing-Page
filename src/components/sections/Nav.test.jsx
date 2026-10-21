@@ -129,6 +129,17 @@ describe("the hamburger menu", () => {
     expect(button).toHaveAttribute("aria-expanded", "false");
   });
 
+  test("the dim backdrop sits outside the nav landmark (so it cannot dim the bar) and closes the menu", () => {
+    const { container, nav, button } = setup();
+    expect(container.querySelector('[data-testid="nav-backdrop"]')).toBeNull();
+    fireEvent.click(button);
+    const backdrop = container.querySelector('[data-testid="nav-backdrop"]');
+    expect(backdrop).not.toBeNull();
+    expect(nav.contains(backdrop)).toBe(false);
+    fireEvent.click(backdrop);
+    expect(button).toHaveAttribute("aria-expanded", "false");
+  });
+
   test("Esc closes it and returns focus to the button", () => {
     const { nav, button } = setup();
     fireEvent.click(button);

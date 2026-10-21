@@ -10,7 +10,7 @@ import { FOCUS_ON_DARK } from "./focus";
 import data from "../../data/data.json";
 
 /**
- * Ticket 09 — Kontakt (DESIGN_PLAN.md §4 row 7, decisions C5, C11, C12, C15–C17, C21).
+ * Ticket 09 — Kontakt (DESIGN_PLAN.md §4 row 8, decisions C5, C11, C12, C15–C17, C21).
  *
  * The call is the page's one real goal, so it gets a named person beside it: Marcus Auner. There is
  * no portrait here any more (C15 amended) — his face already appears once, directly above, in Unternehmen

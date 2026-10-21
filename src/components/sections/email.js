@@ -5,10 +5,14 @@ import data from "../../data/data.json";
  * read from `data.json` `Contact`.
  *
  * - `EMAIL` is shown on the page and copied to the clipboard.
- * - `MAIL_HREF` opens a new mail with a URI-encoded subject, so the umlaut and spaces are valid.
+ * - `mailHref(subject)` builds a `mailto:` to `EMAIL` with a URI-encoded subject, so umlauts and spaces
+ *   are valid. Partner uses it for its role subjects.
+ * - `MAIL_HREF` is that link with Kontakt's subject.
  */
 export const EMAIL = data.Contact.email;
 
 export const MAIL_SUBJECT = data.Contact.mailSubject;
 
-export const MAIL_HREF = `mailto:${EMAIL}?subject=${encodeURIComponent(MAIL_SUBJECT)}`;
+export const mailHref = (subject) => `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}`;
+
+export const MAIL_HREF = mailHref(MAIL_SUBJECT);
