@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: resolved
 Type: enhancement
 
 # 03: "Partner gesucht" section with a pre-addressed email per Partnerrolle
@@ -17,3 +17,7 @@ Type: enhancement
 - [ ] Approved-copy golden edited by hand with exactly the new strings, plus a note recording the company owner's approval
 - [ ] Single-source test shows a changed `Contact.email` appears in both partner links and the old one nowhere
 - [ ] `npm test` and `npm run build` green
+
+## Answer
+
+Done on ticket/03-partner-section (094d455), merged. Layout C, no sector key. Deviations: no shared secondary-button constant exists so Partner keeps its own ACTION; the page-wide /partner/i ban in Page.integration.test.jsx was narrowed; forbidden-words test uses word boundaries.
