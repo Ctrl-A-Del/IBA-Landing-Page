@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: resolved
 Type: enhancement
 
 # 04: Fifth nav link "Partner"
@@ -16,3 +16,7 @@ Type: enhancement
 - [ ] The nav stays usable at 360, 375, 768, 820, 1024 and 1280 px, with the anchor offset still right, the transparent-to-solid scroll behaviour and reduced motion intact (B5, B9)
 - [ ] Nav tests cover the hamburger behaviour, in the spirit of the Nav test prior art
 - [ ] `npm test` and `npm run build` green
+
+## Answer
+
+Done in 3b63e1d on ticket/04-nav-hamburger, merged. One CSS-switched list serves inline and panel layouts. Layout at the six widths was not checked in a browser, only in jsdom.
