@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: resolved
 Type: enhancement
 
 # 02: Kontakt returns to navy and joins the footer
@@ -12,3 +12,7 @@ Type: enhancement
 - [ ] Kontakt, Section and Footer tests are updated only where they hardcode the old tone or a hairline
 - [ ] Comments listing Kontakt among the light sections are corrected (Section primitive header, App slot table, Kontakt)
 - [ ] `npm test` and `npm run build` green
+
+## Answer
+
+Done in 252bfed on ticket/02-kontakt-navy, merged. Kontakt is navy, footer has no hairline, comments updated, one test added.
